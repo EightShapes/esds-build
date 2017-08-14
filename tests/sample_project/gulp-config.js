@@ -70,7 +70,11 @@ module.exports = {
         ]
     },
     tokens: {
-        path: tokensPath,
-        sourceFile: `${tokensPath}/tokens.yaml`
+        namespace: projectNamespace,
+        sourcePath: tokensPath,
+        sourceFile: `${tokensPath}/tokens.yaml`,
+        outputPath: tokensPath,
+        jsonOutputFile: `${tokensPath}/tokens.json`,
+        scssOutputFile: `${tokensPath}/tokens.scss`
     }
 };

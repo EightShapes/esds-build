@@ -1,18 +1,22 @@
-const   configFileLocation = './tests/sample_project/gulp-config.js',
+const   configFile = './tests/sample_project/gulp-config.js',
+        taskFiles = './tasks/*.js',
         config = require(configFileLocation),
         gulp = require('gulp'),
-        tasks = './tasks/*.js',
         HubRegistry = require('gulp-hub');
 
-module.exports.config = config;
+module.exports.config = configFile;
         
 /* load some gulpfiles into the registry */
-var hub = new HubRegistry([tasks]);
+var hub = new HubRegistry([taskFiles]);
 
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
 
-// Composite tasks //////////////////////////////////////////////////////////////
+
+/**************************************************/
+/* Composite tasks ********************************/
+/**************************************************/
+
 //Build the project
 gulp.task('build:all', gulp.parallel('styles:build:all'));
 

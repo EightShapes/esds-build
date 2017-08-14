@@ -11,5 +11,5 @@ gulp.task('clean:dist', function(){
 });
 
 gulp.task('clean:tokens', function(){
-    return del([`${gulpConfig.tokens.path}/*`, `!${gulpConfig.tokens.sourceFile}`]);
+    return del([`${gulpConfig.tokens.sourcePath}/*`, `!${gulpConfig.tokens.sourceFile}`]);
 });

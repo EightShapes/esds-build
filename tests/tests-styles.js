@@ -29,8 +29,11 @@ module.exports = function(){
           docCssFile = `${projectPath}/dist/styles/uds-doc.css`;
 
     describe('styles:precompile', function(){
+      // this.timeout(3000); // Increase testing timeout since this can take a few seconds
+
       beforeEach(function() {
-        return gulp('clean:dist');
+        return gulp('clean:dist')
+          .then(result => gulp('tokens:build:all'));
       });
 
       it('should be able to compile "library" styles', function() {
@@ -101,10 +104,9 @@ module.exports = function(){
     });
 
     describe('styles:postprocess', function(){
-      this.timeout(3000); // Increase testing timeout since this can take a few seconds
-
       beforeEach(function() {
-        return gulp('clean:dist');
+        return gulp('clean:dist')
+          .then(result => gulp('tokens:build:all'));
       });
 
       it('should be able to auto-prefix "library" styles with vendor-specific rules', function() {
@@ -133,10 +135,9 @@ module.exports = function(){
     });
 
     describe('styles:build', function(){
-      this.timeout(3000); // Increase testing timeout since this can take a few seconds
-
       beforeEach(function() {
-        return gulp('clean:dist');
+        return gulp('clean:dist')
+        .then(result => gulp('tokens:build:all'));
       });
 
       it('should lint, precompile, and post-process "library" styles', function() {
@@ -191,11 +192,10 @@ module.exports = function(){
     });
 
     describe('watch:styles', function(){
-      this.timeout(3000); // Increase testing timeout since this can take a few seconds
-
       it('should watch "library" styles for changes', function(done) {
         exec(`gulp watch:styles:components`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/styles/uds_library.scss`);
             recursivelyCheckForFiles([componentsCssFile], done);
@@ -205,6 +205,7 @@ module.exports = function(){
       it('should watch "doc library" styles for changes', function(done) {
         exec(`gulp watch:styles:doc-components`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/doc-component-module/styles/doc_components.scss`);
             recursivelyCheckForFiles([docComponentsCssFile], done);
@@ -214,6 +215,7 @@ module.exports = function(){
       it('should rebuild "doc library" styles when "library" tokens are updated', function(done) {
         exec(`gulp watch:styles:doc-components`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
             recursivelyCheckForFiles([docComponentsCssFile], done);
@@ -223,6 +225,7 @@ module.exports = function(){
       it('should watch "doc" styles for changes', function(done) {
         exec(`gulp watch:styles:doc`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/styles/doc.scss`);
             recursivelyCheckForFiles([docCssFile], done);
@@ -232,6 +235,7 @@ module.exports = function(){
       it('should rebuild "doc" styles when "library" tokens are updated', function(done) {
         exec(`gulp watch:styles:doc`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
             recursivelyCheckForFiles([docCssFile], done);
@@ -241,6 +245,7 @@ module.exports = function(){
       it('should run all watch:style tasks simultaneously', function(done) {
         exec(`gulp watch:styles:all`); // start watch
         gulp('clean:dist') // clear dist
+          .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
             recursivelyCheckForFiles([docCssFile, docComponentsCssFile, componentsCssFile], done);

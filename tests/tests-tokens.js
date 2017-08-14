@@ -4,27 +4,26 @@
 /* global beforeEach */
 
 'use strict';
-const { exec } = require('child_process'),
-      gulp = require('./tests-gulp.js'),
-      assert = require('yeoman-assert'),
-      fs = require('fs');
+const gulp = require('./tests-gulp.js'),
+      assert = require('yeoman-assert');
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          componentsCssFile = `${projectPath}/dist/styles/uds.css`,
-          docComponentsCssFile = `${projectPath}/dist/styles/uds-doc-components.css`,
-          docCssFile = `${projectPath}/dist/styles/uds-doc.css`;
+          tokensPath = `${projectPath}/node_modules/library-component-module/tokens`,
+          tokensScss = `${tokensPath}/tokens.scss`,
+          tokensJson = `${tokensPath}/tokens.json`;
 
-    describe('styles:precompile', function(){
+    describe('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
 
-      it('should be able to compile "library" styles', function() {
-        return gulp('styles:precompile:components')
+      it('should convert tokens.yaml to scss and json', function() {
+        return gulp('tokens:build:all')
           .then(result => {
-            assert.fileContent(componentsCssFile, '.uds-button {');
-            assert.fileContent(componentsCssFile, 'background: #0ff');
+            assert.fileContent(tokensScss, '$uds-color-interactive-primary: #0ff');
+            assert.fileContent(tokensJson, '"tokens": {');
+            assert.fileContent(tokensJson, '"primary": "#0ff"');
           });
       });
     });
