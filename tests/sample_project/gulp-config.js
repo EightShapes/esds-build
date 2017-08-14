@@ -8,6 +8,10 @@ const projectNamespace = 'uds',
 module.exports = {
     rootPath: rootPath,
     distPath: distPath,
+    localEnv: {
+        webroot: `${rootPath}/_site`,
+        latestVersionDirectory: `latest`
+    },
     styles: {
         buildTaskPrefix: 'styles:build:', // Will lint, precompile, and postcss
         compileTaskPrefix: 'styles:precompile:',
