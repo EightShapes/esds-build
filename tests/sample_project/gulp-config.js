@@ -14,12 +14,14 @@ module.exports = {
         latestVersionDirectory: `latest`
     },
     markup: {
-        compileTaskPrefix: 'markup:compile',
+        compileTaskPrefix: 'markup:compile:',
+        concatMacrosTaskPrefix: 'markup:concatenate-macros:',
         tasks: [
             {
                 name: 'components',
                 componentMacros: [`${nodeModulesPath}/library-component-module/components/*.njk`],
-                macroNamespace: projectNamespace,
+                componentMacroOutputPath: `${nodeModulesPath}/library-component-module/components`,
+                componentMacroFilename: projectNamespace,
                 componentSinkPages: [`${nodeModulesPath}/library-component-module/components/*.sink.njk`]
             }
         ]
