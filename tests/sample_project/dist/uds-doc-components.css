@@ -1,7 +1,0 @@
-.uds-doc-code-snippet {
-  border: solid 3px #000;
-  color: hotpink; }
-  .uds-doc-code-snippet, .uds-doc-code-snippet::before, .uds-doc-code-snippet::after {
-    box-sizing: border-box; }
-  .uds-doc-code-snippet *, .uds-doc-code-snippet *::before, .uds-doc-code-snippet *::after {
-    box-sizing: border-box; }

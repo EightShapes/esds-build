@@ -17,10 +17,12 @@
     "yeoman-assert": "^3.0.0"
   },
   "devDependencies": {
+    "autoprefixer": "^7.1.2",
     "fs": "0.0.1-security",
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
     "gulp-cli": "^1.4.0",
     "gulp-hub": "^4.1.0",
+    "gulp-postcss": "^7.0.0",
     "mocha": "^3.5.0"
   },
   "peerDependencies": {
