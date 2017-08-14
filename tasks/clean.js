@@ -1,6 +1,7 @@
 'use strict';
 
-const gulpfile = require('../gulpfile.js'),
+const rootPath = process.cwd(),
+        gulpfile = require(`${rootPath}/gulpfile.js`),
         gulp = require('gulp'),
         gulp_config = gulpfile.config,
         del = require('del');

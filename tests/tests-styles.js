@@ -1,4 +1,5 @@
 /* global it */
+/* global xit */
 /* global describe */
 /* global beforeEach */
 
@@ -7,7 +8,7 @@ const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert');
 
 module.exports = function(){
-    const projectPath = './tests',
+    const projectPath = './tests/sample_project',
           componentsCssFile = `${projectPath}/dist/uds.css`,
           docComponentsCssFile = `${projectPath}/dist/uds-doc-components.css`,
           docCssFile = `${projectPath}/dist/uds-doc.css`;
@@ -83,6 +84,19 @@ module.exports = function(){
             assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
             assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
             assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
+          });
+      });
+    });
+
+    describe('watch:styles', function(){
+      beforeEach(function() {
+        return gulp('clean:dist');
+      });
+
+      xit('should watch "library" styles for changes', function() {
+        return gulp('watch:styles:components')
+          .then(result => {
+            console.log(result);
           });
       });
     });

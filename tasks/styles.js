@@ -1,13 +1,14 @@
 'use strict';
 
-const gulpfile = require('../gulpfile.js'),
+const rootPath = process.cwd(),
+        gulpfile = require(`${rootPath}/gulpfile.js`),
         gulp = require('gulp'),
         gulp_config = gulpfile.config,
         rename = require('gulp-rename'),
         sass = require('gulp-sass'),
         sassLint = require('gulp-sass-lint'),
-        styleCompileTasks = gulp_config.styles.compile.map(taskConfig => taskConfig.taskName),
-        styleLintTasks = gulp_config.styles.lint.map(taskConfig => taskConfig.taskName);
+        styleCompileTasks = gulp_config.styles.compile.map(taskConfig => `${gulp_config.styles.compileTaskPrefix}${taskConfig.taskName}`),
+        styleLintTasks = gulp_config.styles.lint.map(taskConfig => `${gulp_config.styles.lintTaskPrefix}${taskConfig.taskName}`);
 
 // Sass linting
 gulp_config.styles.lint.forEach(function(c){
@@ -16,7 +17,7 @@ gulp_config.styles.lint.forEach(function(c){
         sassLintOptions = c.options;
     }
 
-    gulp.task(c.taskName, function () {
+    gulp.task(`${gulp_config.styles.lintTaskPrefix}${c.taskName}`, function () {
       return gulp.src(c.lintPaths)
         .pipe(sassLint(sassLintOptions))
         .pipe(sassLint.format());
@@ -24,16 +25,17 @@ gulp_config.styles.lint.forEach(function(c){
 });
 
 // Lint all scss files
-gulp.task('styles:lint:all', gulp.parallel(styleLintTasks));
+gulp.task(`${gulp_config.styles.lintTaskPrefix}all`, gulp.parallel(styleLintTasks));
 
 // Sass compilation
 gulp_config.styles.compile.forEach(function(c){
     let sassCompileOptions = {};
+
     if (c.importPaths) {
         sassCompileOptions.includePaths = c.importPaths;
     }
 
-    gulp.task(c.taskName, function(){
+    gulp.task(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`, function(){
         return gulp.src(c.sourceFiles)
             .pipe(sass(sassCompileOptions))
             .pipe(rename(c.outputFileName))
@@ -42,7 +44,36 @@ gulp_config.styles.compile.forEach(function(c){
 });
 
 // Compile all scss files
-gulp.task('styles:build:all', gulp.parallel(styleCompileTasks));
+gulp.task(`${gulp_config.styles.compileTaskPrefix}all`, gulp.parallel(styleCompileTasks));
+
+// Watch scss files for changes
+// gulp_config.styles.compile.forEach(function(c){
+//     gulp.task(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`, function(){
+//         return gulp.watch([c.sourceFiles, c.importPaths], gulp.series(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`));
+//     });
+// });
+
+
+
+// Watch scss files for changes
+// gulp.task('watch:styles:library', function(){
+//     return gulp.watch()
+// });
+
+// gulp_config.styles.compile.forEach(function(c){
+//     let sassCompileOptions = {};
+//     if (c.importPaths) {
+//         sassCompileOptions.includePaths = c.importPaths;
+//     }
+
+//     gulp.task(c.taskName, function(){
+//         return gulp.src(c.sourceFiles)
+//             .pipe(sass(sassCompileOptions))
+//             .pipe(rename(c.outputFileName))
+//             .pipe(gulp.dest(c.outputPath));
+//     });
+// });
+
 
 // gulp.task('styles:build', gulp.series('styles:lint', 'styles:compile-library'));
 

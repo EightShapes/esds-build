@@ -1,12 +1,14 @@
-const   configFileLocation = './tests/gulp-config.js',
+const   configFileLocation = './tests/sample_project/gulp-config.js',
         config = require(configFileLocation),
         gulp = require('gulp'),
+        tasks = './tasks/*.js',
         HubRegistry = require('gulp-hub');
+        console.log(config);
 
 module.exports.config = config;
         
 /* load some gulpfiles into the registry */
-var hub = new HubRegistry(['./tasks/*.js']);
+var hub = new HubRegistry([tasks]);
 
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
