@@ -4,8 +4,21 @@
 /* global beforeEach */
 
 'use strict';
-const gulp = require('./tests-gulp.js'),
-      assert = require('yeoman-assert');
+const { exec } = require('child_process'),
+      gulp = require('./tests-gulp.js'),
+      assert = require('yeoman-assert'),
+      fs = require('fs');
+
+function recursivelyCheckForFile(filePath, done) {
+  if (fs.existsSync(filePath)) {
+    assert.file(filePath);
+    done();
+  } else {
+    setTimeout(function() {
+      recursivelyCheckForFile(filePath, done);
+    }, 20);
+  }
+}
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
@@ -50,8 +63,8 @@ module.exports = function(){
         return gulp('styles:build:all')
           .then(result => {
             assert.file(componentsCssFile);
-            assert.file(docCssFile);
             assert.file(docComponentsCssFile);
+            assert.file(docCssFile);
           });
       });
     });
@@ -89,14 +102,48 @@ module.exports = function(){
     });
 
     describe('watch:styles', function(){
-      beforeEach(function() {
-        return gulp('clean:dist');
+      it('should watch "library" styles for changes', function(done) {
+        exec(`gulp watch:styles:components`); // start watch
+        gulp('clean:dist') // clear dist
+          .then(result => {
+            exec(`touch ${projectPath}/node_modules/library-component-module/styles/uds_library.scss`);
+            recursivelyCheckForFile(componentsCssFile, done);
+          });
       });
 
-      xit('should watch "library" styles for changes', function() {
-        return gulp('watch:styles:components')
+      it('should watch "doc library" styles for changes', function(done) {
+        exec(`gulp watch:styles:doc-components`); // start watch
+        gulp('clean:dist') // clear dist
           .then(result => {
-            console.log(result);
+            exec(`touch ${projectPath}/node_modules/doc-component-module/styles/doc_components.scss`);
+            recursivelyCheckForFile(docComponentsCssFile, done);
+          });
+      });
+
+      it('should rebuild "doc library" styles when "library" tokens are updated', function(done) {
+        exec(`gulp watch:styles:doc-components`); // start watch
+        gulp('clean:dist') // clear dist
+          .then(result => {
+            exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
+            recursivelyCheckForFile(docComponentsCssFile, done);
+          });
+      });
+
+      it('should watch "doc" styles for changes', function(done) {
+        exec(`gulp watch:styles:doc`); // start watch
+        gulp('clean:dist') // clear dist
+          .then(result => {
+            exec(`touch ${projectPath}/styles/doc.scss`);
+            recursivelyCheckForFile(docCssFile, done);
+          });
+      });
+
+      it('should rebuild "doc" styles when "library" tokens are updated', function(done) {
+        exec(`gulp watch:styles:doc`); // start watch
+        gulp('clean:dist') // clear dist
+          .then(result => {
+            exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
+            recursivelyCheckForFile(docCssFile, done);
           });
       });
     });

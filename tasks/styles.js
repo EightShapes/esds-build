@@ -47,11 +47,11 @@ gulp_config.styles.compile.forEach(function(c){
 gulp.task(`${gulp_config.styles.compileTaskPrefix}all`, gulp.parallel(styleCompileTasks));
 
 // Watch scss files for changes
-// gulp_config.styles.compile.forEach(function(c){
-//     gulp.task(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`, function(){
-//         return gulp.watch([c.sourceFiles, c.importPaths], gulp.series(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`));
-//     });
-// });
+gulp_config.styles.compile.forEach(function(c){
+    gulp.task(`${gulp_config.styles.watchTaskPrefix}${c.taskName}`, function(){
+        return gulp.watch([c.sourceFiles, c.importPaths], gulp.series(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`));
+    });
+});
 
 
 

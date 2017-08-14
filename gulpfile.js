@@ -3,7 +3,6 @@ const   configFileLocation = './tests/sample_project/gulp-config.js',
         gulp = require('gulp'),
         tasks = './tasks/*.js',
         HubRegistry = require('gulp-hub');
-        console.log(config);
 
 module.exports.config = config;
         
