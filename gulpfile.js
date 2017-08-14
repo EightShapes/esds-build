@@ -12,6 +12,10 @@ var hub = new HubRegistry([tasks]);
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
 
-// Composite tasks
-gulp.task('default', gulp.series('styles:build:all', gulp.parallel('watch:styles:all', 'serve:local-docs')));
+// Composite tasks //////////////////////////////////////////////////////////////
+//Build the project
+gulp.task('build:all', gulp.parallel('styles:build:all'));
+
+// Build and serve the project, watch for changes to files
+gulp.task('default', gulp.series('build:all', gulp.parallel('watch:styles:all', 'serve:local-docs')));
 

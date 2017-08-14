@@ -3,7 +3,8 @@
 const projectNamespace = 'uds',
         rootPath = './tests/sample_project',
         distPath = `${rootPath}/dist`,
-        nodeModulesPath = `${rootPath}/node_modules`;
+        nodeModulesPath = `${rootPath}/node_modules`,
+        tokensPath = `${nodeModulesPath}/library-component-module/tokens`;
 
 module.exports = {
     rootPath: rootPath,
@@ -67,5 +68,9 @@ module.exports = {
                 }
             }
         ]
+    },
+    tokens: {
+        path: tokensPath,
+        sourceFile: `${tokensPath}/tokens.yaml`
     }
 };

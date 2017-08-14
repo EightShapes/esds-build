@@ -3,9 +3,13 @@
 const rootPath = process.cwd(),
         gulpfile = require(`${rootPath}/gulpfile.js`),
         gulp = require('gulp'),
-        gulp_config = gulpfile.config,
+        gulpConfig = gulpfile.config,
         del = require('del');
 
 gulp.task('clean:dist', function(){
-    return del(`${gulp_config.distPath}/**/*`);
+    return del(`${gulpConfig.distPath}/**/*`);
+});
+
+gulp.task('clean:tokens', function(){
+    return del([`${gulpConfig.tokens.path}/*`, `!${gulpConfig.tokens.sourceFile}`]);
 });
