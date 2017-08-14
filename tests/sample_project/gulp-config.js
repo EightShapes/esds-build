@@ -10,55 +10,44 @@ module.exports = {
     distPath: distPath,
     styles: {
         compileTaskPrefix: 'styles:build:',
-        compile: [
-            {
-                taskName: 'components',
-                outputFileName: `${projectNamespace}.css`,
-                outputPath: distPath,
-                sourceFiles: [`${nodeModulesPath}/library-component-module/styles/${projectNamespace}_library.scss`],
-                importPaths: [`${nodeModulesPath}/library-component-module/components`, `${nodeModulesPath}/library-component-module/tokens`]
-            },
-            {
-                taskName: 'doc-components',
-                outputFileName: `${projectNamespace}-doc-components.css`,
-                outputPath: distPath,
-                sourceFiles: [`${nodeModulesPath}/doc-component-module/styles/doc_components.scss`],
-                importPaths: [`${nodeModulesPath}/doc-component-module/components`, `${nodeModulesPath}`]
-            },
-            {
-                taskName: 'doc',
-                outputFileName: `${projectNamespace}-doc.css`,
-                outputPath: distPath,
-                sourceFiles: [`${rootPath}/styles/doc.scss`],
-                importPaths: [`${nodeModulesPath}`]
-            }
-        ],
         lintTaskPrefix: 'styles:lint:',
-        lint: [
+        watchTaskPrefix: 'watch:styles:',
+        tasks: [
             {
-                taskName: 'components',
-                options: {
+                name: 'components',
+                compiledFileName: `${projectNamespace}.css`,
+                outputPath: distPath,
+                compileSourceFiles: [`${nodeModulesPath}/library-component-module/styles/${projectNamespace}_library.scss`],
+                compileImportPaths: [`${nodeModulesPath}/library-component-module/components`, `${nodeModulesPath}/library-component-module/tokens`],
+                lintOptions: {
                     configFile: `${nodeModulesPath}/library-component-module/.sass-lint.yaml` /* Pulling sass lint config from "library" module */
                 },
                 lintPaths: [`${nodeModulesPath}/library-component-module/styles/**/*.scss`,
                             `${nodeModulesPath}/library-component-module/components/**/*.scss`]
             },
             {
-                taskName: 'doc-components',
-                options: {
+                name: 'doc-components',
+                compiledFileName: `${projectNamespace}-doc-components.css`,
+                outputPath: distPath,
+                compileSourceFiles: [`${nodeModulesPath}/doc-component-module/styles/doc_components.scss`],
+                compileImportPaths: [`${nodeModulesPath}/doc-component-module/components`, `${nodeModulesPath}`],
+                lintOptions: {
                     configFile: `${nodeModulesPath}/library-component-module/.sass-lint.yaml` /* Pulling sass lint config from "library" module */
                 },
                 lintPaths: [`${nodeModulesPath}/doc-component-module/styles/**/*.scss`,
                             `${nodeModulesPath}/doc-component-module/components/**/*.scss`]
             },
             {
-                taskName: 'doc',
-                options: {
+                name: 'doc',
+                compiledFileName: `${projectNamespace}-doc.css`,
+                outputPath: distPath,
+                compileSourceFiles: [`${rootPath}/styles/doc.scss`],
+                compileImportPaths: [`${nodeModulesPath}`],
+                lintOptions: {
                     configFile: `${nodeModulesPath}/library-component-module/.sass-lint.yaml` /* Pulling sass lint config from "library" module */
                 },
                 lintPaths: [`${rootPath}/styles/**/*.scss`]
             }
-        ],
-        watchTaskPrefix: 'watch:styles:'
+        ]
     }
 };

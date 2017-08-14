@@ -7,76 +7,64 @@ const rootPath = process.cwd(),
         rename = require('gulp-rename'),
         sass = require('gulp-sass'),
         sassLint = require('gulp-sass-lint'),
-        styleCompileTasks = gulp_config.styles.compile.map(taskConfig => `${gulp_config.styles.compileTaskPrefix}${taskConfig.taskName}`),
-        styleLintTasks = gulp_config.styles.lint.map(taskConfig => `${gulp_config.styles.lintTaskPrefix}${taskConfig.taskName}`);
+        styleConfig = gulp_config.styles,
+        styleTasks = styleConfig.tasks,
+        compileTaskPrefix = styleConfig.compileTaskPrefix,
+        lintTaskPrefix = styleConfig.lintTaskPrefix,
+        watchTaskPrefix = styleConfig.watchTaskPrefix,
+        styleCompileTasks = styleTasks.map(task => `${compileTaskPrefix}${task.name}`),
+        styleLintTasks = styleTasks.map(task => `${lintTaskPrefix}${task.name}`);
 
-// Sass linting
-gulp_config.styles.lint.forEach(function(c){
+function generateLintTask(c) {
     let sassLintOptions = {};
-    if (c.options) {
-        sassLintOptions = c.options;
+    if (c.lintOptions) {
+        sassLintOptions = c.lintOptions;
     }
 
-    gulp.task(`${gulp_config.styles.lintTaskPrefix}${c.taskName}`, function () {
+    gulp.task(`${lintTaskPrefix}${c.name}`, function () {
       return gulp.src(c.lintPaths)
         .pipe(sassLint(sassLintOptions))
         .pipe(sassLint.format());
     });
+}
+
+function generateCompileTask(c) {
+    let sassCompileOptions = {};
+
+    if (c.compileImportPaths) {
+        sassCompileOptions.includePaths = c.compileImportPaths;
+    }
+
+    gulp.task(`${compileTaskPrefix}${c.name}`, function(){
+        return gulp.src(c.compileSourceFiles)
+            .pipe(sass(sassCompileOptions))
+            .pipe(rename(c.compiledFileName))
+            .pipe(gulp.dest(c.outputPath));
+    });
+}
+
+function generateWatchTask(c) {
+    gulp.task(`${watchTaskPrefix}${c.name}`, function(){
+        return gulp.watch([c.compileSourceFiles, c.compileImportPaths], gulp.series(`${compileTaskPrefix}${c.name}`));
+    });
+}
+
+// Dynamically generate compile, lint, and watch tasks
+styleTasks.forEach(function(c){
+    const buildLintTask = c.lintPaths;
+
+    if (buildLintTask) {
+        generateLintTask(c);
+    }
+
+    generateCompileTask(c);
+    generateWatchTask(c);
 });
 
 // Lint all scss files
-gulp.task(`${gulp_config.styles.lintTaskPrefix}all`, gulp.parallel(styleLintTasks));
-
-// Sass compilation
-gulp_config.styles.compile.forEach(function(c){
-    let sassCompileOptions = {};
-
-    if (c.importPaths) {
-        sassCompileOptions.includePaths = c.importPaths;
-    }
-
-    gulp.task(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`, function(){
-        return gulp.src(c.sourceFiles)
-            .pipe(sass(sassCompileOptions))
-            .pipe(rename(c.outputFileName))
-            .pipe(gulp.dest(c.outputPath));
-    });
-});
+gulp.task(`${lintTaskPrefix}all`, gulp.parallel(styleLintTasks));
 
 // Compile all scss files
-gulp.task(`${gulp_config.styles.compileTaskPrefix}all`, gulp.parallel(styleCompileTasks));
+gulp.task(`${compileTaskPrefix}all`, gulp.parallel(styleCompileTasks));
 
 // Watch scss files for changes
-gulp_config.styles.compile.forEach(function(c){
-    gulp.task(`${gulp_config.styles.watchTaskPrefix}${c.taskName}`, function(){
-        return gulp.watch([c.sourceFiles, c.importPaths], gulp.series(`${gulp_config.styles.compileTaskPrefix}${c.taskName}`));
-    });
-});
-
-
-
-// Watch scss files for changes
-// gulp.task('watch:styles:library', function(){
-//     return gulp.watch()
-// });
-
-// gulp_config.styles.compile.forEach(function(c){
-//     let sassCompileOptions = {};
-//     if (c.importPaths) {
-//         sassCompileOptions.includePaths = c.importPaths;
-//     }
-
-//     gulp.task(c.taskName, function(){
-//         return gulp.src(c.sourceFiles)
-//             .pipe(sass(sassCompileOptions))
-//             .pipe(rename(c.outputFileName))
-//             .pipe(gulp.dest(c.outputPath));
-//     });
-// });
-
-
-// gulp.task('styles:build', gulp.series('styles:lint', 'styles:compile-library'));
-
-// gulp.task('watch:styles', function(){
-//     return gulp.watch(pathsToLint.concat(lintConfigFile), gulp.series('styles:build'));
-// });
