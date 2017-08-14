@@ -13,6 +13,17 @@ module.exports = {
         webroot: `${rootPath}/_site`,
         latestVersionDirectory: `latest`
     },
+    markup: {
+        compileTaskPrefix: 'markup:compile',
+        tasks: [
+            {
+                name: 'components',
+                componentMacros: [`${nodeModulesPath}/library-component-module/components/*.njk`],
+                macroNamespace: projectNamespace,
+                componentSinkPages: [`${nodeModulesPath}/library-component-module/components/*.sink.njk`]
+            }
+        ]
+    },
     styles: {
         buildTaskPrefix: 'styles:build:', // Will lint, precompile, and postcss
         compileTaskPrefix: 'styles:precompile:',
