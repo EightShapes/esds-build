@@ -43,4 +43,17 @@ module.exports = function(){
           });
       });
     });
+
+    describe('clean:concatenated-macros', function(){
+      it('should delete all concatenated macro files', function(){
+        const concatenatedComponentsFilename = `${projectPath}/node_modules/library-component-module/components/uds.njk`;
+
+        fs.writeFileSync(concatenatedComponentsFilename, 'concatenated macros');
+
+        return gulp('clean:concatenated-macros')
+          .then(result => {
+            assert.noFile(concatenatedComponentsFilename);
+          });
+      });
+    });
 };

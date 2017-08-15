@@ -19,9 +19,9 @@ module.exports = {
         tasks: [
             {
                 name: 'components',
-                componentMacros: [`${nodeModulesPath}/library-component-module/components/*.njk`],
+                componentMacros: [`${nodeModulesPath}/library-component-module/components/**/*.njk`],
                 componentMacroOutputPath: `${nodeModulesPath}/library-component-module/components`,
-                componentMacroFilename: projectNamespace,
+                componentMacroFilename: `${projectNamespace}.njk`,
                 componentSinkPages: [`${nodeModulesPath}/library-component-module/components/*.sink.njk`]
             }
         ]

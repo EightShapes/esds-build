@@ -12,7 +12,7 @@ module.exports = function(){
           nodeModulesPath = `${projectPath}/node_modules`,
           componentMacros = `${nodeModulesPath}/library-component-module/components`;
 
-    describe.only('markup:compile', function(){
+    describe('markup:compile', function(){
       it('should concatenate "library" macros', function() {
         return gulp('markup:concatenate-macros:components')
           .then(result => {
