@@ -21,29 +21,33 @@ module.exports = {
         tasks: [
             {
                 name: 'components',
-                componentMacros: [`${nodeModulesPath}/library-component-module/components/**/*.njk`],
+                componentMacros: `${nodeModulesPath}/library-component-module/components/**/*.njk`,
                 componentMacroOutputPath: `${nodeModulesPath}/library-component-module/components`,
                 componentMacroFilename: `${projectNamespace}.njk`,
-                docSourceFilesPath: `${nodeModulesPath}/library-component-module/docs/**/*.njk`,
+                docSourceFilePaths: `${nodeModulesPath}/library-component-module/docs/**/*.njk`,
                 docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`],
-                docOutputPath: `${webroot}/latest`
+                docOutputPath: `${nodeModulesPath}/library-component-module/_site/latest`
             },
             {
                 name: 'doc-components',
-                componentMacros: [`${nodeModulesPath}/doc-component-module/components/**/*.njk`],
+                componentMacros: `${nodeModulesPath}/doc-component-module/components/**/*.njk`,
                 componentMacroOutputPath: `${nodeModulesPath}/doc-component-module/components`,
                 componentMacroFilename: `${projectNamespace}_doc_library.njk`,
-                docSourceFilesPath: `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
-                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`, // import "library" components
-                                        `${nodeModulesPath}/doc-component-module`],   // "doc library" components
-                docOutputPath: `${webroot}/latest`
+                docSourceFilePaths: `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
+                docTemplateRootPaths: [`${nodeModulesPath}/doc-component-module`,
+                                        `${nodeModulesPath}/library-component-module`
+                                        ],
+                docOutputPath: `${nodeModulesPath}/doc-component-module/_site/latest`
             },
             {
                 name: 'doc',
                 docDataFile: `${nodeModulesPath}/library-component-module/tokens/tokens.json`,
-                docSourceFilesPath: `${rootPath}/docs/**/*.njk`,
-                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`, // import "library" components
-                                        `${nodeModulesPath}/doc-component-module`],   // "doc library" components
+                docSourceFilePaths: [`${nodeModulesPath}/library-component-module/docs/**/*.njk`, // compile "library" docs with "doc" context
+                                        `${rootPath}/docs/**/*.njk`],
+                docTemplateRootPaths: [ `${rootPath}`, // Use "doc" nunjucks paths first (doc templates "win")
+                                        `${nodeModulesPath}/doc-component-module`, // Use "doc library" nunjucks paths second
+                                        `${nodeModulesPath}/library-component-module` // Use "library" nunjucks paths last
+                                        ],
                 docOutputPath: `${webroot}/latest`
             }
         ]

@@ -9,6 +9,7 @@ const { exec } = require('child_process'),
       assert = require('yeoman-assert'),
       fs = require('fs');
 
+// TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
   let allFilesFound = filePaths.every(file => fs.existsSync(file));
 
