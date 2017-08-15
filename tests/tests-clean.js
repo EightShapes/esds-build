@@ -6,7 +6,8 @@
 'use strict';
 const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs'),
+      mkdirp = require('mkdirp');
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
@@ -53,6 +54,25 @@ module.exports = function(){
         return gulp('clean:concatenated-macros')
           .then(result => {
             assert.noFile(concatenatedComponentsFilename);
+          });
+      });
+    });
+
+    describe('clean:webroot', function(){
+      it('should delete all files in the project webroot', function(){
+        const webroot = `${projectPath}/_site/latest`,
+              webrootFile = `${webroot}/index.html`,
+              webrootDirectory = `${webroot}/styles`;
+
+        mkdirp.sync(webroot);
+        mkdirp.sync(webrootDirectory);
+        fs.writeFileSync(webrootFile, 'Homepage goes here');
+        fs.writeFileSync(`${webrootDirectory}/uds.css`, 'Component Library CSS goes here');
+
+        return gulp('clean:webroot')
+          .then(result => {
+            assert.noFile(webrootFile);
+            assert.noFile(`${webrootDirectory}/uds.css`);
           });
       });
     });

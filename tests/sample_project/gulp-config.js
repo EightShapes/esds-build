@@ -4,17 +4,19 @@ const projectNamespace = 'uds',
         rootPath = './tests/sample_project',
         distPath = `${rootPath}/dist`,
         nodeModulesPath = `${rootPath}/node_modules`,
-        tokensPath = `${nodeModulesPath}/library-component-module/tokens`;
+        tokensPath = `${nodeModulesPath}/library-component-module/tokens`,
+        webroot = `${rootPath}/_site`;
 
 module.exports = {
     rootPath: rootPath,
     distPath: distPath,
+    createVersionedDocs: true,
     localEnv: {
-        webroot: `${rootPath}/_site`,
+        webroot: webroot,
         latestVersionDirectory: `latest`
     },
     markup: {
-        compileTaskPrefix: 'markup:compile:',
+        buildTaskPrefix: 'markup:build:',
         concatMacrosTaskPrefix: 'markup:concatenate-macros:',
         tasks: [
             {
@@ -22,7 +24,27 @@ module.exports = {
                 componentMacros: [`${nodeModulesPath}/library-component-module/components/**/*.njk`],
                 componentMacroOutputPath: `${nodeModulesPath}/library-component-module/components`,
                 componentMacroFilename: `${projectNamespace}.njk`,
-                componentSinkPages: [`${nodeModulesPath}/library-component-module/components/*.sink.njk`]
+                docSourceFilesPath: `${nodeModulesPath}/library-component-module/docs/**/*.njk`,
+                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`],
+                docOutputPath: `${webroot}/latest`
+            },
+            {
+                name: 'doc-components',
+                componentMacros: [`${nodeModulesPath}/doc-component-module/components/**/*.njk`],
+                componentMacroOutputPath: `${nodeModulesPath}/doc-component-module/components`,
+                componentMacroFilename: `${projectNamespace}_doc_library.njk`,
+                docSourceFilesPath: `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
+                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`, // import "library" components
+                                        `${nodeModulesPath}/doc-component-module`],   // "doc library" components
+                docOutputPath: `${webroot}/latest`
+            },
+            {
+                name: 'doc',
+                docDataFile: `${nodeModulesPath}/library-component-module/tokens/tokens.json`,
+                docSourceFilesPath: `${rootPath}/docs/**/*.njk`,
+                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`, // import "library" components
+                                        `${nodeModulesPath}/doc-component-module`],   // "doc library" components
+                docOutputPath: `${webroot}/latest`
             }
         ]
     },
