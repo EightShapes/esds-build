@@ -1,4 +1,4 @@
-const   configFile = './tests/sample_project/gulp-config.js',
+const   configFile = './tests/sample_project/build-config.js',
         taskFiles = './tasks/*.js',
         gulp = require('gulp'),
         HubRegistry = require('gulp-hub');

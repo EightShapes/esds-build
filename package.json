@@ -4,7 +4,7 @@
   "description": "",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "mocha tests/tests.js --timeout 5000"
+    "test": "mocha tests/tests.js --timeout 6000"
   },
   "author": "Kevin Powell <kevinmpowell@gmail.com>",
   "license": "ISC",

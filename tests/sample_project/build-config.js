@@ -1,5 +1,12 @@
 'use strict';
 
+/*
+    - Clearer variable names
+    - Are there good default paths/names that can be used? Convention over configuration
+    - Overriding, Extending, Starting from Scratch - 3 distinct use cases
+*/
+
+
 const projectNamespace = 'uds',
         rootPath = './tests/sample_project',
         distPath = `${rootPath}/dist`,
@@ -18,14 +25,19 @@ module.exports = {
     markup: {
         buildTaskPrefix: 'markup:build:',
         concatMacrosTaskPrefix: 'markup:concatenate-macros:',
+        watchDocsTaskPrefix: 'watch:markup:docs:',
+        watchMacrosTaskPrefix: 'watch:markup:macros:',
         tasks: [
             {
                 name: 'components',
                 componentMacros: `${nodeModulesPath}/library-component-module/components/**/*.njk`,
                 componentMacroOutputPath: `${nodeModulesPath}/library-component-module/components`,
                 componentMacroFilename: `${projectNamespace}.njk`,
+                componentsReferencedBy: ['doc-components', 'doc'],
                 docSourceFilePaths: `${nodeModulesPath}/library-component-module/docs/**/*.njk`,
-                docTemplateRootPaths: [`${nodeModulesPath}/library-component-module`],
+                docTemplateImportPaths: [`${nodeModulesPath}/library-component-module`],
+                docTemplateWatchPaths: [`${nodeModulesPath}/library-component-module/docs/**/*.njk`,
+                                        `${nodeModulesPath}/library-component-module/templates/**/*.njk`], // Don't need to watch components, already monitored
                 docOutputPath: `${nodeModulesPath}/library-component-module/_site/latest`
             },
             {
@@ -33,10 +45,15 @@ module.exports = {
                 componentMacros: `${nodeModulesPath}/doc-component-module/components/**/*.njk`,
                 componentMacroOutputPath: `${nodeModulesPath}/doc-component-module/components`,
                 componentMacroFilename: `${projectNamespace}_doc_library.njk`,
+                componentsReferencedBy: ['doc'],
                 docSourceFilePaths: `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
-                docTemplateRootPaths: [`${nodeModulesPath}/doc-component-module`,
+                docTemplateImportPaths: [`${nodeModulesPath}/doc-component-module`,
                                         `${nodeModulesPath}/library-component-module`
                                         ],
+                docTemplateWatchPaths: [`${nodeModulesPath}/library-component-module/docs/**/*.njk`,
+                                        `${nodeModulesPath}/library-component-module/templates/**/*.njk`,
+                                        `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
+                                        `${nodeModulesPath}/doc-component-module/templates/**/*.njk`], // Don't need to watch components, already monitored
                 docOutputPath: `${nodeModulesPath}/doc-component-module/_site/latest`
             },
             {
@@ -44,10 +61,16 @@ module.exports = {
                 docDataFile: `${nodeModulesPath}/library-component-module/tokens/tokens.json`,
                 docSourceFilePaths: [`${nodeModulesPath}/library-component-module/docs/**/*.njk`, // compile "library" docs with "doc" context
                                         `${rootPath}/docs/**/*.njk`],
-                docTemplateRootPaths: [ `${rootPath}`, // Use "doc" nunjucks paths first (doc templates "win")
+                docTemplateImportPaths: [ `${rootPath}`, // Use "doc" nunjucks paths first (doc templates "win")
                                         `${nodeModulesPath}/doc-component-module`, // Use "doc library" nunjucks paths second
                                         `${nodeModulesPath}/library-component-module` // Use "library" nunjucks paths last
                                         ],
+                docTemplateWatchPaths: [`${nodeModulesPath}/library-component-module/docs/**/*.njk`,
+                                        `${nodeModulesPath}/library-component-module/templates/**/*.njk`,
+                                        `${nodeModulesPath}/doc-component-module/docs/**/*.njk`,
+                                        `${nodeModulesPath}/doc-component-module/templates/**/*.njk`,
+                                        `${rootPath}/docs/**/*.njk`,
+                                        `${rootPath}/templates/**/*.njk`], // Don't need to watch components, already monitored
                 docOutputPath: `${webroot}/latest`
             }
         ]
@@ -76,7 +99,7 @@ module.exports = {
                 }
             },
             {
-                name: 'doc-components',
+                name: 'doc-components', // Rename so we're not reinforcing 'components' vs. 'doc-components'
                 compiledFileName: `${projectNamespace}-doc-components.css`,
                 outputPath: `${distPath}/styles`,
                 compileSourceFiles: [`${nodeModulesPath}/doc-component-module/styles/doc_components.scss`],
@@ -111,7 +134,7 @@ module.exports = {
     tokens: {
         namespace: projectNamespace,
         sourcePath: tokensPath,
-        sourceFile: `${tokensPath}/tokens.yaml`,
+        sourceFile: `${tokensPath}/tokens.yaml`, // Support Multiple tokens path?
         outputPath: tokensPath,
         jsonOutputFile: `${tokensPath}/tokens.json`,
         scssOutputFile: `${tokensPath}/tokens.scss`
