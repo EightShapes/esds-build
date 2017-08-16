@@ -11,6 +11,7 @@ const rootPath = process.cwd(),
         nunjucksRender = require('gulp-nunjucks-render'),
         concatMacrosTaskPrefix = markupConfig.concatMacrosTaskPrefix,
         buildTaskPrefix = markupConfig.buildTaskPrefix,
+        watchPrefix = markupConfig.watchPrefix,
         watchDocsTaskPrefix = markupConfig.watchDocsTaskPrefix,
         watchMacrosTaskPrefix = markupConfig.watchMacrosTaskPrefix,
         concatTasks = markupTasks.filter(task => task.componentMacros).map(task => `${concatMacrosTaskPrefix}${task.name}`),
@@ -121,4 +122,6 @@ gulp.task(`${watchMacrosTaskPrefix}all`, gulp.parallel(watchMacrosTasks));
 
 // Watch all doc files
 gulp.task(`${watchDocsTaskPrefix}all`, gulp.parallel(watchDocsTasks));
+
+gulp.task(`${watchPrefix}all`, gulp.parallel(`${watchMacrosTaskPrefix}all`, `${watchDocsTaskPrefix}all`));
 

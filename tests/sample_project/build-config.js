@@ -25,6 +25,7 @@ module.exports = {
     markup: {
         buildTaskPrefix: 'markup:build:',
         concatMacrosTaskPrefix: 'markup:concatenate-macros:',
+        watchPrefix: 'watch:markup:',
         watchDocsTaskPrefix: 'watch:markup:docs:',
         watchMacrosTaskPrefix: 'watch:markup:macros:',
         tasks: [
