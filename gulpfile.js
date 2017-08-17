@@ -17,7 +17,7 @@ gulp.registry(hub);
 /**************************************************/
 
 // Watch everything
-gulp.task('watch:all', gulp.parallel('watch:styles:all', 'watch:markup:all'));
+gulp.task('watch:all', gulp.parallel('watch:styles:all', 'watch:markup:all', 'watch:serve:all'));
 
 //Build everything
 gulp.task('build:all', gulp.parallel('styles:build:all', gulp.series('markup:concatenate-macros:all', 'markup:build:all')));

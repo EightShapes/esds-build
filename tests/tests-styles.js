@@ -25,15 +25,15 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          componentsCssFile = `${projectPath}/dist/styles/uds.css`,
-          docComponentsCssFile = `${projectPath}/dist/styles/uds-doc-components.css`,
-          docCssFile = `${projectPath}/dist/styles/uds-doc.css`;
+          componentsCssFile = `${projectPath}/_site/latest/styles/uds.css`,
+          docComponentsCssFile = `${projectPath}/_site/latest/styles/uds-doc-components.css`,
+          docCssFile = `${projectPath}/_site/latest/styles/uds-doc.css`;
 
     describe('styles:precompile', function(){
       // this.timeout(3000); // Increase testing timeout since this can take a few seconds
 
       beforeEach(function() {
-        return gulp('clean:dist')
+        return gulp('clean:webroot')
           .then(result => gulp('tokens:build:all'));
       });
 
@@ -106,7 +106,7 @@ module.exports = function(){
 
     describe('styles:postprocess', function(){
       beforeEach(function() {
-        return gulp('clean:dist')
+        return gulp('clean:webroot')
           .then(result => gulp('tokens:build:all'));
       });
 
@@ -137,7 +137,7 @@ module.exports = function(){
 
     describe('styles:build', function(){
       beforeEach(function() {
-        return gulp('clean:dist')
+        return gulp('clean:webroot')
         .then(result => gulp('tokens:build:all'));
       });
 
@@ -195,7 +195,7 @@ module.exports = function(){
     describe('watch:styles', function(){
       it('should watch "library" styles for changes', function(done) {
         exec(`gulp watch:styles:components`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/styles/uds_library.scss`);
@@ -205,7 +205,7 @@ module.exports = function(){
 
       it('should watch "doc library" styles for changes', function(done) {
         exec(`gulp watch:styles:doc-components`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/doc-component-module/styles/doc_components.scss`);
@@ -215,7 +215,7 @@ module.exports = function(){
 
       it('should rebuild "doc library" styles when "library" tokens are updated', function(done) {
         exec(`gulp watch:styles:doc-components`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
@@ -225,7 +225,7 @@ module.exports = function(){
 
       it('should watch "doc" styles for changes', function(done) {
         exec(`gulp watch:styles:doc`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/styles/doc.scss`);
@@ -235,7 +235,7 @@ module.exports = function(){
 
       it('should rebuild "doc" styles when "library" tokens are updated', function(done) {
         exec(`gulp watch:styles:doc`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
@@ -245,7 +245,7 @@ module.exports = function(){
 
       it('should run all watch:style tasks simultaneously', function(done) {
         exec(`gulp watch:styles:all`); // start watch
-        gulp('clean:dist') // clear dist
+        gulp('clean:webroot') // clear webroot
           .then(result => gulp('tokens:build:all'))
           .then(result => {
             exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
