@@ -1,2 +1,5 @@
 *.DS_Store
 node_modules
+tests/sample_project/_site
+tests/sample_project/node_modules/doc-component-module/_site
+tests/sample_project/node_modules/library-component-module/_site
