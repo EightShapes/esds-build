@@ -34,7 +34,6 @@
   },
   "peerDependencies": {
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
-    "gulp-cli": "^1.4.0",
-    "gulp-hub": "^4.1.0"
+    "gulp-cli": "^1.4.0"
   }
 }

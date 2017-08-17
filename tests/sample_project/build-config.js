@@ -16,6 +16,7 @@ const projectNamespace = 'uds',
 
 module.exports = {
     rootPath: rootPath,
+    scaffoldPath: './tests/scaffold_test', // In an actual project this will always be rootPath, separated here for testing
     distPath: distPath,
     createVersionedDocs: true,
     localEnv: {
