@@ -1,14 +1,14 @@
 'use strict';
 
-const rootPath = process.cwd(),
+const config = require('./config.js'),
+        buildConfig = config.get(),
         autoprefixer = require('autoprefixer'),
         gulp = require('gulp'),
         postcss = require('gulp-postcss'),
         rename = require('gulp-rename'),
         sass = require('gulp-sass'),
         sassLint = require('gulp-sass-lint'),
-        gulpfile = require(`${rootPath}/gulpfile.js`),
-        styleConfig = gulpfile.config.styles,
+        styleConfig = buildConfig.styles,
         styleTasks = styleConfig.tasks,
         buildTaskPrefix = styleConfig.buildTaskPrefix,
         compileTaskPrefix = styleConfig.compileTaskPrefix,

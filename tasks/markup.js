@@ -1,12 +1,12 @@
 'use strict';
 
-const rootPath = process.cwd(),
+const config = require('./config.js'),
         concat = require('gulp-concat-util'),
         fs = require('fs'),
         gulp = require('gulp'),
-        gulpfile = require(`${rootPath}/gulpfile.js`),
         gutil = require('gulp-util'),
-        markupConfig = gulpfile.config.markup,
+        buildConfig = config.get(),
+        markupConfig = buildConfig.markup,
         markupTasks = markupConfig.tasks,
         nunjucksRender = require('gulp-nunjucks-render'),
         concatMacrosTaskPrefix = markupConfig.concatMacrosTaskPrefix,

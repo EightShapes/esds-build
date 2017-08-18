@@ -1,14 +1,14 @@
 'use strict';
 
-const rootPath = process.cwd(),
+const config = require('./config.js'),
+        buildConfig = config.get(),
         flatten = require('flat'),
         fs = require('fs'),
         gulp = require('gulp'),
         jsBeautify = require('js-beautify'),
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),
-        gulpfile = require(`${rootPath}/gulpfile.js`),
-        tokenConfig = gulpfile.config.tokens;
+        tokenConfig = buildConfig.tokens;
 
 function interpolateYamlVariables(variables_object) {
     const regex = /!{\*(.*?)}/g;

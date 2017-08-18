@@ -1,9 +1,9 @@
 'use strict';
 
-const rootPath = process.cwd(),
+const config = require('./config.js'),
+        buildConfig = config.get(),
         gulp = require('gulp'),
         mkdirp = require('mkdirp'),
-        buildConfig = require(`${rootPath}/gulpfile.js`).config,
         projectRoot = buildConfig.scaffoldPath;
 
 gulp.task('generate:project-directories', function(done){

@@ -1,13 +1,13 @@
 'use strict';
 
-const rootPath = process.cwd(),
+const config = require('./config.js'),
+        buildConfig = config.get(),
         browserSync = require('browser-sync'),
         gulp = require('gulp'),
-        gulpfile = require(`${rootPath}/gulpfile.js`),
-        envConfig = gulpfile.config.localEnv,
-        styleConfig = gulpfile.config.styles,
+        envConfig = buildConfig.localEnv,
+        styleConfig = buildConfig.styles,
         styleWatchPaths = styleConfig.tasks.map(t => `${t.outputPath}/**/*.css`),
-        markupConfig = gulpfile.config.markup,
+        markupConfig = buildConfig.markup,
         markupWatchPaths = markupConfig.tasks.map(t => `${t.docOutputPath}/**/*.html`);
 
 // Start local server and auto-reload browser when relevant files change

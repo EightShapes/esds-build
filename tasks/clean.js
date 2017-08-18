@@ -1,21 +1,20 @@
 'use strict';
 
-const rootPath = process.cwd(),
-        gulpfile = require(`${rootPath}/gulpfile.js`),
+const config = require('./config.js'),
+        buildConfig = config.get(),
         gulp = require('gulp'),
-        gulpConfig = gulpfile.config,
         del = require('del');
 
 gulp.task('clean:dist', function(){
-    return del(`${gulpConfig.distPath}/**/*`);
+    return del(`${buildConfig.distPath}/**/*`);
 });
 
 gulp.task('clean:tokens', function(){
-    return del([`${gulpConfig.tokens.sourcePath}/*`, `!${gulpConfig.tokens.sourceFile}`]);
+    return del([`${buildConfig.tokens.sourcePath}/*`, `!${buildConfig.tokens.sourceFile}`]);
 });
 
 gulp.task('clean:concatenated-macros', function(done){
-    gulpConfig.markup.tasks.forEach(t => {
+    buildConfig.markup.tasks.forEach(t => {
         if (t.componentMacroOutputPath) {
             del(`${t.componentMacroOutputPath}/${t.componentMacroFilename}`);
         }
@@ -24,9 +23,9 @@ gulp.task('clean:concatenated-macros', function(done){
 });
 
 gulp.task('clean:webroot', function(done){
-    let webrootPath = gulpConfig.localEnv.webroot;
-    if (gulpConfig.createVersionedDocs) {
-        webrootPath += `/${gulpConfig.localEnv.latestVersionDirectory}`;
+    let webrootPath = buildConfig.localEnv.webroot;
+    if (buildConfig.createVersionedDocs) {
+        webrootPath += `/${buildConfig.localEnv.latestVersionDirectory}`;
     }
 
     return del(`${webrootPath}/**/*`);
