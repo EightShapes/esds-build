@@ -31,8 +31,6 @@ module.exports = function(){
 
     describe('styles', function(){
       describe('styles:precompile', function(){
-        // this.timeout(3000); // Increase testing timeout since this can take a few seconds
-
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));

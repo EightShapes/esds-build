@@ -33,7 +33,7 @@ module.exports = {
                 name: 'design-system',
                 componentMacros: `${rootPath}/components/**/*.njk`,
                 componentMacroOutputPath: `${rootPath}/components`,
-                componentMacroFilename: `${projectNamespace}.njk`,
+                componentMacroFilename: `all_components.njk`,
                 componentsReferencedBy: ['doc'],
                 docSourceFilePaths: `${rootPath}/docs/**/*.njk`,
                 docTemplateImportPaths: [`${rootPath}`],
@@ -52,9 +52,9 @@ module.exports = {
         tasks: [
             {
                 name: 'design-system',
-                compiledFileName: `${projectNamespace}.css`,
+                compiledFileName: `main.css`,
                 outputPath: `${webroot}/latest/styles`,
-                compileSourceFiles: [`${rootPath}/styles/${projectNamespace}.scss`],
+                compileSourceFiles: [`${rootPath}/styles/*.scss`],
                 compileImportPaths: [`${rootPath}/components`, `${rootPath}/tokens`],
                 lintOptions: {
                     configFile: `${rootPath}/.sass-lint.yaml`
