@@ -58,7 +58,7 @@ function generatePostprocessTask(c) {
         var plugins = [
             autoprefixer(autoprefixerOptions)
         ];
-        return gulp.src(`${c.outputPath}/${c.compiledFileName}`)
+        return gulp.src(`${c.outputPath}/*.css`)
             .pipe(postcss(plugins))
             .pipe(gulp.dest(c.outputPath));
     });
