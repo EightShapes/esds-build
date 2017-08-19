@@ -7,7 +7,7 @@ const config = require('./config.js'),
         mkdirp = require('mkdirp'),
         projectRoot = buildConfig.scaffoldPath;
 
-gulp.task('generate:project-directories', function(done){
+gulp.task('generate:project-scaffold', function(done){
     const defaultProjectDirectories = [
         'components',
         'dist',
@@ -23,6 +23,8 @@ gulp.task('generate:project-directories', function(done){
     ];
 
     defaultProjectDirectories.forEach(dir => mkdirp.sync(`${projectRoot}/${dir}`));
+
+    fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, `${projectRoot}/docs/index.njk`);
     done();
 });
 

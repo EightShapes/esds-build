@@ -4,6 +4,8 @@ const config = require('./config.js'),
         buildConfig = config.get(),
         autoprefixer = require('autoprefixer'),
         gulp = require('gulp'),
+        gulpSassError = require('gulp-sass-error').gulpSassError,
+        failBuild = process.env.NODE_ENV === 'production',
         postcss = require('gulp-postcss'),
         rename = require('gulp-rename'),
         sass = require('gulp-sass'),
@@ -42,7 +44,7 @@ function generateCompileTask(c) {
 
     gulp.task(`${compileTaskPrefix}${c.name}`, function(){
         return gulp.src(c.compileSourceFiles)
-            .pipe(sass(sassCompileOptions))
+            .pipe(sass(sassCompileOptions).on('error', gulpSassError(failBuild)))
             .pipe(rename(c.compiledFileName))
             .pipe(gulp.dest(c.outputPath));
     });
@@ -66,6 +68,7 @@ function generatePostprocessTask(c) {
 
 function generateWatchTask(c) {
     gulp.task(`${watchTaskPrefix}${c.name}`, function(){
+        // TODO: Need to watch tokens path
         return gulp.watch([c.compileSourceFiles, c.compileImportPaths], gulp.series(`${buildTaskPrefix}${c.name}`));
     });
 }

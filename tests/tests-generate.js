@@ -11,13 +11,13 @@ const gulp = require('./tests-gulp.js'),
       scaffoldDir = './tests/scaffold_test';
 
 module.exports = function(){
-    describe('generate:project-directories', function(){
+    describe('generate:project-scaffold', function(){
       after(function() {
         return del(scaffoldDir);
       });
 
-      it('should generate all the top level directories using default names', function() {
-        return gulp('generate:project-directories')
+      it('should generate a project scaffold with top level directories and basic files', function() {
+        return gulp('generate:project-scaffold')
           .then(result => {
             const defaultProjectDirectories = [
                 'components',
@@ -33,6 +33,7 @@ module.exports = function(){
                 'tokens'
             ];
             defaultProjectDirectories.forEach(dir => assert.file(`${scaffoldDir}/${dir}`));
+            assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
           });
       });
     });

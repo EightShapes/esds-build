@@ -22,6 +22,6 @@ gulp.task('watch:all', gulp.parallel('watch:styles:all', 'watch:markup:all', 'wa
 gulp.task('build:all', gulp.parallel('styles:build:all', gulp.series('markup:concatenate-macros:all', 'markup:build:all')));
 
 // Build and serve the project, watch for changes to files
-gulp.task('default', gulp.series('build:all', gulp.parallel('watch:all', 'serve:local-docs')));
+gulp.task('default', gulp.series('clean:webroot', 'build:all', gulp.parallel('watch:all', 'serve:local-docs')));
 
 module.exports = gulp;

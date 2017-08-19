@@ -60,3 +60,5 @@ gulp.task('tokens:build:all', function(done){
     fs.writeFileSync(tokenConfig.scssOutputFile, scss);
     done();
 });
+
+// TODO: Need to add tokens watch task

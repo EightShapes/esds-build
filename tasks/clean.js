@@ -23,10 +23,11 @@ gulp.task('clean:concatenated-macros', function(done){
 });
 
 gulp.task('clean:webroot', function(done){
-    let webrootPath = buildConfig.localEnv.webroot;
+    let webrootPaths = [`${buildConfig.localEnv.webroot}/**/*`];
     if (buildConfig.createVersionedDocs) {
-        webrootPath += `/${buildConfig.localEnv.latestVersionDirectory}`;
+        webrootPaths.push(`!${buildConfig.localEnv.webroot}/v`);
+        // webrootPaths.push(`!${buildConfig.localEnv.webroot}/v/**/*`);
     }
 
-    return del(`${webrootPath}/**/*`);
+    return del(webrootPaths);
 });

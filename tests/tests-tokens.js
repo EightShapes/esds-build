@@ -27,4 +27,8 @@ module.exports = function(){
           });
       });
     });
+
+    describe('tokens:watch', function(){
+      xit('should watch tokens.yaml for changes and rebuild scss and json', function(){});
+    });
 };

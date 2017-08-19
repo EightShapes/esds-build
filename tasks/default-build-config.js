@@ -6,8 +6,9 @@
     - Overriding, Extending, Starting from Scratch - 3 distinct use cases
 */
 
-
-const projectNamespace = 'ds',
+const packageRoot = process.cwd(),
+        packageJson = require(`${packageRoot}/package.json`),
+        projectNamespace = packageJson.name,
         rootPath = '.',
         distPath = `${rootPath}/dist`,
         tokensPath = `${rootPath}/tokens`,
@@ -34,12 +35,11 @@ module.exports = {
                 componentMacros: `${rootPath}/components/**/*.njk`,
                 componentMacroOutputPath: `${rootPath}/components`,
                 componentMacroFilename: `all_components.njk`,
-                componentsReferencedBy: ['doc'],
                 docSourceFilePaths: `${rootPath}/docs/**/*.njk`,
                 docTemplateImportPaths: [`${rootPath}`],
                 docTemplateWatchPaths: [`${rootPath}/docs/**/*.njk`,
                                         `${rootPath}/templates/**/*.njk`], // Don't need to watch components, already monitored
-                docOutputPath: `${webroot}/_site/latest`
+                docOutputPath: `${webroot}/latest`
             }
         ]
     },

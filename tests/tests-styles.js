@@ -251,6 +251,8 @@ module.exports = function(){
               recursivelyCheckForFiles([docCssFile, docComponentsCssFile, componentsCssFile], done);
             });
         });
+
+        xit('should watch tokens.scss for changes and recompile', function(){});
       });
     });
   };
