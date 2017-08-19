@@ -8,7 +8,7 @@ function retrieveGulpfile() {
 module.exports = {
     get: function(useDefaults) {
         const gulpfile = retrieveGulpfile();
-        useDefaults = typeof useDefaults === 'undefined' ? false : true;
+        useDefaults = typeof useDefaults === 'undefined' ? false : true; // Used for testing, tasks don't use this argument, config file either exists or it doesn't
 
         if (!useDefaults && gulpfile.config) { // See if a config file has been defined in the gulpfile
             return gulpfile.config;
