@@ -1,0 +1,13 @@
+.uds-doc-code-snippet {
+  border: solid 3px #000;
+  color: hotpink;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 3;
+      grid-template-rows: 3; }
+  .uds-doc-code-snippet, .uds-doc-code-snippet::before, .uds-doc-code-snippet::after {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box; }
+  .uds-doc-code-snippet *, .uds-doc-code-snippet *::before, .uds-doc-code-snippet *::after {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box; }

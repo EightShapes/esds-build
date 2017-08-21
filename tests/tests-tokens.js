@@ -4,8 +4,24 @@
 /* global beforeEach */
 
 'use strict';
-const gulp = require('./tests-gulp.js'),
-      assert = require('yeoman-assert');
+const { exec } = require('child_process'),
+      gulp = require('./tests-gulp.js'),
+      assert = require('yeoman-assert'),
+      fs = require('fs');
+
+// TODO Move this function to a commonly shared place
+function recursivelyCheckForFiles(filePaths, done) {
+  let allFilesFound = filePaths.every(file => fs.existsSync(file));
+
+  if (allFilesFound) {
+    // assert.file(filePath);
+    done();
+  } else {
+    setTimeout(function() {
+      recursivelyCheckForFiles(filePaths, done);
+    }, 20);
+  }
+}
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
@@ -28,7 +44,16 @@ module.exports = function(){
       });
     });
 
-    describe('tokens:watch', function(){
-      xit('should watch tokens.yaml for changes and rebuild scss and json', function(){});
+    describe('watch:tokens', function(){
+      it('should watch tokens.yaml for changes and rebuild scss and json', function(done){
+        exec(`gulp watch:tokens:all`); // start watch
+        gulp('clean:tokens') // clear webroot
+          .then(result => {
+            exec(`touch ${tokensPath}/tokens.yaml`);
+            recursivelyCheckForFiles([
+              `${tokensPath}/tokens.json`,
+              `${tokensPath}/tokens.scss`], done);
+          });
+      });
     });
 };

@@ -61,4 +61,8 @@ gulp.task('tokens:build:all', function(done){
     done();
 });
 
+gulp.task('watch:tokens:all', function(){
+    return gulp.watch([tokenConfig.sourceFile], gulp.series('tokens:build:all'));
+});
+
 // TODO: Need to add tokens watch task
