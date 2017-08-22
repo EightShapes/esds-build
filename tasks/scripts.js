@@ -12,7 +12,8 @@ const config = require('./config.js'),
         watchTaskPrefix = scriptConfig.watchTaskPrefix,
         scriptTasks = scriptConfig.tasks,
         concatenateTasks = scriptTasks.map(t => `${concatTaskPrefix}${t.name}`),
-        lintTasks = scriptTasks.map(t => `${lintTaskPrefix}${t.name}`);
+        lintTasks = scriptTasks.map(t => `${lintTaskPrefix}${t.name}`),
+        buildTasks = scriptTasks.map(t => `${buildTaskPrefix}${t.name}`);
 
 // function generateLintTask(c) {
 //     let sassLintOptions = {};
@@ -50,13 +51,22 @@ function generateLintTask(c) {
     });
 }
 
-// Dynamically generate compile, lint, and watch tasks
+function generateBuildTask(c) {
+    gulp.task(`${buildTaskPrefix}${c.name}`, gulp.series(`${lintTaskPrefix}${c.name}`, `${concatTaskPrefix}${c.name}`));
+}
+
+function generateWatchTask(c) {
+    gulp.task(`${watchTaskPrefix}${c.name}`, function(){
+        return gulp.watch(c.sourcePaths, gulp.series(`${buildTaskPrefix}${c.name}`));
+    });
+}
+
+// Dynamically generate concat, lint, and watch tasks
 scriptTasks.forEach(function(c){
     generateLintTask(c);
     generateConcatenateTask(c);
-    // generatePostprocessTask(c);
-    // generateBuildTask(c);
-    // generateWatchTask(c);
+    generateBuildTask(c);
+    generateWatchTask(c);
 });
 
 // Concat all scripts
@@ -64,3 +74,6 @@ gulp.task(`${concatTaskPrefix}all`, gulp.parallel(concatenateTasks));
 
 // Lint all scripts
 gulp.task(`${lintTaskPrefix}all`, gulp.parallel(lintTasks));
+
+// Build all scritps
+gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));

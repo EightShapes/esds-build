@@ -87,7 +87,7 @@ module.exports = {
         buildTaskPrefix: 'scripts:build:', // Will lint, precompile, and postcss
         concatTaskPrefix: 'scripts:concatenate:',
         lintTaskPrefix: 'scripts:lint:',
-        watchTaskPrefix: 'scripts:styles:',
+        watchTaskPrefix: 'watch:scripts:',
         tasks: [
             {
                 name: 'components',
