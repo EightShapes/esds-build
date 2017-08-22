@@ -37,6 +37,7 @@ module.exports = function(){
           .then(result => {
             const defaultProjectDirectories = [
                 'components',
+                'data',
                 'dist',
                 'docs',
                 'icons',

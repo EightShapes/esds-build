@@ -14,6 +14,7 @@ const config = require('./config.js'),
 gulp.task('generate:project-scaffold', function(done){
     const defaultProjectDirectories = [
         'components',
+        'data',
         'dist',
         'docs',
         'icons',

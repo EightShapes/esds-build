@@ -178,16 +178,9 @@ module.exports = function(){
               assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
               assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(componentsCssFile, '.uds-button {');
-              assert.fileContent(componentsCssFile, 'background: #0ff');
-              assert.fileContent(componentsCssFile, 'display: -webkit-box');
-              assert.fileContent(docComponentsCssFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsCssFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docComponentsCssFile, '-ms-grid-rows: 3;');
-              assert.fileContent(docCssFile, '.uds-doc-nav {');
-              assert.fileContent(docCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docCssFile, '-ms-grid-row: 1;');
+              assert.file(componentsCssFile);
+              assert.file(docComponentsCssFile);
+              assert.file(docCssFile);
             });
         });
       });
