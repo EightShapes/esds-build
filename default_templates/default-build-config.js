@@ -12,17 +12,17 @@ const packageRoot = process.cwd(),
         rootPath = '.',
         distPath = `${rootPath}/dist`,
         tokensPath = `${rootPath}/tokens`,
-        sinkPagesPath = `${rootPath}/docs/sink-pages`,
+        sinkPath = `${rootPath}/docs/sink-pages`,
         componentsPath = `${rootPath}/components`,
-        componentsSinkPagesPath = `${sinkPagesPath}/components`,
+        componentSinkPath = `${sinkPath}/components`,
         webroot = `${rootPath}/_site`;
 
 module.exports = {
     rootPath: rootPath,
     scaffoldPath: rootPath, // In an actual project this will always be rootPath, separated here for testing
     distPath: distPath,
-    componentSinkPagesPath: componentsSinkPagesPath,
-    componentsPath: componentsPath,
+    componentSinkPath: componentSinkPath,
+    componentPath: componentsPath,
     createVersionedDocs: true,
     localEnv: {
         webroot: webroot,

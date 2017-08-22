@@ -12,12 +12,18 @@ const projectNamespace = 'uds',
         distPath = `${rootPath}/dist`,
         nodeModulesPath = `${rootPath}/node_modules`,
         tokensPath = `${nodeModulesPath}/library-component-module/tokens`,
+        scaffoldPath = './tests/scaffold_test',
+        sinkPath = `${scaffoldPath}/docs/sink-pages`,
+        componentsPath = `${scaffoldPath}/components`,
+        componentSinkPath = `${sinkPath}/components`,
         webroot = `${rootPath}/_site`;
 
 module.exports = {
     rootPath: rootPath,
     scaffoldPath: './tests/scaffold_test', // In an actual project this will always be rootPath, separated here for testing
     distPath: distPath,
+    componentSinkPath: componentSinkPath,
+    componentPath: componentsPath,
     createVersionedDocs: true,
     localEnv: {
         webroot: webroot,

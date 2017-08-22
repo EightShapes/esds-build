@@ -25,48 +25,48 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          componentsCssFile = `${projectPath}/_site/latest/styles/uds_library.css`,
-          docComponentsCssFile = `${projectPath}/_site/latest/styles/doc_components.css`,
-          docCssFile = `${projectPath}/_site/latest/styles/doc.css`;
+          componentsJsFile = `${projectPath}/_site/latest/styles/uds_library.js`,
+          docComponentsJsFile = `${projectPath}/_site/latest/styles/doc_components.js`,
+          docJsFile = `${projectPath}/_site/latest/styles/doc.js`;
 
-    describe('styles', function(){
-      describe('styles:precompile', function(){
+    describe('scripts', function(){
+      describe.only('scripts:concatenate', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
         });
 
-        it('should be able to compile "library" styles', function() {
-          return gulp('styles:precompile:components')
+        it('should be able to concatenate "library" scripts', function() {
+          return gulp('scripts:concatenate:components')
             .then(result => {
-              assert.fileContent(componentsCssFile, '.uds-button {');
-              assert.fileContent(componentsCssFile, 'background: #0ff');
+              assert.fileContent(componentsJsFile, 'Uds.Button');
+              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
             });
         });
 
-        it('should be able to compile "doc library" styles with tokens from "library"', function() {
+        xit('should be able to compile "doc library" styles with tokens from "library"', function() {
           return gulp('styles:precompile:doc-components')
             .then(result => {
-              assert.fileContent(docComponentsCssFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsCssFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsCssFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
+              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
+              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
             });
         });
 
-        it('should be able to compile "doc" styles with tokens from "library"', function() {
+        xit('should be able to compile "doc" styles with tokens from "library"', function() {
           return gulp('styles:precompile:doc')
             .then(result => {
-              assert.fileContent(docCssFile, '.uds-doc-nav {');
-              assert.fileContent(docCssFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docJsFile, '.uds-doc-nav {');
+              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
             });
         });
 
-        it('should be able to compile all styles with one composite gulp task', function() {
+        xit('should be able to compile all styles with one composite gulp task', function() {
           return gulp('styles:precompile:all')
             .then(result => {
-              assert.file(componentsCssFile);
-              assert.file(docComponentsCssFile);
-              assert.file(docCssFile);
+              assert.file(componentsJsFile);
+              assert.file(docComponentsJsFile);
+              assert.file(docJsFile);
             });
         });
       });
@@ -113,7 +113,7 @@ module.exports = function(){
           return gulp('styles:precompile:components')
             .then(result => gulp('styles:postprocess:components'))
             .then(result => {
-              assert.fileContent(componentsCssFile, 'display: -webkit-box');
+              assert.fileContent(componentsJsFile, 'display: -webkit-box');
             });
         });
 
@@ -121,7 +121,7 @@ module.exports = function(){
           return gulp('styles:precompile:doc-components')
             .then(result => gulp('styles:postprocess:doc-components'))
             .then(result => {
-              assert.fileContent(docComponentsCssFile, '-ms-grid-rows: 3;');
+              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
             });
         });
 
@@ -129,7 +129,7 @@ module.exports = function(){
           return gulp('styles:precompile:doc')
             .then(result => gulp('styles:postprocess:doc'))
             .then(result => {
-              assert.fileContent(docCssFile, '-ms-grid-row: 1;');
+              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
             });
         });
       });
@@ -144,9 +144,9 @@ module.exports = function(){
           return gulp('styles:build:components')
             .then(result => {
               assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
-              assert.fileContent(componentsCssFile, '.uds-button {');
-              assert.fileContent(componentsCssFile, 'background: #0ff');
-              assert.fileContent(componentsCssFile, 'display: -webkit-box');
+              assert.fileContent(componentsJsFile, '.uds-button {');
+              assert.fileContent(componentsJsFile, 'background: #0ff');
+              assert.fileContent(componentsJsFile, 'display: -webkit-box');
             });
         });
 
@@ -154,10 +154,10 @@ module.exports = function(){
           return gulp('styles:build:doc-components')
             .then(result => {
               assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
-              assert.fileContent(docComponentsCssFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsCssFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docComponentsCssFile, '-ms-grid-rows: 3;');
+              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
+              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
+              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
             });
         });
 
@@ -165,9 +165,9 @@ module.exports = function(){
           return gulp('styles:build:doc')
             .then(result => {
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(docCssFile, '.uds-doc-nav {');
-              assert.fileContent(docCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docCssFile, '-ms-grid-row: 1;');
+              assert.fileContent(docJsFile, '.uds-doc-nav {');
+              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
             });
         });
 
@@ -178,16 +178,16 @@ module.exports = function(){
               assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
               assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(componentsCssFile, '.uds-button {');
-              assert.fileContent(componentsCssFile, 'background: #0ff');
-              assert.fileContent(componentsCssFile, 'display: -webkit-box');
-              assert.fileContent(docComponentsCssFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsCssFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docComponentsCssFile, '-ms-grid-rows: 3;');
-              assert.fileContent(docCssFile, '.uds-doc-nav {');
-              assert.fileContent(docCssFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docCssFile, '-ms-grid-row: 1;');
+              assert.fileContent(componentsJsFile, '.uds-button {');
+              assert.fileContent(componentsJsFile, 'background: #0ff');
+              assert.fileContent(componentsJsFile, 'display: -webkit-box');
+              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
+              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
+              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
+              assert.fileContent(docJsFile, '.uds-doc-nav {');
+              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
             });
         });
       });
@@ -199,7 +199,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/node_modules/library-component-module/styles/uds_library.scss`);
-              recursivelyCheckForFiles([componentsCssFile], done);
+              recursivelyCheckForFiles([componentsJsFile], done);
             });
         });
 
@@ -209,7 +209,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/node_modules/doc-component-module/styles/doc_components.scss`);
-              recursivelyCheckForFiles([docComponentsCssFile], done);
+              recursivelyCheckForFiles([docComponentsJsFile], done);
             });
         });
 
@@ -219,7 +219,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docComponentsCssFile], done);
+              recursivelyCheckForFiles([docComponentsJsFile], done);
             });
         });
 
@@ -229,7 +229,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/styles/doc.scss`);
-              recursivelyCheckForFiles([docCssFile], done);
+              recursivelyCheckForFiles([docJsFile], done);
             });
         });
 
@@ -239,7 +239,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docCssFile], done);
+              recursivelyCheckForFiles([docJsFile], done);
             });
         });
 
@@ -249,7 +249,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docCssFile, docComponentsCssFile, componentsCssFile], done);
+              recursivelyCheckForFiles([docJsFile, docComponentsJsFile, componentsJsFile], done);
             });
         });
 
@@ -258,7 +258,7 @@ module.exports = function(){
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
-              recursivelyCheckForFiles([docCssFile, docComponentsCssFile, componentsCssFile], done);
+              recursivelyCheckForFiles([docJsFile, docComponentsJsFile, componentsJsFile], done);
             });
         });
       });
