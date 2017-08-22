@@ -86,7 +86,6 @@ module.exports = {
         tasks: [
             {
                 name: 'components',
-                compiledFileName: `${projectNamespace}.css`,
                 outputPath: `${webroot}/latest/styles`,
                 compileSourceFiles: [`${nodeModulesPath}/library-component-module/styles/${projectNamespace}_library.scss`],
                 compileImportPaths: [`${nodeModulesPath}/library-component-module/components`, `${nodeModulesPath}/library-component-module/tokens`],
@@ -102,7 +101,6 @@ module.exports = {
             },
             {
                 name: 'doc-components', // Rename so we're not reinforcing 'components' vs. 'doc-components'
-                compiledFileName: `${projectNamespace}-doc-components.css`,
                 outputPath: `${webroot}/latest/styles`,
                 compileSourceFiles: [`${nodeModulesPath}/doc-component-module/styles/doc_components.scss`],
                 compileImportPaths: [`${nodeModulesPath}/doc-component-module/components`, `${nodeModulesPath}`],
@@ -118,7 +116,6 @@ module.exports = {
             },
             {
                 name: 'doc',
-                compiledFileName: `${projectNamespace}-doc.css`,
                 outputPath: `${webroot}/latest/styles`,
                 compileSourceFiles: [`${rootPath}/styles/doc.scss`],
                 compileImportPaths: [`${nodeModulesPath}`],

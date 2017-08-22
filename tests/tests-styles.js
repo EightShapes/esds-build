@@ -25,9 +25,9 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          componentsCssFile = `${projectPath}/_site/latest/styles/uds.css`,
-          docComponentsCssFile = `${projectPath}/_site/latest/styles/uds-doc-components.css`,
-          docCssFile = `${projectPath}/_site/latest/styles/uds-doc.css`;
+          componentsCssFile = `${projectPath}/_site/latest/styles/uds_library.css`,
+          docComponentsCssFile = `${projectPath}/_site/latest/styles/doc_components.css`,
+          docCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
     describe('styles', function(){
       describe('styles:precompile', function(){

@@ -7,7 +7,7 @@ const config = require('./config.js'),
         gulpSassError = require('gulp-sass-error').gulpSassError,
         failBuild = process.env.NODE_ENV === 'production',
         postcss = require('gulp-postcss'),
-        rename = require('gulp-rename'),
+        // rename = require('gulp-rename'),
         sass = require('gulp-sass'),
         sassLint = require('gulp-sass-lint'),
         styleConfig = buildConfig.styles,
@@ -45,7 +45,7 @@ function generateCompileTask(c) {
     gulp.task(`${compileTaskPrefix}${c.name}`, function(){
         return gulp.src(c.compileSourceFiles)
             .pipe(sass(sassCompileOptions).on('error', gulpSassError(failBuild)))
-            .pipe(rename(c.compiledFileName))
+            // .pipe(rename(c.compiledFileName)) //TODO: Maybe add this back in as a feature at some point?
             .pipe(gulp.dest(c.outputPath));
     });
 }
@@ -68,7 +68,6 @@ function generatePostprocessTask(c) {
 
 function generateWatchTask(c) {
     gulp.task(`${watchTaskPrefix}${c.name}`, function(){
-        // TODO: Need to watch tokens path
         return gulp.watch([c.compileSourceFiles, c.compileImportPaths], gulp.series(`${buildTaskPrefix}${c.name}`));
     });
 }
@@ -107,6 +106,6 @@ gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
 // Watch tokens.scss and recompile
 gulp.task(`${watchTaskPrefix}tokens`, gulp.series(`${buildTaskPrefix}all`));
 
-watchTasks.push(`${watchTaskPrefix}tokens`);
 // Run all watch tasks in parallel
+watchTasks.push(`${watchTaskPrefix}tokens`);
 gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));

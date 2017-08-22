@@ -12,12 +12,17 @@ const packageRoot = process.cwd(),
         rootPath = '.',
         distPath = `${rootPath}/dist`,
         tokensPath = `${rootPath}/tokens`,
+        sinkPagesPath = `${rootPath}/docs/sink-pages`,
+        componentsPath = `${rootPath}/components`,
+        componentsSinkPagesPath = `${sinkPagesPath}/components`,
         webroot = `${rootPath}/_site`;
 
 module.exports = {
     rootPath: rootPath,
     scaffoldPath: rootPath, // In an actual project this will always be rootPath, separated here for testing
     distPath: distPath,
+    componentSinkPagesPath: componentsSinkPagesPath,
+    componentsPath: componentsPath,
     createVersionedDocs: true,
     localEnv: {
         webroot: webroot,
@@ -52,7 +57,6 @@ module.exports = {
         tasks: [
             {
                 name: 'design-system',
-                compiledFileName: `main.css`,
                 outputPath: `${webroot}/latest/styles`,
                 compileSourceFiles: [`${rootPath}/styles/*.scss`],
                 compileImportPaths: [`${rootPath}/components`, `${rootPath}/tokens`],
