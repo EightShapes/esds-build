@@ -104,5 +104,9 @@ gulp.task(`${compileTaskPrefix}all`, gulp.parallel(compileTasks));
 // Build all scss files
 gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
 
+// Watch tokens.scss and recompile
+gulp.task(`${watchTaskPrefix}tokens`, gulp.series(`${buildTaskPrefix}all`));
+
+watchTasks.push(`${watchTaskPrefix}tokens`);
 // Run all watch tasks in parallel
 gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));

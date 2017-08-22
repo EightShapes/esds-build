@@ -252,7 +252,14 @@ module.exports = function(){
             });
         });
 
-        xit('should watch tokens.scss for changes and recompile', function(){});
+        it('should watch tokens.scss for changes and recompile', function(done){
+          exec(`gulp watch:styles:tokens`); // start watch
+          gulp('clean:webroot') // clear webroot
+            .then(result => gulp('tokens:build:all'))
+            .then(result => {
+              recursivelyCheckForFiles([docCssFile, docComponentsCssFile, componentsCssFile], done);
+            });
+        });
       });
     });
   };
