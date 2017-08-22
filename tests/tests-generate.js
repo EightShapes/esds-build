@@ -5,8 +5,7 @@
 /* global beforeEach */
 
 'use strict';
-const { exec } = require('child_process'),
-      gulp = require('./tests-gulp.js'),
+const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       del = require('del'),
       fs = require('fs'),
