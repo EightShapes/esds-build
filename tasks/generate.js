@@ -30,6 +30,6 @@ gulp.task('generate:project-scaffold', function(done){
 
 gulp.task('generate:default-config', function(done){
     mkdirp.sync(`${projectRoot}`);
-    fs.copySync(`${__dirname}/default-build-config.js`, `${projectRoot}/build-config.js`);
+    fs.copySync(`${__dirname}/../default_templates/default-build-config.js`, `${projectRoot}/build-config.js`);
     done();
 });

@@ -1,7 +1,5 @@
 .uds-doc-nav {
   border: solid 3px #000;
   color: lemonchiffon;
-  display: -ms-grid;
   display: grid;
-  -ms-grid-row: 1;
-      grid-row-start: 1; }
+  grid-row-start: 1; }
