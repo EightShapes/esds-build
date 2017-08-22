@@ -70,5 +70,67 @@ module.exports = function(){
             });
         });
       });
+
+      describe('scripts:lint', function(){
+        it('should be able to lint "library" scripts', function() {
+          return gulp('scripts:lint:components')
+            .then(result => {
+              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+              assert(result.stderr.includes('components/button/button.js'));
+            });
+        });
+
+        it('should be able to lint "doc library" scripts', function() {
+          return gulp('scripts:lint:doc-components')
+            .then(result => {
+              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+            });
+        });
+
+        it('should be able to lint "doc" scripts', function() {
+          return gulp('scripts:lint:doc')
+            .then(result => {
+              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+              assert(result.stderr.includes('scripts/global.js'));
+            });
+        });
+
+        it('should be able to lint all scripts with a composite lint task', function() {
+          return gulp('scripts:lint:all')
+            .then(result => {
+              assert(result.stderr.includes('components/button/button.js'));
+              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+              assert(result.stderr.includes('scripts/global.js'));
+            });
+        });
+      });
+
+      describe('scripts:build', function(){
+        beforeEach(function() {
+          return gulp('clean:webroot')
+            .then(result => gulp('tokens:build:all'));
+        });
+
+        xit('should be able to lint and then concatenate "library" scripts', function() {
+          return gulp('scripts:build:components')
+            .then(result => {
+              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+              assert(result.stderr.includes('components/button/button.js'));
+              assert.fileContent(componentsJsFile, 'Uds.Button');
+              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+            });
+        });
+
+        xit('should be able to lint and then concatenate "doc library" scripts', function() {
+          return gulp('scripts:build:doc-components')
+            .then(result => {
+              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+            });
+        });
+      });
     });
   };

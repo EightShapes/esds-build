@@ -18,6 +18,7 @@
     "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
     "gulp-cli": "^1.4.0",
     "gulp-concat-util": "^0.5.5",
+    "gulp-eslint": "^4.0.0",
     "gulp-hub": "^4.1.0",
     "gulp-nunjucks-render": "^2.2.1",
     "gulp-postcss": "^7.0.0",

@@ -4,13 +4,15 @@ const config = require('./config.js'),
         buildConfig = config.get(),
         gulp = require('gulp'),
         concat = require('gulp-concat-util'),
+        eslint = require('gulp-eslint'),
         scriptConfig = buildConfig.scripts,
         buildTaskPrefix = scriptConfig.buildTaskPrefix,
         concatTaskPrefix = scriptConfig.concatTaskPrefix,
         lintTaskPrefix = scriptConfig.lintTaskPrefix,
         watchTaskPrefix = scriptConfig.watchTaskPrefix,
         scriptTasks = scriptConfig.tasks,
-        concatenateTasks = scriptTasks.map(t => `${concatTaskPrefix}${t.name}`);
+        concatenateTasks = scriptTasks.map(t => `${concatTaskPrefix}${t.name}`),
+        lintTasks = scriptTasks.map(t => `${lintTaskPrefix}${t.name}`);
 
 // function generateLintTask(c) {
 //     let sassLintOptions = {};
@@ -34,19 +36,31 @@ function generateConcatenateTask(c) {
     });
 }
 
+function generateLintTask(c) {
+    let lintOptions = {};
+
+    if (c.lintOptions) {
+        lintOptions = c.lintOptions;
+    }
+
+    gulp.task(`${lintTaskPrefix}${c.name}`, function () {
+      return gulp.src(c.sourcePaths)
+        .pipe(eslint(lintOptions))
+        .pipe(eslint.formatEach('compact', process.stderr));
+    });
+}
+
 // Dynamically generate compile, lint, and watch tasks
 scriptTasks.forEach(function(c){
-    // const buildLintTask = c.lintPaths;
-
-    // if (buildLintTask) {
-    //     generateLintTask(c);
-    // }
-
+    generateLintTask(c);
     generateConcatenateTask(c);
     // generatePostprocessTask(c);
     // generateBuildTask(c);
     // generateWatchTask(c);
 });
 
+// Concat all scripts
 gulp.task(`${concatTaskPrefix}all`, gulp.parallel(concatenateTasks));
 
+// Lint all scripts
+gulp.task(`${lintTaskPrefix}all`, gulp.parallel(lintTasks));
