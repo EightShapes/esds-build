@@ -83,6 +83,41 @@ module.exports = {
             }
         ]
     },
+    scripts: {
+        buildTaskPrefix: 'scripts:build:', // Will lint, precompile, and postcss
+        concatTaskPrefix: 'scripts:concatenate:',
+        lintTaskPrefix: 'scripts:lint:',
+        watchTaskPrefix: 'scripts:styles:',
+        tasks: [
+            {
+                name: 'components',
+                outputFilename: 'components.js',
+                outputPath: `${webroot}/latest/scripts`,
+                sourcePaths: [`${nodeModulesPath}/library-component-module/components/**/*.js`, `${nodeModulesPath}/library-component-module/scripts/**/*.js`],
+                lintOptions: {
+                    configFile: `${nodeModulesPath}/library-component-module/.eslintrc` /* Pulling js lint config from "library" module */
+                }
+            },
+            {
+                name: 'doc-components',
+                outputFilename: 'doc-components.js',
+                outputPath: `${webroot}/latest/scripts`,
+                sourcePaths: [`${nodeModulesPath}/doc-component-module/components/**/*.js`, `${nodeModulesPath}/doc-component-module/scripts/**/*.js`],
+                lintOptions: {
+                    configFile: `${nodeModulesPath}/library-component-module/.eslintrc` /* Pulling js lint config from "library" module */
+                }
+            },
+            {
+                name: 'doc',
+                outputFilename: 'doc.js',
+                outputPath: `${webroot}/latest/scripts`,
+                sourcePaths: [`${rootPath}/scripts/**/*.js`],
+                lintOptions: {
+                    configFile: `${nodeModulesPath}/library-component-module/.eslintrc` /* Pulling js lint config from "library" module */
+                }
+            }
+        ]
+    },
     styles: {
         buildTaskPrefix: 'styles:build:', // Will lint, precompile, and postcss
         compileTaskPrefix: 'styles:precompile:',

@@ -25,12 +25,12 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          componentsJsFile = `${projectPath}/_site/latest/styles/uds_library.js`,
-          docComponentsJsFile = `${projectPath}/_site/latest/styles/doc_components.js`,
-          docJsFile = `${projectPath}/_site/latest/styles/doc.js`;
+          componentsJsFile = `${projectPath}/_site/latest/scripts/components.js`,
+          docComponentsJsFile = `${projectPath}/_site/latest/scripts/doc-components.js`,
+          docJsFile = `${projectPath}/_site/latest/scripts/doc.js`;
 
     describe('scripts', function(){
-      describe.only('scripts:concatenate', function(){
+      describe('scripts:concatenate', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -44,221 +44,29 @@ module.exports = function(){
             });
         });
 
-        xit('should be able to compile "doc library" styles with tokens from "library"', function() {
-          return gulp('styles:precompile:doc-components')
+        it('should be able to concatenate "doc library" scripts', function() {
+          return gulp('scripts:concatenate:doc-components')
             .then(result => {
-              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
             });
         });
 
-        xit('should be able to compile "doc" styles with tokens from "library"', function() {
-          return gulp('styles:precompile:doc')
+        it('should be able to concatenate "doc" scripts', function() {
+          return gulp('scripts:concatenate:doc')
             .then(result => {
-              assert.fileContent(docJsFile, '.uds-doc-nav {');
-              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
+              assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
 
-        xit('should be able to compile all styles with one composite gulp task', function() {
-          return gulp('styles:precompile:all')
+        it('should be able to concatenate all scripts with one composite gulp task', function() {
+          return gulp('scripts:concatenate:all')
             .then(result => {
-              assert.file(componentsJsFile);
-              assert.file(docComponentsJsFile);
-              assert.file(docJsFile);
-            });
-        });
-      });
-
-      describe('styles:lint', function(){
-        it('should be able to lint "library" styles', function() {
-          return gulp('styles:lint:components')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
-            });
-        });
-
-        it('should be able to lint "doc library" styles', function() {
-          return gulp('styles:lint:doc-components')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
-            });
-        });
-
-        it('should be able to lint "doc" styles', function() {
-          return gulp('styles:lint:doc')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-            });
-        });
-
-        it('should be able to lint all styles with one composite gulp task', function() {
-          return gulp('styles:lint:all')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
-              assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
-              assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-            });
-        });
-      });
-
-      describe('styles:postprocess', function(){
-        beforeEach(function() {
-          return gulp('clean:webroot')
-            .then(result => gulp('tokens:build:all'));
-        });
-
-        it('should be able to auto-prefix "library" styles with vendor-specific rules', function() {
-          return gulp('styles:precompile:components')
-            .then(result => gulp('styles:postprocess:components'))
-            .then(result => {
-              assert.fileContent(componentsJsFile, 'display: -webkit-box');
-            });
-        });
-
-        it('should be able to auto-prefix "doc library" styles with vendor-specific rules', function() {
-          return gulp('styles:precompile:doc-components')
-            .then(result => gulp('styles:postprocess:doc-components'))
-            .then(result => {
-              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
-            });
-        });
-
-        it('should be able to auto-prefix "doc" styles with vendor-specific rules', function() {
-          return gulp('styles:precompile:doc')
-            .then(result => gulp('styles:postprocess:doc'))
-            .then(result => {
-              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
-            });
-        });
-      });
-
-      describe('styles:build', function(){
-        beforeEach(function() {
-          return gulp('clean:webroot')
-          .then(result => gulp('tokens:build:all'));
-        });
-
-        it('should lint, precompile, and post-process "library" styles', function() {
-          return gulp('styles:build:components')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
-              assert.fileContent(componentsJsFile, '.uds-button {');
-              assert.fileContent(componentsJsFile, 'background: #0ff');
-              assert.fileContent(componentsJsFile, 'display: -webkit-box');
-            });
-        });
-
-        it('should lint, precompile, and post-process "doc library" styles', function() {
-          return gulp('styles:build:doc-components')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
-              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
-            });
-        });
-
-        it('should lint, precompile, and post-process "doc" styles', function() {
-          return gulp('styles:build:doc')
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(docJsFile, '.uds-doc-nav {');
-              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
-            });
-        });
-
-        it('should lint, precompile, and post-process all styles', function() {
-          return gulp('tokens:build:all')
-            .then(result => gulp('styles:build:all'))
-            .then(result => {
-              assert(result.stdout.includes('warning  Color \'red\' should be written in its hexadecimal form #ff0000'));
-              assert(result.stdout.includes('warning  Color \'hotpink\' should be written in its hexadecimal form #ff69b4'));
-              assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(componentsJsFile, '.uds-button {');
-              assert.fileContent(componentsJsFile, 'background: #0ff');
-              assert.fileContent(componentsJsFile, 'display: -webkit-box');
-              assert.fileContent(docComponentsJsFile, '.uds-doc-code-snippet {');
-              assert.fileContent(docComponentsJsFile, 'box-sizing: border-box;');
-              assert.fileContent(docComponentsJsFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docComponentsJsFile, '-ms-grid-rows: 3;');
-              assert.fileContent(docJsFile, '.uds-doc-nav {');
-              assert.fileContent(docJsFile, 'border: solid 3px #000;'); // token from library
-              assert.fileContent(docJsFile, '-ms-grid-row: 1;');
-            });
-        });
-      });
-
-      describe('watch:styles', function(){
-        it('should watch "library" styles for changes', function(done) {
-          exec(`gulp watch:styles:components`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/styles/uds_library.scss`);
-              recursivelyCheckForFiles([componentsJsFile], done);
-            });
-        });
-
-        it('should watch "doc library" styles for changes', function(done) {
-          exec(`gulp watch:styles:doc-components`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/doc-component-module/styles/doc_components.scss`);
-              recursivelyCheckForFiles([docComponentsJsFile], done);
-            });
-        });
-
-        it('should rebuild "doc library" styles when "library" tokens are updated', function(done) {
-          exec(`gulp watch:styles:doc-components`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docComponentsJsFile], done);
-            });
-        });
-
-        it('should watch "doc" styles for changes', function(done) {
-          exec(`gulp watch:styles:doc`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/styles/doc.scss`);
-              recursivelyCheckForFiles([docJsFile], done);
-            });
-        });
-
-        it('should rebuild "doc" styles when "library" tokens are updated', function(done) {
-          exec(`gulp watch:styles:doc`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docJsFile], done);
-            });
-        });
-
-        it('should run all watch:style tasks simultaneously', function(done) {
-          exec(`gulp watch:styles:all`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/tokens/tokens.scss`);
-              recursivelyCheckForFiles([docJsFile, docComponentsJsFile, componentsJsFile], done);
-            });
-        });
-
-        it('should watch tokens.scss for changes and recompile', function(done){
-          exec(`gulp watch:styles:tokens`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => gulp('tokens:build:all'))
-            .then(result => {
-              recursivelyCheckForFiles([docJsFile, docComponentsJsFile, componentsJsFile], done);
+              assert.fileContent(componentsJsFile, 'Uds.Button');
+              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+              assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
       });
