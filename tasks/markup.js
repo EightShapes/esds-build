@@ -5,6 +5,8 @@ const config = require('./config.js'),
         fs = require('fs'),
         gulp = require('gulp'),
         gutil = require('gulp-util'),
+        marked = require('marked'),
+        stripIndent = require('strip-indent'),
         buildConfig = config.get(),
         markupConfig = buildConfig.markup,
         markupTasks = markupConfig.tasks,
@@ -18,6 +20,44 @@ const config = require('./config.js'),
         buildTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${buildTaskPrefix}${task.name}`),
         watchDocsTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${watchDocsTaskPrefix}${task.name}`),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`);
+
+function addDocLibraryNunjucksFilters(env) {
+    // env.addFilter('htmlbeautify', function(string) {
+    //     return htmlBeautify(string, htmlBeautifyOptions);
+    // });
+
+    // env.addFilter('cssbeautify', function(string) {
+    //     return cssBeautify(string, cssBeautifyOptions);
+    // });
+
+    // env.addFilter('stripindent', function(string){
+    //     return stripIndent(string);
+    // });
+
+    env.addFilter('markdown', function(string, wrap, wrapper_class) {
+        var rendered_markup = marked(stripIndent(string));
+        wrap = typeof wrap === 'undefined' ? false : wrap;
+        wrapper_class = typeof wrapper_class === 'undefined' ? 'uds-markdown-wrap' : wrapper_class;
+
+        if (wrap) {
+            rendered_markup = '<div class="' + wrapper_class + '">' + rendered_markup + "</div>";
+        }
+
+        return env.filters.safe(rendered_markup);
+    });
+
+    // env.addFilter('nunjucksrenderstring', function(string, context){
+    //     return env.renderString(string, context);
+    // });
+
+    // env.addFilter('getcontext', function(){
+    //     return this.ctx;
+    // });
+
+    // env.addGlobal('getContext', function(name) {
+    //     return name ? this.ctx[name] : this.ctx;
+    // });
+}
 
 function generateMacroConcatenateTask(c) {
     if (c.componentMacros) {
@@ -72,7 +112,7 @@ function generateBuildTask(c) {
                     watch: false
                 },
                 manageEnv: function(env) {
-                    // projectNodePackage.addDocLibraryNunjucksFilters(env);
+                    addDocLibraryNunjucksFilters(env);
                 },
                 path: c.docTemplateImportPaths
             };

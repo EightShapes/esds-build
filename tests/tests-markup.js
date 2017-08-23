@@ -113,7 +113,7 @@ module.exports = function(){
           });
       });
 
-      it('should compile "doc" docs', function() {
+      it('should compile "doc" docs, including markdown filter usage', function() {
         return gulp('tokens:build:all')
           .then(result => gulp('markup:concatenate-macros:all'))
           .then(result => gulp('markup:build:doc'))
@@ -132,6 +132,17 @@ module.exports = function(){
             assert.file(`${webroot}/latest/index.html`);
             assert.file(`${nodeModulesPath}/library-component-module/_site/latest/index.html`);
             assert.file(`${nodeModulesPath}/doc-component-module/_site/latest/index.html`);
+          });
+      });
+
+      it('should compile using a markdown filter', function() {
+        return gulp('tokens:build:all')
+          .then(result => gulp('markup:concatenate-macros:all'))
+          .then(result => gulp('markup:build:all'))
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/index.html`, '<h1 id="doc-compiled-from-markdown">Doc Compiled from Markdown</h1>');
+            assert.fileContent(`${nodeModulesPath}/library-component-module/_site/latest/index.html`, '<h1 id="library-compiled-from-markdown">Library Compiled from Markdown</h1>');
+            assert.fileContent(`${nodeModulesPath}/doc-component-module/_site/latest/index.html`, '<h1 id="doc-library-compiled-from-markdown">Doc Library Compiled from Markdown</h1>');
           });
       });
     });
