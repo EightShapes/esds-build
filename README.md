@@ -1,7 +1,7 @@
 # Installation Instructions
   1. Create a new node project:
   
-    `npm init`
+  `npm init`
   
   2. Install required gulp dependencies:  
   
