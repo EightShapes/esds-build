@@ -7,9 +7,6 @@
 'use strict';
 const assert = require('yeoman-assert');
 
-let config,
-    buildConfig;
-
 module.exports = function(){
     describe('get config when config file exists', function(){
       it('should retrieve the config from the path set in the gulpfile', function() {
@@ -28,6 +25,17 @@ module.exports = function(){
             assert(buildConfig.rootPath.includes('/uds-build-tools'));
             assert(buildConfig.scaffoldPath.includes('/uds-build-tools'));
             assert(buildConfig.localEnv.webroot.includes('/uds-build-tools/_site'));
+        });
+    });
+
+    describe.only('when retrieving product config', function(){
+        it('should return an empty config object when a product config file cannot be found', function(){
+            const config = require('../tasks/config.js'),
+                    productConfig = config.retrieveProductBuildConfig('/path/doesnt/exist/'),
+                    keys = Object.keys(productConfig);
+            console.log(typeof productConfig);
+            assert(typeof productConfig === 'object');
+            assert(keys.length === 0);
         });
     });
 };

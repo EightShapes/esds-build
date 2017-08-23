@@ -1,5 +1,17 @@
 'use strict';
 
+const productBuildConfigFileName = 'uds-build-tool-config.js',
+        fs = require('fs');
+
+function retrieveProductBuildConfig(rootPath) {
+    rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
+    if (fs.existsSync(`${rootPath}${productBuildConfigFileName}`)) {
+        return require(`${rootPath}${productBuildConfigFileName}`);
+    } else {
+        return {};
+    }
+}
+
 function retrieveGulpfile() {
     const rootPath = process.cwd();
     return require(`${rootPath}/gulpfile.js`);
@@ -15,5 +27,6 @@ module.exports = {
         } else {
             return require(`${__dirname}/../default_templates/default-build-config.js`); // If no config file has been defined, use the default config
         }
-    }
+    },
+    retrieveProductBuildConfig: retrieveProductBuildConfig
 };

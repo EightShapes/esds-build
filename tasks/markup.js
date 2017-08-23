@@ -89,7 +89,6 @@ function generateWatchMacrosTask(c) {
                 let macroLibraryBuildTask = `${markupConfig.buildTaskPrefix}${c.name}`;
                 postConcatBuildTasks.push(macroLibraryBuildTask);
             }
-            console.log([c.componentMacros, `!${concatenatedMacroFilename}`]);
 
             return gulp.watch([c.componentMacros, `!${concatenatedMacroFilename}`], gulp.series(concatTask, gulp.parallel(postConcatBuildTasks)));
         });
@@ -124,6 +123,7 @@ function generateBuildTask(c) {
             try {
                 data = JSON.parse(file);
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.log(e, `Warning: Could not parse ${c.docDataFile} into JSON for nunjucks`);
             }
 
