@@ -18,6 +18,7 @@ module.exports = function(){
 
       it('should delete all the files in dist', function() {
         const testFilename = `${dist}/some-random-file.txt`;
+        mkdirp.sync(dist);
         fs.writeFileSync(testFilename, 'blah blah blah');
 
         return gulp('clean:dist')
