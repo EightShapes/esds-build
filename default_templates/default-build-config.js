@@ -79,5 +79,15 @@ module.exports = {
         outputPath: tokensPath,
         jsonOutputFile: `${tokensPath}/tokens.json`,
         scssOutputFile: `${tokensPath}/tokens.scss`
+    },
+    copy: {
+        copyTaskPrefix: 'copy:',
+        tasks: [
+            {
+                name: 'images',
+                sources: [`${rootPath}/images/**/*`],
+                destination: `${webroot}/latest/images`
+            }
+        ]
     }
 };
