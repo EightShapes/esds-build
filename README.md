@@ -15,7 +15,7 @@
   
   4. Create a `gulpfile.js` in the root of your project. Add the following line:
   
-  `const gulp = require('uds-build-tasks');`
+  `const gulp = require('uds-build-tools');`
 
   5. Generate the project scaffold:
   
