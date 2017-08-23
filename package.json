@@ -1,13 +1,14 @@
 {
   "name": "uds_build_tasks",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "tasks/uds_tasks.js",
+  "private": true,
   "scripts": {
     "test": "mocha tests/tests.js --timeout 6000"
   },
   "author": "Kevin Powell <kevinmpowell@gmail.com>",
-  "license": "ISC",
+  "license": "TBD",
   "dependencies": {
     "autoprefixer": "^7.1.2",
     "browser-sync": "^2.18.13",
