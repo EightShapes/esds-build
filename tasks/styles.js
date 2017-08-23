@@ -10,6 +10,7 @@ const config = require('./config.js'),
         // rename = require('gulp-rename'),
         sass = require('gulp-sass'),
         sassLint = require('gulp-sass-lint'),
+        fs = require('fs'),
         styleConfig = buildConfig.styles,
         styleTasks = styleConfig.tasks,
         buildTaskPrefix = styleConfig.buildTaskPrefix,
@@ -22,11 +23,21 @@ const config = require('./config.js'),
         lintTasks = styleTasks.map(task => `${lintTaskPrefix}${task.name}`),
         watchTasks = styleTasks.map(task => `${watchTaskPrefix}${task.name}`);
 
-function generateLintTask(c) {
+function getLintOptions(c) {
     let sassLintOptions = {};
     if (c.lintOptions) {
         sassLintOptions = c.lintOptions;
     }
+    if (sassLintOptions.configFile && !fs.existsSync(sassLintOptions.configFile)) {
+        // eslint-disable-next-line no-console
+        console.log(`Warning: ${sassLintOptions.configFile} cannot be found, using sass-lint defaults`);
+        delete sassLintOptions.configFile;
+    }
+    return sassLintOptions;
+}
+
+function generateLintTask(c) {
+    let sassLintOptions = getLintOptions(c);
 
     gulp.task(`${lintTaskPrefix}${c.name}`, function () {
       return gulp.src(c.lintPaths)
@@ -109,3 +120,7 @@ gulp.task(`${watchTaskPrefix}tokens`, gulp.series(`${buildTaskPrefix}all`));
 // Run all watch tasks in parallel
 watchTasks.push(`${watchTaskPrefix}tokens`);
 gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));
+
+module.exports = {
+    getLintOptions: getLintOptions
+};

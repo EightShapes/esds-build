@@ -101,6 +101,30 @@ module.exports = function(){
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
             });
         });
+
+        it('should get sass lint options including lint config file when config file exists', function(){
+          const existingConfigFilePath = './tests/sample_project/node_modules/library-component-module/.sass-lint.yaml',
+                stylesTasks = require('../tasks/styles.js'),
+                taskConfig = {
+                  lintOptions: {
+                    configFile: existingConfigFilePath
+                  }
+                },
+                lintOptions = stylesTasks.getLintOptions(taskConfig);
+          assert(lintOptions.configFile === existingConfigFilePath);
+        });
+
+        it('should get an empty set of sass lint options that does not include a lint config file when the config file does not exist', function(){
+          const nonExistentConfigPath = './path/does/not/exist',
+                stylesTasks = require('../tasks/styles.js'),
+                taskConfig = {
+                  lintOptions: {
+                    configFile: nonExistentConfigPath
+                  }
+                },
+                lintOptions = stylesTasks.getLintOptions(taskConfig);
+          assert(typeof lintOptions.configFile === 'undefined');
+        });
       });
 
       describe('styles:postprocess', function(){

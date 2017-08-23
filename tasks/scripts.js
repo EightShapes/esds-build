@@ -5,6 +5,7 @@ const config = require('./config.js'),
         gulp = require('gulp'),
         concat = require('gulp-concat-util'),
         eslint = require('gulp-eslint'),
+        fs = require('fs'),
         scriptConfig = buildConfig.scripts,
         buildTaskPrefix = scriptConfig.buildTaskPrefix,
         concatTaskPrefix = scriptConfig.concatTaskPrefix,
@@ -13,20 +14,21 @@ const config = require('./config.js'),
         scriptTasks = scriptConfig.tasks,
         concatenateTasks = scriptTasks.map(t => `${concatTaskPrefix}${t.name}`),
         lintTasks = scriptTasks.map(t => `${lintTaskPrefix}${t.name}`),
+        watchTasks = scriptTasks.map(t => `${watchTaskPrefix}${t.name}`),
         buildTasks = scriptTasks.map(t => `${buildTaskPrefix}${t.name}`);
 
-// function generateLintTask(c) {
-//     let sassLintOptions = {};
-//     if (c.lintOptions) {
-//         sassLintOptions = c.lintOptions;
-//     }
-
-//     gulp.task(`${lintTaskPrefix}${c.name}`, function () {
-//       return gulp.src(c.lintPaths)
-//         .pipe(sassLint(sassLintOptions))
-//         .pipe(sassLint.format());
-//     });
-// }
+function getLintOptions(c) {
+    let lintOptions = {};
+    if (c.lintOptions) {
+        lintOptions = c.lintOptions;
+    }
+    if (lintOptions.configFile && !fs.existsSync(lintOptions.configFile)) {
+        // eslint-disable-next-line no-console
+        console.log(`Warning: ${lintOptions.configFile} cannot be found, using eslint defaults`);
+        delete lintOptions.configFile;
+    }
+    return lintOptions;
+}
 
 function generateConcatenateTask(c) {
     gulp.task(`${concatTaskPrefix}${c.name}`, function() {
@@ -38,11 +40,7 @@ function generateConcatenateTask(c) {
 }
 
 function generateLintTask(c) {
-    let lintOptions = {};
-
-    if (c.lintOptions) {
-        lintOptions = c.lintOptions;
-    }
+    let lintOptions = getLintOptions(c);
 
     gulp.task(`${lintTaskPrefix}${c.name}`, function () {
       return gulp.src(c.sourcePaths)
@@ -77,3 +75,10 @@ gulp.task(`${lintTaskPrefix}all`, gulp.parallel(lintTasks));
 
 // Build all scritps
 gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
+
+// Watch all scritps
+gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));
+
+module.exports = {
+    getLintOptions: getLintOptions
+};

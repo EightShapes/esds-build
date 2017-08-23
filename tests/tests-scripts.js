@@ -1,5 +1,5 @@
 /* global it */
-/* global xit */
+/* global it */
 /* global describe */
 /* global beforeEach */
 
@@ -102,6 +102,30 @@ module.exports = function(){
               assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
               assert(result.stderr.includes('scripts/global.js'));
             });
+        });
+
+        it('should get eslint options including a lint config file when config file exists', function(){
+          const existingConfigFilePath = './tests/sample_project/node_modules/library-component-module/.eslintrc',
+                scriptsTasks = require('../tasks/scripts.js'),
+                taskConfig = {
+                  lintOptions: {
+                    configFile: existingConfigFilePath
+                  }
+                },
+                lintOptions = scriptsTasks.getLintOptions(taskConfig);
+          assert(lintOptions.configFile === existingConfigFilePath);
+        });
+
+        it('should get an empty set of eslint options that does not include a lint config file when the config file does not exist', function(){
+          const nonExistentConfigPath = './path/does/not/exist',
+                scriptsTasks = require('../tasks/scripts.js'),
+                taskConfig = {
+                  lintOptions: {
+                    configFile: nonExistentConfigPath
+                  }
+                },
+                lintOptions = scriptsTasks.getLintOptions(taskConfig);
+          assert(typeof lintOptions.configFile === 'undefined');
         });
       });
 
