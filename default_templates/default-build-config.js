@@ -36,7 +36,7 @@ module.exports = {
         watchMacrosTaskPrefix: 'watch:markup:macros:',
         tasks: [
             {
-                name: 'design-system',
+                name: 'product',
                 componentMacros: `${rootPath}/components/**/*.njk`,
                 componentMacroOutputPath: `${rootPath}/components`,
                 componentMacroFilename: `all_components.njk`,
@@ -55,7 +55,7 @@ module.exports = {
         watchTaskPrefix: 'watch:scripts:',
         tasks: [
             {
-                name: 'design-system',
+                name: 'product',
                 outputFilename: 'main.js',
                 outputPath: `${webroot}/latest/scripts`,
                 sourcePaths: [`${rootPath}/components/**/*.js`, `${rootPath}/scripts/**/*.js`],
@@ -73,15 +73,19 @@ module.exports = {
         watchTaskPrefix: 'watch:styles:',
         tasks: [
             {
-                name: 'design-system',
+                name: 'product',
                 outputPath: `${webroot}/latest/styles`,
                 compileSourceFiles: [`${rootPath}/styles/*.scss`],
-                compileImportPaths: [`${rootPath}/components`, `${rootPath}/tokens`],
+                compileImportPaths: [`${rootPath}/components`, `${rootPath}/tokens`, `${rootPath}/styles`],
                 lintOptions: {
                     configFile: `${rootPath}/.sass-lint.yaml`
                 },
                 lintPaths: [`${rootPath}/styles/**/*.scss`,
                             `${rootPath}/components/**/*.scss`],
+                watchFiles: [`${rootPath}/styles/**/*.scss`,
+                            `${rootPath}/components/**/*.scss`,
+                            `${rootPath}/tokens/*.scss`
+                ],
                 autoprefixerOptions: {
                     browsers: ['last 2 versions'],
                     grid: true

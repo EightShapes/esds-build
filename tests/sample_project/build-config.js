@@ -135,6 +135,11 @@ module.exports = {
                 },
                 lintPaths: [`${nodeModulesPath}/library-component-module/styles/**/*.scss`,
                             `${nodeModulesPath}/library-component-module/components/**/*.scss`],
+                watchFiles: [
+                    `${nodeModulesPath}/library-component-module/styles/**/*.scss`,
+                    `${nodeModulesPath}/library-component-module/components/**/*.scss`,
+                    `${nodeModulesPath}/library-component-module/tokens/*.scss`
+                ],
                 autoprefixerOptions: {
                     browsers: ['last 2 versions'],
                     grid: true
@@ -150,6 +155,11 @@ module.exports = {
                 },
                 lintPaths: [`${nodeModulesPath}/doc-component-module/styles/**/*.scss`,
                             `${nodeModulesPath}/doc-component-module/components/**/*.scss`],
+                watchFiles: [
+                    `${nodeModulesPath}/doc-component-module/styles/**/*.scss`,
+                    `${nodeModulesPath}/doc-component-module/components/**/*.scss`,
+                    `${nodeModulesPath}/library-component-module/tokens/*.scss`
+                ],
                 autoprefixerOptions: {
                     browsers: ['last 2 versions'],
                     grid: true
@@ -164,6 +174,10 @@ module.exports = {
                     configFile: `${nodeModulesPath}/library-component-module/.sass-lint.yaml` /* Pulling sass lint config from "library" module */
                 },
                 lintPaths: [`${rootPath}/styles/**/*.scss`],
+                watchFiles: [
+                    `${rootPath}/styles/**/*.scss`,
+                    `${nodeModulesPath}/library-component-module/tokens/*.scss`
+                ],
                 autoprefixerOptions: {
                     browsers: ['last 2 versions'],
                     grid: true
