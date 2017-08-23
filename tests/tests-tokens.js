@@ -6,6 +6,7 @@
 'use strict';
 const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
+      tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
       fs = require('fs');
 
@@ -41,6 +42,12 @@ module.exports = function(){
             assert.fileContent(tokensJson, '"tokens": {');
             assert.fileContent(tokensJson, '"primary": "#0ff"');
           });
+      });
+
+      it('should return a warning when the tokens.yaml source file does not exist', function(){
+        tokensTasks.convertTokensYaml('/path/does/not/exist', function(){});
+        assert.noFile(`${tokensPath}/tokens.json`);
+        assert.noFile(`${tokensPath}/tokens.scss`);
       });
     });
 
