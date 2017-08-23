@@ -48,6 +48,23 @@ module.exports = {
             }
         ]
     },
+    scripts: {
+        buildTaskPrefix: 'scripts:build:', // Will lint, precompile, and postcss
+        concatTaskPrefix: 'scripts:concatenate:',
+        lintTaskPrefix: 'scripts:lint:',
+        watchTaskPrefix: 'watch:scripts:',
+        tasks: [
+            {
+                name: 'design-system',
+                outputFilename: 'main.js',
+                outputPath: `${webroot}/latest/scripts`,
+                sourcePaths: [`${rootPath}/components/**/*.js`, `${rootPath}/scripts/**/*.js`],
+                lintOptions: {
+                    configFile: `${rootPath}/.eslintrc` /* Pulling js lint config from "library" module */
+                }
+            }
+        ]
+    },
     styles: {
         buildTaskPrefix: 'styles:build:', // Will lint, precompile, and postcss
         compileTaskPrefix: 'styles:precompile:',
