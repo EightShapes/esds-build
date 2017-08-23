@@ -5,8 +5,7 @@
 /* global after */
 
 'use strict';
-const assert = require('yeoman-assert'),
-        fs = require('fs');
+const assert = require('yeoman-assert');
 
 let config,
     buildConfig;
@@ -26,9 +25,9 @@ module.exports = function(){
             const useDefaults = true;
             config = require('../tasks/config.js');
             buildConfig = config.get(useDefaults); // Gets default config
-            assert(buildConfig.rootPath === '.');
-            assert(buildConfig.scaffoldPath === '.');
-            assert(buildConfig.localEnv.webroot === './_site');
+            assert(buildConfig.rootPath.includes('/uds-build-tools'));
+            assert(buildConfig.scaffoldPath.includes('/uds-build-tools'));
+            assert(buildConfig.localEnv.webroot.includes('/uds-build-tools/_site'));
         });
     });
 };

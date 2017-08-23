@@ -9,7 +9,7 @@
 const packageRoot = process.cwd(),
         packageJson = require(`${packageRoot}/package.json`),
         projectNamespace = packageJson.name,
-        rootPath = '.',
+        rootPath = packageRoot,
         distPath = `${rootPath}/dist`,
         tokensPath = `${rootPath}/tokens`,
         sinkPath = `${rootPath}/docs/sink-pages`,

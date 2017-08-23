@@ -64,9 +64,9 @@ module.exports = function(){
           .then(result => {
             assert.file(`${scaffoldDir}/build-config.js`);
             const defaultConfig = require(`${__dirname}/scaffold_test/build-config.js`);
-            assert(defaultConfig.rootPath === '.');
-            assert(defaultConfig.scaffoldPath === '.');
-            assert(defaultConfig.localEnv.webroot === './_site');
+            assert(defaultConfig.rootPath.includes('/uds-build-tools'));
+            assert(defaultConfig.scaffoldPath.includes('/uds-build-tools'));
+            assert(defaultConfig.localEnv.webroot.includes('/uds-build-tools/_site'));
           });
       });
     });

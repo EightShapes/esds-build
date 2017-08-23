@@ -79,7 +79,12 @@ function generatePostprocessTask(c) {
 
 function generateWatchTask(c) {
     gulp.task(`${watchTaskPrefix}${c.name}`, function(){
-        return gulp.watch([c.compileSourceFiles, c.compileImportPaths], gulp.series(`${buildTaskPrefix}${c.name}`));
+        let watchFiles = c.compileSourceFiles;
+        if (c.compileImportPaths) {
+            c.compileImportPaths.forEach(filePath => { watchFiles.push(`${filePath}/**/*.scss`); });
+        }
+
+        return gulp.watch(watchFiles, gulp.series(`${buildTaskPrefix}${c.name}`));
     });
 }
 

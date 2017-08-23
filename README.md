@@ -24,3 +24,6 @@
   6. Run the local environment:
   
   `gulp`
+
+## Generate new component files
+`gulp generate:new-component`

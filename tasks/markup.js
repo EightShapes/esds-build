@@ -49,6 +49,7 @@ function generateWatchMacrosTask(c) {
                 let macroLibraryBuildTask = `${markupConfig.buildTaskPrefix}${c.name}`;
                 postConcatBuildTasks.push(macroLibraryBuildTask);
             }
+            console.log([c.componentMacros, `!${concatenatedMacroFilename}`]);
 
             return gulp.watch([c.componentMacros, `!${concatenatedMacroFilename}`], gulp.series(concatTask, gulp.parallel(postConcatBuildTasks)));
         });
