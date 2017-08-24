@@ -1,0 +1,11 @@
+{
+    "configMethod": "overwrite",
+    "classPrefix": "off-the-rails",
+    "docsPath": "pages",
+    "componentsPath": "modules",
+    "tokensPath": "constants",
+    "stylesPath": "scss",
+    "scriptsPath": "js",
+    "imagesPath": "imgs",
+    "dataPath": "content"
+}
