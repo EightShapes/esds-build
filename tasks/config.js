@@ -43,6 +43,7 @@ function getStylesConfig(buildConfig) {
             outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath),
             compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
             compileImportPaths: [
+                path.join(c.rootPath, c.dependenciesPath),
                 path.join(c.rootPath, c.componentsPath),
                 path.join(c.rootPath, c.tokensPath),
                 path.join(c.rootPath, c.stylesPath)
@@ -86,7 +87,7 @@ function getMarkupConfig(buildConfig) {
             componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
             componentMacroFilename: `${c.productTaskName}${c.markupSourceExtension}`,
             docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-            docTemplateImportPaths: [c.rootPath],
+            docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
                 path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)

@@ -30,6 +30,7 @@ module.exports = {
     configMethod: 'extend',
     classPrefix: classPrefix,
     rootPath: packageRoot,
+    dependenciesPath: 'node_modules',
     distPath: 'dist',
     docsPath: 'docs',
     componentsPath: 'components',
