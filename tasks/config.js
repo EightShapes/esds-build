@@ -165,11 +165,13 @@ function getCopyConfig(buildConfig) {
 function getTaskConfig(rootPath) {
     let buildConfig = retrieveBuildConfig(rootPath);
 
-    buildConfig.copy = getCopyConfig(buildConfig);
-    buildConfig.markup = getMarkupConfig(buildConfig);
-    buildConfig.scripts = getScriptsConfig(buildConfig);
-    buildConfig.styles = getStylesConfig(buildConfig);
-    buildConfig.tokens = getTokensConfig(buildConfig);
+    if (buildConfig.rootPath) {
+        buildConfig.copy = getCopyConfig(buildConfig);
+        buildConfig.markup = getMarkupConfig(buildConfig);
+        buildConfig.scripts = getScriptsConfig(buildConfig);
+        buildConfig.styles = getStylesConfig(buildConfig);
+        buildConfig.tokens = getTokensConfig(buildConfig);
+    }
 
     return buildConfig; // If no config file has been defined, use the default config
 }

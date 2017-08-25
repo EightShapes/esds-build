@@ -20,7 +20,6 @@ function recursivelyCheckForFiles(filePaths, done) {
   let allFilesFound = filePaths.every(file => fs.existsSync(file));
 
   if (allFilesFound) {
-    // assert.file(filePath);
     done();
   } else {
     setTimeout(function() {
@@ -127,28 +126,6 @@ module.exports = function(){
     });
 
     describe('watch:markup:docs', function(){
-      // it('should rebuild doc files for "library" when library doc files are saved', function(done){
-      //   exec(`gulp watch:markup:docs:components`); // start watch
-      //   deleteNodeModuleWebroots();
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => {
-      //       exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
-      //       recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
-      //                                 `${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
-      //     });
-      // });
-
-      // it('should rebuild doc files for "doc library" when "doc library" doc files are saved', function(done){
-      //   exec(`gulp watch:markup:docs:doc-components`); // start watch
-      //   deleteNodeModuleWebroots();
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => {
-      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
-      //       recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
-      //                                 `${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
-      //     });
-      // });
-
       it('should rebuild doc files when doc files are saved', function(done){
         exec(`gulp watch:markup:docs:${configProductName}`); // start watch
         gulp('markup:concatenate:macros:all')
@@ -158,48 +135,6 @@ module.exports = function(){
             recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
           });
       });
-
-      // it('should rebuild doc files for "doc" when "doc library" doc files are saved', function(done){
-      //   exec(`gulp watch:markup:docs:doc`); // start watch
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => gulp('clean:webroot'))
-      //     .then(result => {
-      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/sink-pages/components/code_snippet.njk`);
-      //       recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
-      //     });
-      // });
-
-      // it('should rebuild doc files for "doc" when "doc" doc files are saved ;)', function(done){
-      //   exec(`gulp watch:markup:docs:doc`); // start watch
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => gulp('clean:webroot'))
-      //     .then(result => {
-      //       exec(`touch ${projectPath}/docs/index.njk`);
-      //       recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
-      //     });
-      // });
-
-      // it('should rebuild "library" doc files when all doc files are being watched', function(done){
-      //   exec(`gulp watch:markup:docs:all`); // start watch
-      //   deleteNodeModuleWebroots();
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => gulp('clean:webroot'))
-      //     .then(result => {
-      //       exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
-      //       recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
-      //     });
-      // });
-
-      // it('should rebuild "doc library" doc files when all doc files are being watched', function(done){
-      //   exec(`gulp watch:markup:docs:all`); // start watch
-      //   deleteNodeModuleWebroots();
-      //   gulp('markup:concatenate-macros:all')
-      //     .then(result => gulp('clean:webroot'))
-      //     .then(result => {
-      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
-      //       recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
-      //     });
-      // });
 
       it('should rebuild "doc" files when all doc files are being watched', function(done){
         exec(`gulp watch:markup:docs:all`); // start watch

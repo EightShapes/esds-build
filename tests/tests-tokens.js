@@ -16,7 +16,6 @@ function recursivelyCheckForFiles(filePaths, done) {
   let allFilesFound = filePaths.every(file => fs.existsSync(file));
 
   if (allFilesFound) {
-    // assert.file(filePath);
     done();
   } else {
     setTimeout(function() {
