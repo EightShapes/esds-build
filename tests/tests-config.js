@@ -7,7 +7,7 @@
 'use strict';
 const assert = require('yeoman-assert'),
         path = require('path'),
-        configProductName = '-eightshapes-uds-build-tools';
+        configProductName = 'eightshapes-uds-build-tools';
 
 let config;
 

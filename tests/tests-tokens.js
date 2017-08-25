@@ -26,11 +26,11 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          tokensPath = `${projectPath}/node_modules/library-component-module/tokens`,
+          tokensPath = `${projectPath}/tokens`,
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
-    describe('tokens:build', function(){
+    describe.only('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
@@ -38,7 +38,7 @@ module.exports = function(){
       it('should convert tokens.yaml to scss and json', function() {
         return gulp('tokens:build:all')
           .then(result => {
-            assert.fileContent(tokensScss, '$uds-color-interactive-primary: #0ff');
+            assert.fileContent(tokensScss, '$eightshapes-uds-build-tools-color-interactive-primary: #0ff');
             assert.fileContent(tokensJson, '"tokens": {');
             assert.fileContent(tokensJson, '"primary": "#0ff"');
           });

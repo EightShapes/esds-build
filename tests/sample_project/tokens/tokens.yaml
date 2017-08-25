@@ -1,2 +1,5 @@
-testing:
-  values: "here"
+color:
+  interactive:
+    primary: "#0ff"
+border:
+  medium: "solid 3px #000"

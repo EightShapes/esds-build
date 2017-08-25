@@ -10,7 +10,12 @@ let packageJson,
     classPrefix = 'uds';
 
 function makeSafeForCss(name) {
-    return name.replace(/[^a-z0-9]/g, '-');
+    let safeName = name.replace(/[^a-z0-9]/g, '-');
+    while (safeName.indexOf('-') === 0) {
+        safeName = safeName.substring(1);
+    }
+
+    return safeName;
 }
 
 if (fs.existsSync(packageJsonFile)) {
