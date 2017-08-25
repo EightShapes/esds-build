@@ -91,7 +91,7 @@ function getMarkupConfig(buildConfig) {
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
                 path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
             ],
-            docOutputPath: c.latestVersionWebroot
+            docOutputPath: path.join(c.rootPath, c.latestVersionWebroot)
         };
 
     let tasks = [defaultTask];

@@ -133,6 +133,7 @@ function generateBuildTask(c) {
 
         // Compile doc src to html
         gulp.task(`${buildTaskPrefix}${c.name}`, function() {
+            console.log(c.docOutputPath)
             return gulp.src(c.docSourceFilePaths)
                 .pipe(
                     nunjucksRender(nunjucksOptions).on('error', function(e){
