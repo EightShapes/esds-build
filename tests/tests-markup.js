@@ -66,7 +66,7 @@ module.exports = function(){
 
     });
 
-    describe.only('markup:build:', function(){
+    describe('markup:build:', function(){
       beforeEach(function(){
         return gulp('clean:webroot');
       });
@@ -148,30 +148,29 @@ module.exports = function(){
     });
 
     describe('watch:markup:macros', function(){
-      it('should reconcatenate macros and rebuild docs for "library", "doc library", and "doc" when library macro files are saved', function(done){
-        exec(`gulp watch:markup:macros:components`); // start watch
+      // it('should reconcatenate macros and rebuild docs for "library", "doc library", and "doc" when library macro files are saved', function(done){
+      //   exec(`gulp watch:markup:macros:components`); // start watch
+      //   deleteNodeModuleWebroots();
+      //   gulp('clean:concatenated-macros')
+      //     .then(result => gulp('markup:concatenate-macros:doc-components')) // Rebuild the doc components concatenated macro file since this task shouldn't do that
+      //     .then(result => gulp('clean:webroot'))
+      //     .then(result => {
+      //       exec(`touch ${componentMacros}/button/button.njk`);
+      //       recursivelyCheckForFiles([`${componentMacros}/uds.njk`,
+      //                                 `${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
+      //                                 `${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
+      //                                 `${webroot}/latest/index.html`], done);
+      //     });
+      // });
+
+      it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
+        exec(`gulp watch:markup:macros:${configProductName}`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
-          .then(result => gulp('markup:concatenate-macros:doc-components')) // Rebuild the doc components concatenated macro file since this task shouldn't do that
           .then(result => gulp('clean:webroot'))
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
-            recursivelyCheckForFiles([`${componentMacros}/uds.njk`,
-                                      `${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
-                                      `${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
-                                      `${webroot}/latest/index.html`], done);
-          });
-      });
-
-      it('should reconcatenate "doc library" macros and rebuild "doc library" and when macro files are saved', function(done){
-        exec(`gulp watch:markup:macros:doc-components`); // start watch
-        deleteNodeModuleWebroots();
-        gulp('clean:concatenated-macros')
-          .then(result => gulp('clean:webroot'))
-          .then(result => {
-            exec(`touch ${docComponentMacros}/code_snippet/code_snippet.njk`);
-            recursivelyCheckForFiles([`${docComponentMacros}/uds_doc_library.njk`,
-                                      `${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
+            recursivelyCheckForFiles([`${componentMacros}/${configProductName}.njk`,
                                       `${webroot}/latest/index.html`], done);
           });
       });
@@ -182,63 +181,39 @@ module.exports = function(){
         gulp('clean:concatenated-macros')
           .then(result => gulp('clean:webroot'))
           .then(result => {
-            exec(`touch ${docComponentMacros}/code_snippet/code_snippet.njk`);
             exec(`touch ${componentMacros}/button/button.njk`);
-            recursivelyCheckForFiles([`${componentMacros}/uds.njk`,
-                                      `${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
-                                      `${docComponentMacros}/uds_doc_library.njk`,
-                                      `${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
+            recursivelyCheckForFiles([`${componentMacros}/${configProductName}.njk`,
                                       `${webroot}/latest/index.html`], done);
           });
       });
     });
 
     describe('watch:markup:docs', function(){
-      it('should rebuild doc files for "library" when library doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:components`); // start watch
-        deleteNodeModuleWebroots();
-        gulp('markup:concatenate-macros:all')
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
-            recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
-                                      `${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
-          });
-      });
+      // it('should rebuild doc files for "library" when library doc files are saved', function(done){
+      //   exec(`gulp watch:markup:docs:components`); // start watch
+      //   deleteNodeModuleWebroots();
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => {
+      //       exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
+      //       recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/sink-pages/components/buttons.html`,
+      //                                 `${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
+      //     });
+      // });
 
-      it('should rebuild doc files for "doc library" when "doc library" doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:doc-components`); // start watch
-        deleteNodeModuleWebroots();
-        gulp('markup:concatenate-macros:all')
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
-            recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
-                                      `${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
-          });
-      });
+      // it('should rebuild doc files for "doc library" when "doc library" doc files are saved', function(done){
+      //   exec(`gulp watch:markup:docs:doc-components`); // start watch
+      //   deleteNodeModuleWebroots();
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => {
+      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
+      //       recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/sink-pages/components/code-snippets.html`,
+      //                                 `${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
+      //     });
+      // });
 
-      it('should rebuild doc files for "doc" when "library" doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:doc`); // start watch
-        gulp('markup:concatenate-macros:all')
-          .then(result => gulp('clean:webroot'))
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/library-component-module/docs/sink-pages/components/buttons.njk`);
-            recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
-          });
-      });
-
-      it('should rebuild doc files for "doc" when "doc library" doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:doc`); // start watch
-        gulp('markup:concatenate-macros:all')
-          .then(result => gulp('clean:webroot'))
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/doc-component-module/docs/sink-pages/components/code_snippet.njk`);
-            recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
-          });
-      });
-
-      it('should rebuild doc files for "doc" when "doc" doc files are saved ;)', function(done){
-        exec(`gulp watch:markup:docs:doc`); // start watch
-        gulp('markup:concatenate-macros:all')
+      it('should rebuild doc files when doc files are saved', function(done){
+        exec(`gulp watch:markup:docs:${configProductName}`); // start watch
+        gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
           .then(result => {
             exec(`touch ${projectPath}/docs/index.njk`);
@@ -246,32 +221,52 @@ module.exports = function(){
           });
       });
 
-      it('should rebuild "library" doc files when all doc files are being watched', function(done){
-        exec(`gulp watch:markup:docs:all`); // start watch
-        deleteNodeModuleWebroots();
-        gulp('markup:concatenate-macros:all')
-          .then(result => gulp('clean:webroot'))
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
-            recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
-          });
-      });
+      // it('should rebuild doc files for "doc" when "doc library" doc files are saved', function(done){
+      //   exec(`gulp watch:markup:docs:doc`); // start watch
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => gulp('clean:webroot'))
+      //     .then(result => {
+      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/sink-pages/components/code_snippet.njk`);
+      //       recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
+      //     });
+      // });
 
-      it('should rebuild "doc library" doc files when all doc files are being watched', function(done){
-        exec(`gulp watch:markup:docs:all`); // start watch
-        deleteNodeModuleWebroots();
-        gulp('markup:concatenate-macros:all')
-          .then(result => gulp('clean:webroot'))
-          .then(result => {
-            exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
-            recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
-          });
-      });
+      // it('should rebuild doc files for "doc" when "doc" doc files are saved ;)', function(done){
+      //   exec(`gulp watch:markup:docs:doc`); // start watch
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => gulp('clean:webroot'))
+      //     .then(result => {
+      //       exec(`touch ${projectPath}/docs/index.njk`);
+      //       recursivelyCheckForFiles([`${webroot}/latest/index.html`], done);
+      //     });
+      // });
+
+      // it('should rebuild "library" doc files when all doc files are being watched', function(done){
+      //   exec(`gulp watch:markup:docs:all`); // start watch
+      //   deleteNodeModuleWebroots();
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => gulp('clean:webroot'))
+      //     .then(result => {
+      //       exec(`touch ${nodeModulesPath}/library-component-module/docs/index.njk`);
+      //       recursivelyCheckForFiles([`${nodeModulesPath}/library-component-module/_site/latest/index.html`], done);
+      //     });
+      // });
+
+      // it('should rebuild "doc library" doc files when all doc files are being watched', function(done){
+      //   exec(`gulp watch:markup:docs:all`); // start watch
+      //   deleteNodeModuleWebroots();
+      //   gulp('markup:concatenate-macros:all')
+      //     .then(result => gulp('clean:webroot'))
+      //     .then(result => {
+      //       exec(`touch ${nodeModulesPath}/doc-component-module/docs/index.njk`);
+      //       recursivelyCheckForFiles([`${nodeModulesPath}/doc-component-module/_site/latest/index.html`], done);
+      //     });
+      // });
 
       it('should rebuild "doc" files when all doc files are being watched', function(done){
         exec(`gulp watch:markup:docs:all`); // start watch
         deleteNodeModuleWebroots();
-        gulp('markup:concatenate-macros:all')
+        gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
           .then(result => {
             exec(`touch ${projectPath}/docs/index.njk`);
