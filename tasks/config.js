@@ -40,8 +40,8 @@ function getStylesConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputPath: path.join(c.latestVersionWebroot, c.stylesPath),
-            compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*', c.stylesSourceExtension),
+            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath),
+            compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
             compileImportPaths: [
                 path.join(c.rootPath, c.componentsPath),
                 path.join(c.rootPath, c.tokensPath),
@@ -51,13 +51,13 @@ function getStylesConfig(buildConfig) {
                 configFile: c.stylesLintConfig
             },
             lintPaths: [
-                path.join(c.rootPath, c.componentsPath, '**', '*', c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*', c.stylesSourceExtension)
+                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
+                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension)
             ],
             watchFiles: [
-                path.join(c.rootPath, c.componentsPath, '**', '*', c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*', c.stylesSourceExtension),
-                path.join(c.rootPath, c.tokensPath, '*', c.stylesSourceExtension)
+                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
+                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension),
+                path.join(c.rootPath, c.tokensPath, '*' + c.stylesSourceExtension)
             ],
             autoprefixerOptions: {
                 browsers: ['last 2 versions'],
@@ -82,14 +82,14 @@ function getMarkupConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*', c.markupSourceExtension),
+            componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension),
             componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
             componentMacroFilename: `${c.productTaskName}${c.markupSourceExtension}`,
-            docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*', c.markupSourceExtension),
+            docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
             docTemplateImportPaths: [c.rootPath],
             docTemplateWatchPaths: [
-                path.join(c.rootPath, c.docsPath, '**', '*', c.markupSourceExtension),
-                path.join(c.rootPath, c.templatesPath, '**', '*', c.markupSourceExtension)
+                path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
+                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
             ],
             docOutputPath: c.latestVersionWebroot
         };
@@ -111,10 +111,10 @@ function getScriptsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             outputFilename: `${c.productTaskName}${c.scriptsSourceExtension}`,
-            outputPath: path.join(c.latestVersionWebroot, c.scriptsPath),
+            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.scriptsPath),
             sourcePaths: [
-                path.join(c.rootPath, c.componentsPath, '**', '*', c.scriptsSourceExtension),
-                path.join(c.rootPath, c.scriptsPath, '**', '*', c.scriptsSourceExtension)
+                path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension),
+                path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)
             ],
             lintOptions: {
                 configFile: c.scriptsLintConfig

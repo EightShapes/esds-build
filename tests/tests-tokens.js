@@ -8,7 +8,8 @@ const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs'),
+      configProductName = 'eightshapes-uds-build-tools';
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -30,16 +31,18 @@ module.exports = function(){
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
-    describe.only('tokens:build', function(){
+    describe('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
 
-      it('should convert tokens.yaml to scss and json', function() {
+      it('should convert tokens.yaml to scss and json and include classPrefix from config', function() {
         return gulp('tokens:build:all')
           .then(result => {
-            assert.fileContent(tokensScss, '$eightshapes-uds-build-tools-color-interactive-primary: #0ff');
+            assert.fileContent(tokensScss, `$${configProductName}-color-interactive-primary: #0ff`);
+            assert.fileContent(tokensScss, `$eightshapes-uds-build-tools-class-prefix: "${configProductName}"`);
             assert.fileContent(tokensJson, '"tokens": {');
+            assert.fileContent(tokensJson, `"class-prefix": "${configProductName}"`);
             assert.fileContent(tokensJson, '"primary": "#0ff"');
           });
       });

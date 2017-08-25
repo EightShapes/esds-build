@@ -85,9 +85,11 @@ function convertTokensYaml(sourceFile, done) {
         tokenConfig.formats.forEach(format => {
             switch (format) {
                 case '.json':
+                    tokens['class-prefix'] = c.classPrefix;
                     writeTokensJsonFile(tokens);
                     break;
                 case '.scss':
+                    tokens['class-prefix'] = '"' + c.classPrefix + '"';
                     writeTokensScssFile(tokens);
                     break;
             }

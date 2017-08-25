@@ -1,7 +1,7 @@
-@import 'library-component-module/tokens/tokens';
+@import 'tokens';
 
-.uds-doc-nav {
-    border: $uds-border-medium;
+.#{$eightshapes-uds-build-tools-class-prefix}-nav {
+    border: $eightshapes-uds-build-tools-border-medium;
     color: lemonchiffon;
     display: grid;
     grid-row-start: 1;
