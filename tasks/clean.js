@@ -1,33 +1,35 @@
 'use strict';
 
 const config = require('./config.js'),
-        buildConfig = config.get(),
+        c = config.get(),
         gulp = require('gulp'),
+        path = require('path'),
         del = require('del');
 
 gulp.task('clean:dist', function(){
-    return del(`${buildConfig.distPath}/**/*`);
+    return del(path.join(c.rootPath, c.distPath, '**', '*'));
 });
 
 gulp.task('clean:tokens', function(){
-    return del([`${buildConfig.tokens.sourcePath}/*`, `!${buildConfig.tokens.sourceFile}`]);
+    const tokenFiles = path.join(c.tokens.outputPath, '*'),
+            tokenSourceFile = c.tokens.sourceFile;
+    return del([ tokenFiles, `!${tokenSourceFile}`]);
 });
 
 gulp.task('clean:concatenated-macros', function(done){
-    buildConfig.markup.tasks.forEach(t => {
+    c.markup.tasks.forEach(t => {
         if (t.componentMacroOutputPath) {
-            del(`${t.componentMacroOutputPath}/${t.componentMacroFilename}`);
+            del(path.join(t.componentMacroOutputPath, t.componentMacroFilename));
         }
     });
     done();
 });
 
 gulp.task('clean:webroot', function(done){
-    let webrootPaths = [`${buildConfig.localEnv.webroot}/**/*`];
-    if (buildConfig.createVersionedDocs) {
-        webrootPaths.push(`!${buildConfig.localEnv.webroot}/v`);
-        // webrootPaths.push(`!${buildConfig.localEnv.webroot}/v/**/*`);
+    let webrootPaths = [path.join(c.rootPath, c.latestVersionWebroot, '**', '*')];
+    if (c.versionedDocs) {
+        const versionedDocPaths = path.join(c.rootPath, c.webroot, 'v');
+        webrootPaths.push(`!${versionedDocPaths}`);
     }
-
     return del(webrootPaths);
 });

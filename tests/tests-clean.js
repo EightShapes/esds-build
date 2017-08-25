@@ -7,11 +7,13 @@
 const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       fs = require('fs'),
-      mkdirp = require('mkdirp');
+      path = require('path'),
+      mkdirp = require('mkdirp'),
+      configProductName = 'eightshapes-uds-build-tools';
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          tokensPath = `${projectPath}/node_modules/library-component-module/tokens`,
+          tokensPath = `${projectPath}/tokens`,
           dist = `${projectPath}/dist`;
 
     describe('clean:dist', function(){
@@ -34,6 +36,7 @@ module.exports = function(){
               tokensJsonFilename = `${tokensPath}/tokens.json`,
               tokensYamlFilename = `${tokensPath}/tokens.yaml`;
 
+        mkdirp.sync(tokensPath);
         fs.writeFileSync(tokensScssFilename, 'tokens scss');
         fs.writeFileSync(tokensJsonFilename, 'tokens json');
 
@@ -48,7 +51,8 @@ module.exports = function(){
 
     describe('clean:concatenated-macros', function(){
       it('should delete all concatenated macro files', function(){
-        const concatenatedComponentsFilename = `${projectPath}/node_modules/library-component-module/components/uds.njk`;
+        const concatenatedComponentsFilename = `${projectPath}/components/${configProductName}.njk`;
+        mkdirp.sync(path.join(projectPath, 'components'));
 
         fs.writeFileSync(concatenatedComponentsFilename, 'concatenated macros');
 

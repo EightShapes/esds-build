@@ -1,0 +1,13 @@
+{
+    "rootPath": "tests/sample_project/",
+    "dependencies": [
+        {
+            "name": "product-a",
+            "tokens": "include"
+        },
+        {
+            "name": "product-b",
+            "tokens": "merge"
+        }
+    ]
+}
