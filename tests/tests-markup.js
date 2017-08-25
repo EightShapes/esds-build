@@ -14,7 +14,7 @@ const { exec } = require('child_process'),
       componentMacros = `${projectPath}/components`,
       docComponentMacros = `${nodeModulesPath}/doc-component-module/components`,
       webroot = `${projectPath}/_site`,
-      configProductName = 'eightshapes-uds-build-tools';;
+      configProductName = 'eightshapes-uds-build-tools';
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {

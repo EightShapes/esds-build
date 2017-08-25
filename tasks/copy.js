@@ -7,6 +7,7 @@ const config = require('./config.js'),
 
 function generateCopyTask(c) {
     gulp.task(`${buildConfig.copy.copyTaskPrefix}${c.name}`, function() {
+        console.log(c.sources);
     return gulp.src(c.sources)
         .pipe(gulp.dest(c.destination));
     });

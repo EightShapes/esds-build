@@ -23,8 +23,8 @@ function retrieveDefaultBuildConfig() {
 
 function retrieveBuildConfig(rootPath) {
     rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
-    const defaultConfig = retrieveDefaultBuildConfig(),
-            productConfig = retrieveProductBuildConfig(rootPath);
+    const defaultConfig = JSON.parse(JSON.stringify(retrieveDefaultBuildConfig())), // deep copy technique
+            productConfig = JSON.parse(JSON.stringify(retrieveProductBuildConfig(rootPath))); // deep copy technique
 
     let buildConfig = Object.assign(defaultConfig, productConfig),
         useProductConfig = buildConfig.configMethod === 'overwrite';
@@ -150,7 +150,7 @@ function getCopyConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.imagesPath, '**', '*')
             ],
-            destination: path.join(c.latestVersionWebroot, c.imagesPath)
+            destination: path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath)
         };
 
     let tasks = [imageTask];

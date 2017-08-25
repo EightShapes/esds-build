@@ -91,7 +91,7 @@ module.exports = function(){
             assert(c.styles.lintTaskPrefix === 'styles:lint:');
             assert(c.styles.watchTaskPrefix === 'watch:styles:');
             assert(c.styles.tasks[0].name === configProductName);
-            assert(c.styles.tasks[0].outputPath === path.join(c.latestVersionWebroot, c.stylesPath));
+            assert(c.styles.tasks[0].outputPath === path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath));
 
             assert(c.markup.buildTaskPrefix === 'markup:build:');
             assert(c.markup.concatMacrosTaskPrefix === 'markup:concatenate:macros:');
@@ -99,7 +99,7 @@ module.exports = function(){
             assert(c.markup.watchDocsTaskPrefix === 'watch:markup:docs:');
             assert(c.markup.watchMacrosTaskPrefix === 'watch:markup:macros:');
             assert(c.markup.tasks[0].name === configProductName);
-            assert(c.markup.tasks[0].docOutputPath === c.latestVersionWebroot);
+            assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.latestVersionWebroot));
             assert(c.markup.tasks[0].componentMacroFilename === `${configProductName}${c.markupSourceExtension}`);
 
             assert(c.scripts.buildTaskPrefix === 'scripts:build:');
@@ -117,7 +117,7 @@ module.exports = function(){
 
             assert(c.copy.copyTaskPrefix === 'copy:');
             assert(c.copy.tasks[0].name === 'images');
-            assert(c.copy.tasks[0].destination === path.join(c.latestVersionWebroot, c.imagesPath));
+            assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath));
         });
 
         xit('should return a task config with product level extensions when a product config file is present', function(){

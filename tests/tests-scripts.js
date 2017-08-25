@@ -7,7 +7,8 @@
 const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs'),
+      configProductName = 'eightshapes-uds-build-tools';
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -27,7 +28,7 @@ module.exports = function(){
     const projectPath = './tests/sample_project',
           componentsJsFile = `${projectPath}/_site/latest/scripts/components.js`,
           docComponentsJsFile = `${projectPath}/_site/latest/scripts/doc-components.js`,
-          docJsFile = `${projectPath}/_site/latest/scripts/doc.js`;
+          docJsFile = `${projectPath}/_site/latest/scripts/${configProductName}.js`;
 
     describe('scripts', function(){
       describe('scripts:concatenate', function(){
@@ -35,24 +36,24 @@ module.exports = function(){
           return gulp('clean:webroot');
         });
 
-        it('should be able to concatenate "library" scripts', function() {
-          return gulp('scripts:concatenate:components')
-            .then(result => {
-              assert.fileContent(componentsJsFile, 'Uds.Button');
-              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
-            });
-        });
+        // it('should be able to concatenate "library" scripts', function() {
+        //   return gulp('scripts:concatenate:components')
+        //     .then(result => {
+        //       assert.fileContent(componentsJsFile, 'Uds.Button');
+        //       assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+        //     });
+        // });
 
-        it('should be able to concatenate "doc library" scripts', function() {
-          return gulp('scripts:concatenate:doc-components')
-            .then(result => {
-              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
-              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
-            });
-        });
+        // it('should be able to concatenate "doc library" scripts', function() {
+        //   return gulp('scripts:concatenate:doc-components')
+        //     .then(result => {
+        //       assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+        //       assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+        //     });
+        // });
 
-        it('should be able to concatenate "doc" scripts', function() {
-          return gulp('scripts:concatenate:doc')
+        it('should be able to concatenate scripts', function() {
+          return gulp(`scripts:concatenate:${configProductName}`)
             .then(result => {
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
@@ -61,34 +62,34 @@ module.exports = function(){
         it('should be able to concatenate all scripts with one composite gulp task', function() {
           return gulp('scripts:concatenate:all')
             .then(result => {
-              assert.fileContent(componentsJsFile, 'Uds.Button');
-              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
-              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
-              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+              // assert.fileContent(componentsJsFile, 'Uds.Button');
+              // assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+              // assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+              // assert.fileContent(docComponentsJsFile, 'Global8SHelper');
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
       });
 
       describe('scripts:lint', function(){
-        it('should be able to lint "library" scripts', function() {
-          return gulp('scripts:lint:components')
-            .then(result => {
-              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
-              assert(result.stderr.includes('components/button/button.js'));
-            });
-        });
+        // it('should be able to lint "library" scripts', function() {
+        //   return gulp('scripts:lint:components')
+        //     .then(result => {
+        //       assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+        //       assert(result.stderr.includes('components/button/button.js'));
+        //     });
+        // });
 
-        it('should be able to lint "doc library" scripts', function() {
-          return gulp('scripts:lint:doc-components')
-            .then(result => {
-              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
-              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
-            });
-        });
+        // it('should be able to lint "doc library" scripts', function() {
+        //   return gulp('scripts:lint:doc-components')
+        //     .then(result => {
+        //       assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+        //       assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+        //     });
+        // });
 
-        it('should be able to lint "doc" scripts', function() {
-          return gulp('scripts:lint:doc')
+        it('should be able to lint scripts', function() {
+          return gulp(`scripts:lint:${configProductName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -98,8 +99,8 @@ module.exports = function(){
         it('should be able to lint all scripts with a composite lint task', function() {
           return gulp('scripts:lint:all')
             .then(result => {
-              assert(result.stderr.includes('components/button/button.js'));
-              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+              // assert(result.stderr.includes('components/button/button.js'));
+              // assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
               assert(result.stderr.includes('scripts/global.js'));
             });
         });
@@ -134,28 +135,28 @@ module.exports = function(){
           return gulp('clean:webroot');
         });
 
-        it('should be able to lint and then concatenate "library" scripts', function() {
-          return gulp('scripts:build:components')
-            .then(result => {
-              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
-              assert(result.stderr.includes('components/button/button.js'));
-              assert.fileContent(componentsJsFile, 'Uds.Button');
-              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
-            });
-        });
+        // it('should be able to lint and then concatenate "library" scripts', function() {
+        //   return gulp('scripts:build:components')
+        //     .then(result => {
+        //       assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+        //       assert(result.stderr.includes('components/button/button.js'));
+        //       assert.fileContent(componentsJsFile, 'Uds.Button');
+        //       assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+        //     });
+        // });
 
-        it('should be able to lint and then concatenate "doc library" scripts', function() {
-          return gulp('scripts:build:doc-components')
-            .then(result => {
-              assert(result.stderr.includes('Unexpected console statement. (no-console)'));
-              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
-              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
-              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
-            });
-        });
+        // it('should be able to lint and then concatenate "doc library" scripts', function() {
+        //   return gulp('scripts:build:doc-components')
+        //     .then(result => {
+        //       assert(result.stderr.includes('Unexpected console statement. (no-console)'));
+        //       assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+        //       assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+        //       assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+        //     });
+        // });
 
-        it('should be able to lint and then concatenate "doc" scripts', function() {
-          return gulp('scripts:build:doc')
+        it('should be able to lint and then concatenate scripts', function() {
+          return gulp(`scripts:build:${configProductName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -166,39 +167,39 @@ module.exports = function(){
         it('should be able to lint and then concatenate all scripts', function() {
           return gulp('scripts:build:all')
             .then(result => {
-              assert(result.stderr.includes('components/button/button.js'));
-              assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
+              // assert(result.stderr.includes('components/button/button.js'));
+              // assert(result.stderr.includes('components/code_snippet/code_snippet.js'));
               assert(result.stderr.includes('scripts/global.js'));
-              assert.fileContent(componentsJsFile, 'Uds.Button');
-              assert.fileContent(componentsJsFile, 'globalFunctionHelper');
-              assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
-              assert.fileContent(docComponentsJsFile, 'Global8SHelper');
+              // assert.fileContent(componentsJsFile, 'Uds.Button');
+              // assert.fileContent(componentsJsFile, 'globalFunctionHelper');
+              // assert.fileContent(docComponentsJsFile, 'DocLibrary.CodeSnippet');
+              // assert.fileContent(docComponentsJsFile, 'Global8SHelper');
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
       });
 
       describe('watch:scripts', function(){
-        it('should watch "library" scripts for changes', function(done) {
-          exec(`gulp watch:scripts:components`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/components/button/button.js`);
-              recursivelyCheckForFiles([componentsJsFile], done);
-            });
-        });
+        // it('should watch "library" scripts for changes', function(done) {
+        //   exec(`gulp watch:scripts:components`); // start watch
+        //   gulp('clean:webroot') // clear webroot
+        //     .then(result => {
+        //       exec(`touch ${projectPath}/node_modules/library-component-module/components/button/button.js`);
+        //       recursivelyCheckForFiles([componentsJsFile], done);
+        //     });
+        // });
 
-        it('should watch "doc library" scripts for changes', function(done) {
-          exec(`gulp watch:scripts:doc-components`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => {
-              exec(`touch ${projectPath}/node_modules/doc-component-module/components/code_snippet/code_snippet.js`);
-              recursivelyCheckForFiles([docComponentsJsFile], done);
-            });
-        });
+        // it('should watch "doc library" scripts for changes', function(done) {
+        //   exec(`gulp watch:scripts:doc-components`); // start watch
+        //   gulp('clean:webroot') // clear webroot
+        //     .then(result => {
+        //       exec(`touch ${projectPath}/node_modules/doc-component-module/components/code_snippet/code_snippet.js`);
+        //       recursivelyCheckForFiles([docComponentsJsFile], done);
+        //     });
+        // });
 
-        it('should watch "doc" scripts for changes', function(done) {
-          exec(`gulp watch:scripts:doc`); // start watch
+        it('should watch scripts for changes', function(done) {
+          exec(`gulp watch:scripts:${configProductName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => {
               exec(`touch ${projectPath}/scripts/global.js`);
@@ -210,10 +211,10 @@ module.exports = function(){
           exec(`gulp watch:scripts:all`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => {
-              exec(`touch ${projectPath}/node_modules/library-component-module/components/button/button.js`);
-              exec(`touch ${projectPath}/node_modules/doc-component-module/components/code_snippet/code_snippet.js`);
+              // exec(`touch ${projectPath}/node_modules/library-component-module/components/button/button.js`);
+              // exec(`touch ${projectPath}/node_modules/doc-component-module/components/code_snippet/code_snippet.js`);
               exec(`touch ${projectPath}/scripts/global.js`);
-              recursivelyCheckForFiles([docJsFile, docComponentsJsFile, componentsJsFile], done);
+              recursivelyCheckForFiles([docJsFile], done);
             });
         });
       });

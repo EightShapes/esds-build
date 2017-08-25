@@ -32,9 +32,8 @@ module.exports = function(){
       });
 
       it('should generate a project scaffold with top level directories and basic files', function() {
-        return gulp('generate:project-scaffold')
-          .then(result => {
-            const defaultProjectDirectories = [
+        const generate = require('../tasks/generate.js'),
+              defaultProjectDirectories = [
                 'components',
                 'data',
                 'dist',
@@ -48,9 +47,9 @@ module.exports = function(){
                 'tests',
                 'tokens'
             ];
-            defaultProjectDirectories.forEach(dir => assert.file(`${scaffoldDir}/${dir}`));
-            assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
-          });
+        generate.createTopLevelDirectories(scaffoldDir);
+        defaultProjectDirectories.forEach(dir => assert.file(`${scaffoldDir}/${dir}`));
+        assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
       });
     });
 
@@ -60,14 +59,13 @@ module.exports = function(){
       });
 
       it('should generate a default config', function() {
-        return gulp('generate:default-config')
-          .then(result => {
-            assert.file(`${scaffoldDir}/build-config.js`);
-            const defaultConfig = require(`${__dirname}/scaffold_test/build-config.js`);
-            assert(defaultConfig.rootPath.includes('/uds-build-tools'));
-            assert(defaultConfig.scaffoldPath.includes('/uds-build-tools'));
-            assert(defaultConfig.localEnv.webroot.includes('/uds-build-tools/_site'));
-          });
+        const generate = require('../tasks/generate.js');
+        generate.copyDefaultConfig(scaffoldDir);
+        assert.file(`${scaffoldDir}/uds-build-tools-config.js`);
+
+        const defaultConfig = require(`${__dirname}/scaffold_test/uds-build-tools-config.js`);
+        assert(defaultConfig.rootPath.includes('/uds-build-tools'));
+        assert(defaultConfig.webroot === '_site');
       });
     });
 
@@ -78,7 +76,7 @@ module.exports = function(){
 
       it('should generate default component files', function(done) {
         const generate = require('../tasks/generate.js');
-        generate.generateComponentFiles({componentName: 'Data Table', componentJavascript: true}, function(){});
+        generate.generateComponentFiles({componentName: 'Data Table', componentJavascript: true}, scaffoldDir);
 
           recursivelyCheckForFiles([
             `${scaffoldDir}/components/data_table/data_table.njk`,
