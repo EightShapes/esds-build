@@ -1,11 +1,12 @@
 {
     "configMethod": "overwrite",
     "classPrefix": "off-the-rails",
-    "docsPath": "pages",
+    "docsPath": "blog",
     "componentsPath": "modules",
     "tokensPath": "constants",
     "stylesPath": "scss",
     "scriptsPath": "js",
     "imagesPath": "imgs",
-    "dataPath": "content"
+    "dataPath": "content",
+    "markupSourceExtension": ".htmlnjk"
 }

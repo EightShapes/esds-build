@@ -66,7 +66,7 @@ module.exports = function(){
             const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_full_override/`);
             assert(buildConfig.configMethod === 'overwrite');
             assert(buildConfig.classPrefix === 'off-the-rails');
-            assert(buildConfig.docsPath === 'pages');
+            assert(buildConfig.docsPath === 'blog');
             assert(buildConfig.componentsPath === 'modules');
             assert(buildConfig.tokensPath === 'constants');
             assert(buildConfig.stylesPath === 'scss');
@@ -120,12 +120,16 @@ module.exports = function(){
             assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath));
         });
 
-        xit('should return a task config with product level extensions when a product config file is present', function(){
-
+        it('should return a task config with product level extensions when a product config file is present', function(){
+            const taskConfig = config.get(`${process.cwd()}/tests/sample_project/`),
+                    c = taskConfig; //for brevity
+            assert(c.markup.tasks[0].docSourceFilePaths === path.join(c.rootPath, 'pages', '**', '*.nunjucks'));
         });
 
-        xit('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
-
+        it('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
+            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_full_override/`),
+                    c = taskConfig; //for brevity
+            assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });
     });
 };

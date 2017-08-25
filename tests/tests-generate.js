@@ -5,8 +5,7 @@
 /* global beforeEach */
 
 'use strict';
-const gulp = require('./tests-gulp.js'),
-      assert = require('yeoman-assert'),
+const assert = require('yeoman-assert'),
       del = require('del'),
       fs = require('fs'),
       scaffoldDir = './tests/scaffold_test';
@@ -16,7 +15,6 @@ function recursivelyCheckForFiles(filePaths, done) {
   let allFilesFound = filePaths.every(file => fs.existsSync(file));
 
   if (allFilesFound) {
-    // assert.file(filePath);
     done();
   } else {
     setTimeout(function() {
