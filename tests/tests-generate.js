@@ -26,7 +26,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    describe('generate:project-scaffold', function(){
+    describe('generate:scaffold', function(){
       after(function() {
         return del(scaffoldDir);
       });

@@ -13,7 +13,7 @@ const config = require('./config.js'),
         nunjucksRender = require('gulp-nunjucks-render'),
         concatMacrosTaskPrefix = markupConfig.concatMacrosTaskPrefix,
         buildTaskPrefix = markupConfig.buildTaskPrefix,
-        watchPrefix = markupConfig.watchPrefix,
+        watchTaskPrefix = markupConfig.watchTaskPrefix,
         watchDocsTaskPrefix = markupConfig.watchDocsTaskPrefix,
         watchMacrosTaskPrefix = markupConfig.watchMacrosTaskPrefix,
         concatTasks = markupTasks.filter(task => task.componentMacros).map(task => `${concatMacrosTaskPrefix}${task.name}`),
@@ -133,7 +133,6 @@ function generateBuildTask(c) {
 
         // Compile doc src to html
         gulp.task(`${buildTaskPrefix}${c.name}`, function() {
-            console.log(c.docOutputPath)
             return gulp.src(c.docSourceFilePaths)
                 .pipe(
                     nunjucksRender(nunjucksOptions).on('error', function(e){
@@ -166,5 +165,5 @@ gulp.task(`${watchMacrosTaskPrefix}all`, gulp.parallel(watchMacrosTasks));
 // Watch all doc files
 gulp.task(`${watchDocsTaskPrefix}all`, gulp.parallel(watchDocsTasks));
 
-gulp.task(`${watchPrefix}all`, gulp.parallel(`${watchMacrosTaskPrefix}all`, `${watchDocsTaskPrefix}all`));
+gulp.task(`${watchTaskPrefix}all`, gulp.parallel(`${watchMacrosTaskPrefix}all`, `${watchDocsTaskPrefix}all`));
 

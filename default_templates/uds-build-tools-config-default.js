@@ -3,7 +3,8 @@ const fs = require('fs'),
         path = require('path'),
         packageRoot = process.cwd(),
         packageJsonFile = path.join(packageRoot, 'package.json'),
-        webroot = '_site';
+        webroot = '_site',
+        latestVersionPath = 'latest';
 
 let packageJson,
     projectName,
@@ -40,8 +41,9 @@ module.exports = {
     imagesPath: 'images',
     dataPath: 'data',
     webroot: '_site',
+    latestVersionPath: latestVersionPath,
     versionedDocs: true,
-    latestVersionWebroot: path.join(webroot, 'latest'),
+    latestVersionWebroot: path.join(webroot, latestVersionPath),
     //Tokens filename
     tokensSourceFile: 'tokens.yaml',
     tokensFormats: ['.scss', '.json'],

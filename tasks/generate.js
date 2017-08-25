@@ -8,8 +8,7 @@ const productBuildConfigFileName = 'uds-build-tools-config',
         gulp = require('gulp'),
         inquirer = require('inquirer'),
         mkdirp = require('mkdirp'),
-        pluralize = require('pluralize'),
-        componentSinkPath = c.componentSinkPath;
+        pluralize = require('pluralize');
 
 function createTopLevelDirectories(rootPath) {
     // TODO: Make this idempotent and non-destructive
@@ -40,7 +39,7 @@ function copyDefaultConfig(rootPath) {
     fs.copySync(defaultConfigPath, copiedConfigPath);
 }
 
-gulp.task('generate:project-scaffold', function(done){
+gulp.task('generate:scaffold', function(done){
     createTopLevelDirectories(c.rootPath);
     done();
 });

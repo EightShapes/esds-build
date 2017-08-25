@@ -1,13 +1,13 @@
 'use strict';
 
 const config = require('./config.js'),
-        buildConfig = config.get(),
+        c = config.get(),
         browserSync = require('browser-sync'),
         gulp = require('gulp'),
-        envConfig = buildConfig.localEnv,
-        styleConfig = buildConfig.styles,
+        path = require('path'),
+        styleConfig = c.styles,
         styleWatchPaths = styleConfig.tasks.map(t => `${t.outputPath}/**/*.css`),
-        markupConfig = buildConfig.markup,
+        markupConfig = c.markup,
         markupWatchPaths = markupConfig.tasks.map(t => `${t.docOutputPath}/**/*.html`);
 
 // Start local server and auto-reload browser when relevant files change
@@ -19,11 +19,11 @@ gulp.task('serve:local-docs', function() {
             scroll: true
         },
         server: {
-            baseDir: envConfig.webroot
+            baseDir: path.join(c.rootPath, c.webroot)
         },
         middleware: function(req, res, next) {
           if (!req.url.match(/\/v\//g)) {
-            req.url = `/${envConfig.latestVersionDirectory}/` + req.url;
+            req.url = `/${c.latestVersionPath}/` + req.url;
           }
           return next();
         }
