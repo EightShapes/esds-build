@@ -11,9 +11,10 @@ const { exec } = require('child_process'),
       fs = require('fs'),
       projectPath = './tests/sample_project',
       nodeModulesPath = `${projectPath}/node_modules`,
-      componentMacros = `${nodeModulesPath}/library-component-module/components`,
+      componentMacros = `${projectPath}/components`,
       docComponentMacros = `${nodeModulesPath}/doc-component-module/components`,
-      webroot = `${projectPath}/_site`;
+      webroot = `${projectPath}/_site`,
+      configProductName = 'eightshapes-uds-build-tools';;
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -35,32 +36,31 @@ function deleteNodeModuleWebroots() {
 
 
 module.exports = function(){
-    describe('markup:concatenate-macros:', function(){
+    describe('markup:concatenate:macros:', function(){
       beforeEach(function(){
         return gulp('clean:concatenated-macros');
       });
 
-      it('should concatenate "library" macros', function() {
-        return gulp('markup:concatenate-macros:components')
+      it('should concatenate macros', function() {
+        return gulp(`markup:concatenate:macros:${configProductName}`)
           .then(result => {
-            assert.fileContent(`${componentMacros}/uds.njk`, '{% macro button(');
-            assert.fileContent(`${componentMacros}/uds.njk`, '{% macro data_table(');
+            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro button(');
+            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro data_table(');
           });
       });
 
-      it('should concatenate "doc library" macros', function() {
-        return gulp('markup:concatenate-macros:doc-components')
-          .then(result => {
-            assert.fileContent(`${docComponentMacros}/uds_doc_library.njk`, '{% macro code_snippet(');
-            assert.fileContent(`${docComponentMacros}/uds_doc_library.njk`, '{% macro tint_stack(');
-          });
-      });
+      // it('should concatenate macros', function() {
+      //   return gulp('markup:concatenate-macros:doc-components')
+      //     .then(result => {
+      //       assert.fileContent(`${docComponentMacros}/uds_doc_library.njk`, '{% macro code_snippet(');
+      //       assert.fileContent(`${docComponentMacros}/uds_doc_library.njk`, '{% macro tint_stack(');
+      //     });
+      // });
 
       it('should concatenate all macros into their respective files', function() {
-        return gulp('markup:concatenate-macros:all')
+        return gulp('markup:concatenate:macros:all')
           .then(result => {
-            assert.file(`${componentMacros}/uds.njk`);
-            assert.file(`${docComponentMacros}/uds_doc_library.njk`);
+            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro button(');
           });
       });
 
