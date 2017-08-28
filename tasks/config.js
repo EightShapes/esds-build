@@ -162,11 +162,30 @@ function getCopyConfig(buildConfig) {
     };
 }
 
+function getIconsConfig(buildConfig) {
+    const c = buildConfig, // for brevity
+        defaultTask = {
+            name: c.productTaskName,
+            sources: [
+                path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`)
+            ],
+            optimizedFileDestination: path.join(c.rootPath, c.iconsPath),
+            destination: path.join(c.rootPath, c.latestVersionWebroot, c.iconsPath)
+        };
+
+    let tasks = [defaultTask];
+
+    return {
+        tasks: tasks
+    };
+}
+
 function getTaskConfig(rootPath) {
     let buildConfig = retrieveBuildConfig(rootPath);
 
     if (buildConfig.rootPath) {
         buildConfig.copy = getCopyConfig(buildConfig);
+        buildConfig.icons = getIconsConfig(buildConfig);
         buildConfig.markup = getMarkupConfig(buildConfig);
         buildConfig.scripts = getScriptsConfig(buildConfig);
         buildConfig.styles = getStylesConfig(buildConfig);

@@ -16,10 +16,10 @@ gulp.registry(hub);
 /**************************************************/
 
 // Watch everything
-gulp.task('watch:all', gulp.parallel('watch:tokens:all', 'watch:styles:all', 'watch:scripts:all', 'watch:markup:all', 'watch:serve:all'));
+gulp.task('watch:all', gulp.parallel('watch:tokens:all', 'watch:icons:all', 'watch:styles:all', 'watch:scripts:all', 'watch:markup:all', 'watch:serve:all'));
 
 //Build everything
-gulp.task('build:all', gulp.series('tokens:build:all', gulp.parallel('scripts:build:all', 'styles:build:all', gulp.series('markup:concatenate:macros:all', 'markup:build:all'))));
+gulp.task('build:all', gulp.series('tokens:build:all', gulp.parallel('scripts:build:all', 'styles:build:all', 'icons:build:all', gulp.series('markup:concatenate:macros:all', 'markup:build:all'))));
 
 // Build and serve the project, watch for changes to files
 gulp.task('default', gulp.series('clean:webroot', 'build:all', gulp.parallel('watch:all', 'serve:local-docs')));
