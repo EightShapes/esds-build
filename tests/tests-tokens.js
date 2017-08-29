@@ -5,11 +5,12 @@
 
 'use strict';
 const { exec } = require('child_process'),
+      config = require('../tasks/config.js'),
+      c = config.get(),
       gulp = require('./tests-gulp.js'),
       tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs'),
-      configProductName = 'eightshapes-uds-build-tools';
+      fs = require('fs');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -35,13 +36,13 @@ module.exports = function(){
         return gulp('clean:tokens');
       });
 
-      it('should convert tokens.yaml to scss and json and include classPrefix from config', function() {
+      it('should convert tokens.yaml to scss and json and include codeNamespace from config', function() {
         return gulp('tokens:build:all')
           .then(result => {
-            assert.fileContent(tokensScss, `$${configProductName}-color-interactive-primary: #0ff`);
-            assert.fileContent(tokensScss, `$eightshapes-uds-build-tools-class-prefix: "${configProductName}"`);
+            assert.fileContent(tokensScss, `$${c.codeNamespace}-color-interactive-primary: #0ff`);
+            assert.fileContent(tokensScss, `$esds-namespace: "${c.codeNamespace}"`);
             assert.fileContent(tokensJson, '"tokens": {');
-            assert.fileContent(tokensJson, `"class-prefix": "${configProductName}"`);
+            assert.fileContent(tokensJson, `"namespace": "${c.codeNamespace}"`);
             assert.fileContent(tokensJson, '"primary": "#0ff"');
           });
       });

@@ -1,11 +1,9 @@
-{% import 'components/eightshapes-uds-build-tools.njk' as components with context %}
-{% import 'product-a/components/product-a.njk' as product_a with context %}
-{# {% import 'components/uds_doc_library.njk' as doc_components with context %} #}
+{% import 'components/esds.njk' as components with context %}
+{% import 'product-a/components/product-a.njk' as another_library with context %}
 <h1>Doc Site Homepage</h1>
 
 {{ components.button() }}
-{{ product_a.button() }}
-{# {{ doc_components.code_snippet() }} #}
+{{ another_library.button() }}
 
 {% filter markdown %}
 # Doc Compiled from Markdown

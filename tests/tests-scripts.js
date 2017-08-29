@@ -5,10 +5,11 @@
 
 'use strict';
 const { exec } = require('child_process'),
+      config = require('../tasks/config.js'),
+      c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs'),
-      configProductName = 'eightshapes-uds-build-tools';
+      fs = require('fs');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -25,7 +26,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
-          docJsFile = `${projectPath}/_site/latest/scripts/${configProductName}.js`;
+          docJsFile = `${projectPath}/_site/latest/scripts/${c.codeNamespace}.js`;
 
     describe('scripts', function(){
       describe('scripts:concatenate', function(){
@@ -34,7 +35,7 @@ module.exports = function(){
         });
 
         it('should be able to concatenate scripts', function() {
-          return gulp(`scripts:concatenate:${configProductName}`)
+          return gulp(`scripts:concatenate:${c.productName}`)
             .then(result => {
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
@@ -50,7 +51,7 @@ module.exports = function(){
 
       describe('scripts:lint', function(){
         it('should be able to lint scripts', function() {
-          return gulp(`scripts:lint:${configProductName}`)
+          return gulp(`scripts:lint:${c.productName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -83,7 +84,7 @@ module.exports = function(){
         });
 
         it('should be able to lint and then concatenate scripts', function() {
-          return gulp(`scripts:build:${configProductName}`)
+          return gulp(`scripts:build:${c.productName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -102,7 +103,7 @@ module.exports = function(){
 
       describe('watch:scripts', function(){
         it('should watch scripts for changes', function(done) {
-          exec(`gulp watch:scripts:${configProductName}`); // start watch
+          exec(`gulp watch:scripts:${c.productName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => {
               exec(`touch ${projectPath}/scripts/global.js`);

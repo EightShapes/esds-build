@@ -9,7 +9,7 @@ const gulp = require('./tests-gulp.js'),
       fs = require('fs'),
       path = require('path'),
       mkdirp = require('mkdirp'),
-      configProductName = 'eightshapes-uds-build-tools';
+      configDefaults = require('../eightshapes-build-tools-config.json');
 
 module.exports = function(){
     const projectPath = './tests/sample_project',
@@ -51,7 +51,7 @@ module.exports = function(){
 
     describe('clean:concatenated-macros', function(){
       it('should delete all concatenated macro files', function(){
-        const concatenatedComponentsFilename = `${projectPath}/components/${configProductName}.njk`;
+        const concatenatedComponentsFilename = `${projectPath}/components/${configDefaults.codeNamespace}.njk`;
         mkdirp.sync(path.join(projectPath, 'components'));
 
         fs.writeFileSync(concatenatedComponentsFilename, 'concatenated macros');
@@ -72,12 +72,12 @@ module.exports = function(){
         mkdirp.sync(webroot);
         mkdirp.sync(webrootDirectory);
         fs.writeFileSync(webrootFile, 'Homepage goes here');
-        fs.writeFileSync(`${webrootDirectory}/uds.css`, 'Component Library CSS goes here');
+        fs.writeFileSync(`${webrootDirectory}/esds.css`, 'Component Library CSS goes here');
 
         return gulp('clean:webroot')
           .then(result => {
             assert.noFile(webrootFile);
-            assert.noFile(`${webrootDirectory}/uds.css`);
+            assert.noFile(`${webrootDirectory}/esds.css`);
           });
       });
     });

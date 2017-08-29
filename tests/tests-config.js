@@ -7,7 +7,8 @@
 'use strict';
 const assert = require('yeoman-assert'),
         path = require('path'),
-        configProductName = 'eightshapes-uds-build-tools';
+        configDefaults = require('../default_templates/eightshapes-build-tools-config-default.js'),
+        configProductName = configDefaults.productName;
 
 let config;
 
@@ -27,19 +28,19 @@ module.exports = function(){
         it('should return a config object when the product config file is found', function(){
             const productConfig = config.retrieveProductBuildConfig(`${process.cwd()}/tests/sample_project/`);
             assert(typeof productConfig === 'object');
-            assert(productConfig.classPrefix === 'uds-testing');
+            assert(productConfig.codeNamespace === 'esds-testing');
         });
 
-        it('should retrieve default config with the package.json name set as the classPrefix', function(){
+        it('should retrieve default config with the package.json name set as the codeNamespace', function(){
             const defaultConfig = config.retrieveDefaultBuildConfig();
             assert(defaultConfig.configMethod === 'extend');
-            assert(defaultConfig.classPrefix === configProductName);
+            assert(defaultConfig.codeNamespace === configProductName);
         });
 
         it('should retrieve the default config as the build config when no product build config exists', function(){
             const buildConfig = config.retrieveBuildConfig('/path/doesnt/exist/');
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.classPrefix === configProductName);
+            assert(buildConfig.codeNamespace === configProductName);
             assert(buildConfig.docsPath === 'docs');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -52,7 +53,7 @@ module.exports = function(){
         it('should retrieve merged default and product config as the build config when the product build config exists', function(){
             const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project/`);
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.classPrefix === 'uds-testing');
+            assert(buildConfig.codeNamespace === 'esds-testing');
             assert(buildConfig.docsPath === 'pages');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -65,7 +66,7 @@ module.exports = function(){
         it('should return only product config as the build config when the product build config exists and sets configMethod to override', function(){
             const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_full_override/`);
             assert(buildConfig.configMethod === 'overwrite');
-            assert(buildConfig.classPrefix === 'off-the-rails');
+            assert(buildConfig.codeNamespace === 'off-the-rails');
             assert(buildConfig.docsPath === 'blog');
             assert(buildConfig.componentsPath === 'modules');
             assert(buildConfig.tokensPath === 'constants');

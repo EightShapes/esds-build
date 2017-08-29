@@ -7,8 +7,7 @@ const fs = require('fs'),
         latestVersionPath = 'latest';
 
 let packageJson,
-    projectName,
-    classPrefix = 'uds';
+    productNameNamespace;
 
 function makeSafeForCss(name) {
     let safeName = name.replace(/[^a-z0-9]/g, '-');
@@ -21,14 +20,13 @@ function makeSafeForCss(name) {
 
 if (fs.existsSync(packageJsonFile)) {
     packageJson = require(packageJsonFile);
-    projectName = packageJson.name;
-
-    classPrefix = makeSafeForCss(projectName);
+    productNameNamespace = makeSafeForCss(packageJson.name);
 }
 
 module.exports = {
+    productName: productNameNamespace,
     configMethod: 'extend',
-    classPrefix: classPrefix,
+    codeNamespace: productNameNamespace, // Used as the name for concatenated macro, icon, and script files as well as the JSON tokens namespace and SCSS token prefix. If the namespace was 'esds' this would result in: esds.njk, esds.svg, esds.js, {{ esds.token_name }}, and $esds-token-name
     rootPath: packageRoot,
     componentsPath: 'components',
     dataPath: 'data',
@@ -71,7 +69,7 @@ module.exports = {
     optimizeTaskName: 'optimize',
     postprocessTaskName: 'postprocess',
     precompileTaskName: 'precompile',
-    productTaskName: classPrefix,
+    productTaskName: productNameNamespace,
     scriptsTaskName: 'scripts',
     stylesTaskName: 'styles',
     watchTaskName: 'watch'

@@ -5,10 +5,11 @@
 
 'use strict';
 const { exec } = require('child_process'),
+      config = require('../tasks/config.js'),
+      c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs'),
-      configProductName = 'eightshapes-uds-build-tools';
+      fs = require('fs');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -35,17 +36,17 @@ module.exports = function(){
         });
 
         it('should be able to compile styles with tokens', function() {
-          return gulp(`styles:precompile:${configProductName}`)
+          return gulp(`styles:precompile:${c.productName}`)
             .then(result => {
-              assert.fileContent(compiledCssFile, `.${configProductName}-nav {`);
+              assert.fileContent(compiledCssFile, `.${c.codeNamespace}-nav {`);
               assert.fileContent(compiledCssFile, 'border: solid 3px #000;');
             });
         });
 
         it('should be able to compile the primary Product styles using tokens from a dependency', function(){
-          return gulp(`styles:precompile:${configProductName}`)
+          return gulp(`styles:precompile:${c.productName}`)
             .then(result => {
-              assert.fileContent(compiledCssFile, `.${configProductName}-nav {`);
+              assert.fileContent(compiledCssFile, `.${c.codeNamespace}-nav {`);
               assert.fileContent(compiledCssFile, 'content: "content token in product-a";'); // token from dependency
             });
         });
@@ -61,7 +62,7 @@ module.exports = function(){
 
       describe('styles:lint', function(){
         it('should be able to lint styles', function() {
-          return gulp(`styles:lint:${configProductName}`)
+          return gulp(`styles:lint:${c.productName}`)
             .then(result => {
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
             });
@@ -94,8 +95,8 @@ module.exports = function(){
         });
 
         it('should be able to auto-prefix styles with vendor-specific rules', function() {
-          return gulp(`styles:precompile:${configProductName}`)
-            .then(result => gulp(`styles:postprocess:${configProductName}`))
+          return gulp(`styles:precompile:${c.productName}`)
+            .then(result => gulp(`styles:postprocess:${c.productName}`))
             .then(result => {
               assert.fileContent(compiledCssFile, '-ms-grid-row: 1;');
             });
@@ -109,10 +110,10 @@ module.exports = function(){
         });
 
         it('should lint, precompile, and post-process styles', function() {
-          return gulp(`styles:build:${configProductName}`)
+          return gulp(`styles:build:${c.productName}`)
             .then(result => {
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
-              assert.fileContent(compiledCssFile, `.${configProductName}-nav {`);
+              assert.fileContent(compiledCssFile, `.${c.codeNamespace}-nav {`);
               assert.fileContent(compiledCssFile, 'border: solid 3px #000;'); // token from library
               assert.fileContent(compiledCssFile, '-ms-grid-row: 1;');
             });
@@ -130,7 +131,7 @@ module.exports = function(){
 
       describe('watch:styles', function(){
         it('should watch styles for changes', function(done) {
-          exec(`gulp watch:styles:${configProductName}`); // start watch
+          exec(`gulp watch:styles:${c.productName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
@@ -140,7 +141,7 @@ module.exports = function(){
         });
 
         it('should rebuild styles when tokens are updated', function(done) {
-          exec(`gulp watch:styles:${configProductName}`); // start watch
+          exec(`gulp watch:styles:${c.productName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {

@@ -59,10 +59,10 @@ module.exports = function(){
       it('should generate a default config', function() {
         const generate = require('../tasks/generate.js');
         generate.copyDefaultConfig(scaffoldDir);
-        assert.file(`${scaffoldDir}/uds-build-tools-config.js`);
+        assert.file(`${scaffoldDir}/eightshapes-build-tools-config.js`);
 
-        const defaultConfig = require(`${__dirname}/scaffold_test/uds-build-tools-config.js`);
-        assert(defaultConfig.rootPath.includes('/uds-build-tools'));
+        const defaultConfig = require(`${__dirname}/scaffold_test/eightshapes-build-tools-config.js`);
+        assert(defaultConfig.rootPath.includes('/eightshapes-build-tools'));
         assert(defaultConfig.webroot === '_site');
       });
     });

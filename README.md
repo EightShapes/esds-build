@@ -11,11 +11,11 @@
   
   3. Install this node module:
   
-  `npm install @eightshapes/uds-build-tools --save-dev`
+  `npm install @eightshapes/eightshapes-build-tools --save-dev`
   
   4. Create a `gulpfile.js` in the root of your project. Add the following line:
   
-  `const gulp = require('@eightshapes/uds-build-tools');`
+  `const gulp = require('@eightshapes/eightshapes-build-tools');`
 
   5. Generate the project scaffold:
   

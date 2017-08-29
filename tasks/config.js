@@ -1,6 +1,6 @@
 'use strict';
 
-const productBuildConfigFileName = 'uds-build-tools-config',
+const productBuildConfigFileName = 'eightshapes-build-tools-config',
         fs = require('fs'),
         path = require('path');
 
@@ -18,7 +18,7 @@ function retrieveProductBuildConfig(rootPath) {
 }
 
 function retrieveDefaultBuildConfig() {
-    return require(`${__dirname}/../default_templates/uds-build-tools-config-default.js`);
+    return require(`${__dirname}/../default_templates/${productBuildConfigFileName}-default.js`);
 }
 
 function retrieveBuildConfig(rootPath) {
@@ -85,7 +85,7 @@ function getMarkupConfig(buildConfig) {
             name: c.productTaskName,
             componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension),
             componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
-            componentMacroFilename: `${c.productTaskName}${c.markupSourceExtension}`,
+            componentMacroFilename: `${c.codeNamespace}${c.markupSourceExtension}`,
             docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
             docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
@@ -111,7 +111,7 @@ function getScriptsConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputFilename: `${c.productTaskName}${c.scriptsSourceExtension}`,
+            outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
             outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.scriptsPath),
             sourcePaths: [
                 path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension),
@@ -137,7 +137,7 @@ function getTokensConfig(buildConfig) {
     const c = buildConfig;
 
     return {
-        namespace: c.classPrefix,
+        namespace: c.codeNamespace,
         sourceFile: path.join(c.rootPath, c.tokensPath, c.tokensSourceFile),
         outputPath: path.join(c.rootPath, c.tokensPath),
         formats: c.tokensFormats
