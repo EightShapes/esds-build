@@ -40,7 +40,7 @@ module.exports = function(){
       });
 
       it('should concatenate macros', function() {
-        return gulp(`markup:concatenate:macros:${c.productName}`)
+        return gulp(`markup:concatenate:macros:${c.productTaskName}`)
           .then(result => {
             assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro button(');
             assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro data_table(');
@@ -64,7 +64,7 @@ module.exports = function(){
       it('should compile docs', function() {
         return gulp('tokens:build:all')
           .then(result => gulp('markup:concatenate:macros:all'))
-          .then(result => gulp(`markup:build:${c.productName}`))
+          .then(result => gulp(`markup:build:${c.productTaskName}`))
           .then(result => {
             assert.fileContent(`${webroot}/latest/index.html`, '<h1>Doc Site Homepage</h1>');
             assert.fileContent(`${webroot}/latest/index.html`, '<button class="esds-button"');
@@ -101,7 +101,7 @@ module.exports = function(){
 
     describe('watch:markup:macros', function(){
       it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
-        exec(`gulp watch:markup:macros:${c.productName}`); // start watch
+        exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
           .then(result => gulp('clean:webroot'))
@@ -127,7 +127,7 @@ module.exports = function(){
 
     describe('watch:markup:docs', function(){
       it('should rebuild doc files when doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:${c.productName}`); // start watch
+        exec(`gulp watch:markup:docs:${c.productTaskName}`); // start watch
         gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
           .then(result => {

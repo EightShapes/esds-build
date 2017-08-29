@@ -40,7 +40,7 @@ function getStylesConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath),
+            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath),
             compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
             compileImportPaths: [
                 path.join(c.rootPath, c.dependenciesPath),
@@ -92,7 +92,7 @@ function getMarkupConfig(buildConfig) {
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
                 path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
             ],
-            docOutputPath: path.join(c.rootPath, c.latestVersionWebroot)
+            docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
         };
 
     let tasks = [defaultTask];
@@ -112,7 +112,7 @@ function getScriptsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
-            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.scriptsPath),
+            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath),
             sourcePaths: [
                 path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension),
                 path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)
@@ -151,7 +151,7 @@ function getCopyConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.imagesPath, '**', '*')
             ],
-            destination: path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath)
+            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)
         };
 
     let tasks = [imageTask];
@@ -169,8 +169,9 @@ function getIconsConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`)
             ],
+            outputFilename: `${c.codeNamespace}${c.iconSourceExtension}`,
             optimizedFileDestination: path.join(c.rootPath, c.iconsPath),
-            destination: path.join(c.rootPath, c.latestVersionWebroot, c.iconsPath)
+            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath)
         };
 
     let tasks = [defaultTask];

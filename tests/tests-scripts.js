@@ -35,7 +35,7 @@ module.exports = function(){
         });
 
         it('should be able to concatenate scripts', function() {
-          return gulp(`scripts:concatenate:${c.productName}`)
+          return gulp(`scripts:concatenate:${c.productTaskName}`)
             .then(result => {
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
@@ -51,7 +51,7 @@ module.exports = function(){
 
       describe('scripts:lint', function(){
         it('should be able to lint scripts', function() {
-          return gulp(`scripts:lint:${c.productName}`)
+          return gulp(`scripts:lint:${c.productTaskName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -84,7 +84,7 @@ module.exports = function(){
         });
 
         it('should be able to lint and then concatenate scripts', function() {
-          return gulp(`scripts:build:${c.productName}`)
+          return gulp(`scripts:build:${c.productTaskName}`)
             .then(result => {
               assert(result.stderr.includes('Unexpected console statement. (no-console)'));
               assert(result.stderr.includes('scripts/global.js'));
@@ -103,7 +103,7 @@ module.exports = function(){
 
       describe('watch:scripts', function(){
         it('should watch scripts for changes', function(done) {
-          exec(`gulp watch:scripts:${c.productName}`); // start watch
+          exec(`gulp watch:scripts:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => {
               exec(`touch ${projectPath}/scripts/global.js`);

@@ -6,9 +6,7 @@
 
 'use strict';
 const assert = require('yeoman-assert'),
-        path = require('path'),
-        configDefaults = require('../default_templates/eightshapes-build-tools-config-default.js'),
-        configProductName = configDefaults.productName;
+        path = require('path');
 
 let config;
 
@@ -31,16 +29,16 @@ module.exports = function(){
             assert(productConfig.codeNamespace === 'esds-testing');
         });
 
-        it('should retrieve default config with the package.json name set as the codeNamespace', function(){
+        it('should retrieve default config with a sanitized version of the package.json "name" key set as the codeNamespace', function(){
             const defaultConfig = config.retrieveDefaultBuildConfig();
             assert(defaultConfig.configMethod === 'extend');
-            assert(defaultConfig.codeNamespace === configProductName);
+            assert(defaultConfig.codeNamespace === 'eightshapes-eightshapes-build-tools');
         });
 
         it('should retrieve the default config as the build config when no product build config exists', function(){
             const buildConfig = config.retrieveBuildConfig('/path/doesnt/exist/');
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.codeNamespace === configProductName);
+            assert(buildConfig.codeNamespace === buildConfig.codeNamespace);
             assert(buildConfig.docsPath === 'docs');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -91,34 +89,34 @@ module.exports = function(){
             assert(c.styles.postprocessTaskPrefix === 'styles:postprocess:');
             assert(c.styles.lintTaskPrefix === 'styles:lint:');
             assert(c.styles.watchTaskPrefix === 'watch:styles:');
-            assert(c.styles.tasks[0].name === configProductName);
-            assert(c.styles.tasks[0].outputPath === path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath));
+            assert(c.styles.tasks[0].name === c.productTaskName);
+            assert(c.styles.tasks[0].outputPath === path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath));
 
             assert(c.markup.buildTaskPrefix === 'markup:build:');
             assert(c.markup.concatMacrosTaskPrefix === 'markup:concatenate:macros:');
             assert(c.markup.watchTaskPrefix === 'watch:markup:');
             assert(c.markup.watchDocsTaskPrefix === 'watch:markup:docs:');
             assert(c.markup.watchMacrosTaskPrefix === 'watch:markup:macros:');
-            assert(c.markup.tasks[0].name === configProductName);
-            assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.latestVersionWebroot));
-            assert(c.markup.tasks[0].componentMacroFilename === `${configProductName}${c.markupSourceExtension}`);
+            assert(c.markup.tasks[0].name === c.productTaskName);
+            assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.webroot, c.latestVersionPath));
+            assert(c.markup.tasks[0].componentMacroFilename === `${c.codeNamespace}${c.markupSourceExtension}`);
 
             assert(c.scripts.buildTaskPrefix === 'scripts:build:');
             assert(c.scripts.concatTaskPrefix === 'scripts:concatenate:');
             assert(c.scripts.lintTaskPrefix === 'scripts:lint:');
             assert(c.scripts.watchTaskPrefix === 'watch:scripts:');
-            assert(c.scripts.tasks[0].name === configProductName);
-            assert(c.scripts.tasks[0].outputFilename === `${configProductName}${c.scriptsSourceExtension}`);
+            assert(c.scripts.tasks[0].name === c.productTaskName);
+            assert(c.scripts.tasks[0].outputFilename === `${c.codeNamespace}${c.scriptsSourceExtension}`);
             assert(c.scripts.tasks[0].sourcePaths.length === 2);
 
-            assert(c.tokens.namespace === configProductName);
+            assert(c.tokens.namespace === c.codeNamespace);
             assert(c.tokens.sourceFile === path.join(c.rootPath, c.tokensPath, c.tokensSourceFile));
             assert(c.tokens.outputPath === path.join(c.rootPath, c.tokensPath));
             assert(c.tokens.formats === c.tokensFormats);
 
             assert(c.copy.copyTaskPrefix === 'copy:');
             assert(c.copy.tasks[0].name === 'images');
-            assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath));
+            assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath));
         });
 
         it('should return a task config with product level extensions when a product config file is present', function(){

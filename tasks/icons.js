@@ -30,7 +30,7 @@ function generateIconConcatenateTask(t) {
                 mode: {
                     symbol: {
                         dest: '.',
-                        sprite: `${t.name}.svg`,
+                        sprite: t.outputFilename,
                         example: false
                     }
                 }
