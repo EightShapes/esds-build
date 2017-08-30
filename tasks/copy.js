@@ -1,18 +1,21 @@
 'use strict';
 
 const config = require('./config.js'),
-        buildConfig = config.get(),
+        c = config.get(),
         gulp = require('gulp'),
-        copyTasks = buildConfig.copy.tasks;
+        copyTasks = c.copy.tasks,
+        copyTaskNames = copyTasks.map(t => `${c.copy.copyTaskPrefix}${t.name}`);
 
-function generateCopyTask(c) {
-    gulp.task(`${buildConfig.copy.copyTaskPrefix}${c.name}`, function() {
-        console.log(c.sources);
-    return gulp.src(c.sources)
-        .pipe(gulp.dest(c.destination));
+function generateCopyTask(t) {
+    gulp.task(`${c.copy.copyTaskPrefix}${t.name}`, function() {
+    return gulp.src(t.sources)
+        .pipe(gulp.dest(t.destination));
     });
 }
 
-copyTasks.forEach(c => {
-    generateCopyTask(c);
+copyTasks.forEach(t => {
+    generateCopyTask(t);
 });
+
+// Run all copy tasks
+gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskPrefix}`, gulp.parallel(copyTaskNames));

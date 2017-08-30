@@ -50,6 +50,8 @@ module.exports = {
     markupSourceExtension: '.njk',                                      // Markup template file extension
     scriptsSourceExtension: '.js',                                      // Scripts file extension
     stylesSourceExtension: '.scss',                                     // Styles file extension
+    manageNunjucksEnv: false,                                           // hook to configure the Nunjucks templating environment, add additional filters, etc.
+    copyTasks: [],                                                      // Product specific set of tasks to copy a file from one destination to another. For copying jQuery from node_modules to the webroot as an example
     allTaskName: 'all',                                                 // gulp task name segment, ex: build:all, watch:all
     copyTaskName: 'copy',                                               // gulp task name segment, ex: copy:images
     buildTaskName: 'build',                                             // gulp task name segment, ex: markup:build, styles:build
@@ -67,4 +69,5 @@ module.exports = {
     scriptsTaskName: 'scripts',                                         // gulp task name segment, ex: scripts:build
     stylesTaskName: 'styles',                                           // gulp task name segment, ex: styles:build
     watchTaskName: 'watch'                                              // gulp task name segment, ex: watch:scripts, watch:styles
+
 };
