@@ -1,6 +1,6 @@
 {
     "configMethod": "overwrite",
-    "classPrefix": "off-the-rails",
+    "codeNamespace": "off-the-rails",
     "docsPath": "blog",
     "componentsPath": "modules",
     "tokensPath": "constants",

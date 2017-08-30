@@ -1,7 +1,7 @@
 'use strict';
 
 const rootPath = process.cwd(),
-        taskFiles = ['**/*.js', '!uds_tasks.js'],
+        taskFiles = ['**/*.js', '!esds_tasks.js'],
         gulp = require(`${rootPath}/node_modules/gulp`), // Need to make sure the "gulp" loaded is the gulp installed in ./node_modules/gulp, not the one installed in this package
         HubRegistry = require('gulp-hub');
 

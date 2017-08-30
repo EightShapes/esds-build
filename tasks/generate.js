@@ -1,6 +1,6 @@
 'use strict';
 
-const productBuildConfigFileName = 'uds-build-tools-config',
+const productBuildConfigFileName = 'eightshapes-build-tools-config',
         config = require('./config.js'),
         c = config.get(),
         fs = require('fs-extra'),

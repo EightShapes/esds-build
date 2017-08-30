@@ -1,6 +1,6 @@
 'use strict';
 
-const productBuildConfigFileName = 'uds-build-tools-config',
+const productBuildConfigFileName = 'eightshapes-build-tools-config',
         fs = require('fs'),
         path = require('path');
 
@@ -18,7 +18,7 @@ function retrieveProductBuildConfig(rootPath) {
 }
 
 function retrieveDefaultBuildConfig() {
-    return require(`${__dirname}/../default_templates/uds-build-tools-config-default.js`);
+    return require(`${__dirname}/../default_templates/${productBuildConfigFileName}-default.js`);
 }
 
 function retrieveBuildConfig(rootPath) {
@@ -40,7 +40,7 @@ function getStylesConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath),
+            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath),
             compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
             compileImportPaths: [
                 path.join(c.rootPath, c.dependenciesPath),
@@ -85,14 +85,14 @@ function getMarkupConfig(buildConfig) {
             name: c.productTaskName,
             componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension),
             componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
-            componentMacroFilename: `${c.productTaskName}${c.markupSourceExtension}`,
+            componentMacroFilename: `${c.codeNamespace}${c.markupSourceExtension}`,
             docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
             docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
                 path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
             ],
-            docOutputPath: path.join(c.rootPath, c.latestVersionWebroot)
+            docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
         };
 
     let tasks = [defaultTask];
@@ -111,8 +111,8 @@ function getScriptsConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputFilename: `${c.productTaskName}${c.scriptsSourceExtension}`,
-            outputPath: path.join(c.rootPath, c.latestVersionWebroot, c.scriptsPath),
+            outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
+            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath),
             sourcePaths: [
                 path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension),
                 path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)
@@ -137,7 +137,7 @@ function getTokensConfig(buildConfig) {
     const c = buildConfig;
 
     return {
-        namespace: c.classPrefix,
+        namespace: c.codeNamespace,
         sourceFile: path.join(c.rootPath, c.tokensPath, c.tokensSourceFile),
         outputPath: path.join(c.rootPath, c.tokensPath),
         formats: c.tokensFormats
@@ -151,7 +151,7 @@ function getCopyConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.imagesPath, '**', '*')
             ],
-            destination: path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath)
+            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)
         };
 
     let tasks = [imageTask];
@@ -169,8 +169,9 @@ function getIconsConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`)
             ],
+            outputFilename: `${c.codeNamespace}${c.iconSourceExtension}`,
             optimizedFileDestination: path.join(c.rootPath, c.iconsPath),
-            destination: path.join(c.rootPath, c.latestVersionWebroot, c.iconsPath)
+            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath)
         };
 
     let tasks = [defaultTask];

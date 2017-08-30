@@ -6,8 +6,7 @@
 
 'use strict';
 const assert = require('yeoman-assert'),
-        path = require('path'),
-        configProductName = 'eightshapes-uds-build-tools';
+        path = require('path');
 
 let config;
 
@@ -25,21 +24,21 @@ module.exports = function(){
         });
 
         it('should return a config object when the product config file is found', function(){
-            const productConfig = config.retrieveProductBuildConfig(`${process.cwd()}/tests/sample_project/`);
+            const productConfig = config.retrieveProductBuildConfig(`${process.cwd()}/tests/sample_project_extends_config/`);
             assert(typeof productConfig === 'object');
-            assert(productConfig.classPrefix === 'uds-testing');
+            assert(productConfig.codeNamespace === 'esds-testing');
         });
 
-        it('should retrieve default config with the package.json name set as the classPrefix', function(){
+        it('should retrieve default config with a sanitized version of the package.json "name" key set as the codeNamespace', function(){
             const defaultConfig = config.retrieveDefaultBuildConfig();
             assert(defaultConfig.configMethod === 'extend');
-            assert(defaultConfig.classPrefix === configProductName);
+            assert(defaultConfig.codeNamespace === 'eightshapes-eightshapes-build-tools');
         });
 
         it('should retrieve the default config as the build config when no product build config exists', function(){
             const buildConfig = config.retrieveBuildConfig('/path/doesnt/exist/');
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.classPrefix === configProductName);
+            assert(buildConfig.codeNamespace === buildConfig.codeNamespace);
             assert(buildConfig.docsPath === 'docs');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -50,9 +49,9 @@ module.exports = function(){
         });
 
         it('should retrieve merged default and product config as the build config when the product build config exists', function(){
-            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project/`);
+            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_extends_config/`);
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.classPrefix === 'uds-testing');
+            assert(buildConfig.codeNamespace === 'esds-testing');
             assert(buildConfig.docsPath === 'pages');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -63,9 +62,9 @@ module.exports = function(){
         });
 
         it('should return only product config as the build config when the product build config exists and sets configMethod to override', function(){
-            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_full_override/`);
+            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_override_config/`);
             assert(buildConfig.configMethod === 'overwrite');
-            assert(buildConfig.classPrefix === 'off-the-rails');
+            assert(buildConfig.codeNamespace === 'off-the-rails');
             assert(buildConfig.docsPath === 'blog');
             assert(buildConfig.componentsPath === 'modules');
             assert(buildConfig.tokensPath === 'constants');
@@ -90,44 +89,44 @@ module.exports = function(){
             assert(c.styles.postprocessTaskPrefix === 'styles:postprocess:');
             assert(c.styles.lintTaskPrefix === 'styles:lint:');
             assert(c.styles.watchTaskPrefix === 'watch:styles:');
-            assert(c.styles.tasks[0].name === configProductName);
-            assert(c.styles.tasks[0].outputPath === path.join(c.rootPath, c.latestVersionWebroot, c.stylesPath));
+            assert(c.styles.tasks[0].name === c.productTaskName);
+            assert(c.styles.tasks[0].outputPath === path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath));
 
             assert(c.markup.buildTaskPrefix === 'markup:build:');
             assert(c.markup.concatMacrosTaskPrefix === 'markup:concatenate:macros:');
             assert(c.markup.watchTaskPrefix === 'watch:markup:');
             assert(c.markup.watchDocsTaskPrefix === 'watch:markup:docs:');
             assert(c.markup.watchMacrosTaskPrefix === 'watch:markup:macros:');
-            assert(c.markup.tasks[0].name === configProductName);
-            assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.latestVersionWebroot));
-            assert(c.markup.tasks[0].componentMacroFilename === `${configProductName}${c.markupSourceExtension}`);
+            assert(c.markup.tasks[0].name === c.productTaskName);
+            assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.webroot, c.latestVersionPath));
+            assert(c.markup.tasks[0].componentMacroFilename === `${c.codeNamespace}${c.markupSourceExtension}`);
 
             assert(c.scripts.buildTaskPrefix === 'scripts:build:');
             assert(c.scripts.concatTaskPrefix === 'scripts:concatenate:');
             assert(c.scripts.lintTaskPrefix === 'scripts:lint:');
             assert(c.scripts.watchTaskPrefix === 'watch:scripts:');
-            assert(c.scripts.tasks[0].name === configProductName);
-            assert(c.scripts.tasks[0].outputFilename === `${configProductName}${c.scriptsSourceExtension}`);
+            assert(c.scripts.tasks[0].name === c.productTaskName);
+            assert(c.scripts.tasks[0].outputFilename === `${c.codeNamespace}${c.scriptsSourceExtension}`);
             assert(c.scripts.tasks[0].sourcePaths.length === 2);
 
-            assert(c.tokens.namespace === configProductName);
+            assert(c.tokens.namespace === c.codeNamespace);
             assert(c.tokens.sourceFile === path.join(c.rootPath, c.tokensPath, c.tokensSourceFile));
             assert(c.tokens.outputPath === path.join(c.rootPath, c.tokensPath));
             assert(c.tokens.formats === c.tokensFormats);
 
             assert(c.copy.copyTaskPrefix === 'copy:');
             assert(c.copy.tasks[0].name === 'images');
-            assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.latestVersionWebroot, c.imagesPath));
+            assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath));
         });
 
         it('should return a task config with product level extensions when a product config file is present', function(){
-            const taskConfig = config.get(`${process.cwd()}/tests/sample_project/`),
+            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_extends_config/`),
                     c = taskConfig; //for brevity
             assert(c.markup.tasks[0].docSourceFilePaths === path.join(c.rootPath, 'pages', '**', '*.nunjucks'));
         });
 
         it('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
-            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_full_override/`),
+            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_override_config/`),
                     c = taskConfig; //for brevity
             assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });

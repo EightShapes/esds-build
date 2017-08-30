@@ -1,12 +1,12 @@
 @import 'tokens';
 @import 'product-a/tokens/tokens';
 
-.#{$eightshapes-uds-build-tools-class-prefix}-nav {
+.esds-nav {
     &:before {
         content: $product-a-content-token;
     }
 
-    border: $eightshapes-uds-build-tools-border-medium;
+    border: $esds-border-medium;
     color: lemonchiffon;
     display: grid;
     grid-row-start: 1;

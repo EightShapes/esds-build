@@ -26,7 +26,7 @@ gulp.task('clean:concatenated-macros', function(done){
 });
 
 gulp.task('clean:webroot', function(done){
-    let webrootPaths = [path.join(c.rootPath, c.latestVersionWebroot, '**', '*')];
+    let webrootPaths = [path.join(c.rootPath, c.webroot, c.latestVersionPath, '**', '*')];
     if (c.versionedDocs) {
         const versionedDocPaths = path.join(c.rootPath, c.webroot, 'v');
         webrootPaths.push(`!${versionedDocPaths}`);

@@ -5,6 +5,8 @@
 
 'use strict';
 const { exec } = require('child_process'),
+      config = require('../tasks/config.js'),
+      c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       del = require('del'),
@@ -12,8 +14,7 @@ const { exec } = require('child_process'),
       projectPath = './tests/sample_project',
       nodeModulesPath = `${projectPath}/node_modules`,
       componentMacros = `${projectPath}/components`,
-      webroot = `${projectPath}/_site`,
-      configProductName = 'eightshapes-uds-build-tools';
+      webroot = `${projectPath}/_site`;
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -32,7 +33,6 @@ function deleteNodeModuleWebroots() {
   return del([`${nodeModulesPath}/library-component-module/_site`, `${nodeModulesPath}/doc-component-module/_site`]);
 }
 
-
 module.exports = function(){
     describe('markup:concatenate:macros:', function(){
       beforeEach(function(){
@@ -40,17 +40,17 @@ module.exports = function(){
       });
 
       it('should concatenate macros', function() {
-        return gulp(`markup:concatenate:macros:${configProductName}`)
+        return gulp(`markup:concatenate:macros:${c.productTaskName}`)
           .then(result => {
-            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro button(');
-            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro data_table(');
+            assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro button(');
+            assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro data_table(');
           });
       });
 
       it('should concatenate all macros into their respective files', function() {
         return gulp('markup:concatenate:macros:all')
           .then(result => {
-            assert.fileContent(`${componentMacros}/${configProductName}.njk`, '{% macro button(');
+            assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro button(');
           });
       });
 
@@ -64,10 +64,10 @@ module.exports = function(){
       it('should compile docs', function() {
         return gulp('tokens:build:all')
           .then(result => gulp('markup:concatenate:macros:all'))
-          .then(result => gulp(`markup:build:${configProductName}`))
+          .then(result => gulp(`markup:build:${c.productTaskName}`))
           .then(result => {
             assert.fileContent(`${webroot}/latest/index.html`, '<h1>Doc Site Homepage</h1>');
-            assert.fileContent(`${webroot}/latest/index.html`, '<button class="uds-button"');
+            assert.fileContent(`${webroot}/latest/index.html`, '<button class="esds-button"');
           });
       });
 
@@ -101,13 +101,13 @@ module.exports = function(){
 
     describe('watch:markup:macros', function(){
       it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
-        exec(`gulp watch:markup:macros:${configProductName}`); // start watch
+        exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
           .then(result => gulp('clean:webroot'))
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
-            recursivelyCheckForFiles([`${componentMacros}/${configProductName}.njk`,
+            recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
                                       `${webroot}/latest/index.html`], done);
           });
       });
@@ -119,7 +119,7 @@ module.exports = function(){
           .then(result => gulp('clean:webroot'))
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
-            recursivelyCheckForFiles([`${componentMacros}/${configProductName}.njk`,
+            recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
                                       `${webroot}/latest/index.html`], done);
           });
       });
@@ -127,7 +127,7 @@ module.exports = function(){
 
     describe('watch:markup:docs', function(){
       it('should rebuild doc files when doc files are saved', function(done){
-        exec(`gulp watch:markup:docs:${configProductName}`); // start watch
+        exec(`gulp watch:markup:docs:${c.productTaskName}`); // start watch
         gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
           .then(result => {

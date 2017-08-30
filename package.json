@@ -1,8 +1,8 @@
 {
-  "name": "@eightshapes/uds-build-tools",
+  "name": "@eightshapes/eightshapes-build-tools",
   "version": "0.5.0",
-  "description": "1. Create a new node project: `npm init` 2. Install required gulp dependencies:   `npm install gulp-cli --save-dev`   `npm install git+https://github.com/gulpjs/gulp.git#4.0 --save-dev` 3. Install this node module:   `npm install uds-build-tools --save-dev` 4. Create a `gulpfile.js` in the root of your project. Add the following line:   `const gulp = require('uds-build-tasks')` 5. Generate the project scaffold:   `gulp generate:project-scaffold` 6. Run the local environment:   `gulp`",
-  "main": "tasks/uds_tasks.js",
+  "description": "1. Create a new node project: `npm init` 2. Install required gulp dependencies:   `npm install gulp-cli --save-dev`   `npm install git+https://github.com/gulpjs/gulp.git#4.0 --save-dev` 3. Install this node module:   `npm install @eightshapes/eightshapes-build-tools --save-dev` 4. Create a `gulpfile.js` in the root of your project. Add the following line:   `const gulp = require('@eightshapes/eightshapes-build-tasks')` 5. Generate the project scaffold:   `gulp generate:project-scaffold` 6. Run the local environment:   `gulp`",
+  "main": "tasks/esds_tasks.js",
   "scripts": {
     "test": "mocha tests/tests.js --timeout 6000"
   },
@@ -50,10 +50,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EightShapes/uds-build-tools.git"
+    "url": "git+https://github.com/EightShapes/eightshapes-build-tools.git"
   },
   "bugs": {
-    "url": "https://github.com/EightShapes/uds-build-tools/issues"
+    "url": "https://github.com/EightShapes/eightshapes-build-tools/issues"
   },
-  "homepage": "https://github.com/EightShapes/uds-build-tools#readme"
+  "homepage": "https://github.com/EightShapes/eightshapes-build-tools#readme"
 }
