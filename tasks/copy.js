@@ -18,4 +18,4 @@ copyTasks.forEach(t => {
 });
 
 // Run all copy tasks
-gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskPrefix}`, gulp.parallel(copyTaskNames));
+gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(copyTaskNames));
