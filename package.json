@@ -1,10 +1,12 @@
 {
   "name": "@eightshapes/eightshapes-build-tools",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "1. Create a new node project: `npm init` 2. Install required gulp dependencies:   `npm install gulp-cli --save-dev`   `npm install git+https://github.com/gulpjs/gulp.git#4.0 --save-dev` 3. Install this node module:   `npm install @eightshapes/eightshapes-build-tools --save-dev` 4. Create a `gulpfile.js` in the root of your project. Add the following line:   `const gulp = require('@eightshapes/eightshapes-build-tasks')` 5. Generate the project scaffold:   `gulp generate:project-scaffold` 6. Run the local environment:   `gulp`",
   "main": "tasks/esds_tasks.js",
   "scripts": {
-    "test": "mocha tests/tests.js --timeout 6000"
+    "test": "mocha tests/tests.js --timeout 6000",
+    "postinstall": "node scripts/postinstall.js",
+    "start": "gulp"
   },
   "author": "Kevin Powell <kevinmpowell@gmail.com>",
   "license": "UNLICENSED",
@@ -15,8 +17,6 @@
     "flat": "^4.0.0",
     "fs": "0.0.1-security",
     "fs-extra": "^4.0.1",
-    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
-    "gulp-cli": "^1.4.0",
     "gulp-concat-util": "^0.5.5",
     "gulp-eslint": "^4.0.0",
     "gulp-hub": "^4.1.0",
@@ -39,6 +39,8 @@
     "yeoman-assert": "^3.0.0"
   },
   "devDependencies": {
+    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
+    "gulp-cli": "^1.4.0",
     "mocha": "^3.5.0"
   },
   "peerDependencies": {
