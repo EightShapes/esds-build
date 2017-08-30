@@ -1,0 +1,21 @@
+<nav>
+    <ul>
+        {% for nav_item in content.site_nav %}
+            <li>
+                <a href="{{ nav_item.href }}">{{ nav_item.label }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</nav>
+
+<h1>Animals</h1>
+<ul>
+    {% for animal, color in animals %}
+        <li>The {{ animal }} is {{ color }}.</li>
+    {% endfor %}
+</ul>
+
+<footer>
+    {{ content.copyright | safe }}
+</footer>
+    

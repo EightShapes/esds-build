@@ -139,6 +139,24 @@ module.exports = function(){
       });
     });
 
+    describe('json data available in nunjucks', function(){
+      beforeEach(function(){
+        return gulp('clean:webroot')
+            .then(result => gulp('tokens:build:all'));
+      });
+
+      it('should compile docs that use custom Product-level filters', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/using-content-example.html`, 'The elephant is gray.');
+            assert.fileContent(`${webroot}/latest/using-content-example.html`, 'The tiger is orange.');
+            assert.fileContent(`${webroot}/latest/using-content-example.html`, 'The duck is yellow.');
+            assert.fileContent(`${webroot}/latest/using-content-example.html`, '&copy; 2017 Your Company Name');
+            assert.fileContent(`${webroot}/latest/using-content-example.html`, '<a href="/">Home</a>');
+          });
+      });
+    });
+
     describe('watch:markup:macros', function(){
       it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
         exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch

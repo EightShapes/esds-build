@@ -1,0 +1,13 @@
+{
+    "copyright": "&copy; 2017 Your Company Name",
+    "site_nav": [
+        {
+            "label": "Home",
+            "href": "/"
+        },
+        {
+            "label": "Contribute",
+            "href": "/contribute.html"
+        }
+    ]
+}

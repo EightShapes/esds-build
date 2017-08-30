@@ -105,10 +105,47 @@ function generateWatchDocsTask(c) {
     }
 }
 
+
+
+function getDataForTemplates() {
+    const fullDataPath = path.join(buildConfig.rootPath, buildConfig.dataPath);
+    let allDataFiles = ['tokens.json'],
+        data = {};
+
+    if (fs.existsSync(fullDataPath)) {
+        allDataFiles = allDataFiles.concat(fs.readdirSync(fullDataPath));
+    }
+    allDataFiles.forEach(f => {
+        if (f.indexOf('.json') !== -1) {
+            let namespace = f.replace(/.json/, ''),
+                dataDirectory = f === 'tokens.json' ? buildConfig.tokensPath : buildConfig.dataPath,
+                fullFilepath = path.join(buildConfig.rootPath, dataDirectory, f);
+            if (fs.existsSync(fullFilepath)) {
+                let contents = fs.readFileSync(fullFilepath, {encoding: 'UTF-8'}),
+                    json;
+
+                try {
+                    json = JSON.parse(contents);
+                    if (namespace === 'tokens') {
+                        Object.assign(data, json);
+                    } else {
+                        data[namespace] = json;
+                    }
+                } catch (e) {
+                    // eslint-disable-next-line no-console
+                    console.log(e, `Warning: Could not parse data file ${fullFilepath} into JSON for nunjucks`);
+                }
+            }
+        }
+    });
+
+    return data;
+}
+
 function generateBuildTask(t) {
     if (t.docSourceFilePaths) {
         let nunjucksOptions = {
-            data: {},
+            data: getDataForTemplates(),
             envOptions: {
                 watch: false
             },
@@ -120,22 +157,6 @@ function generateBuildTask(t) {
             },
             path: t.docTemplateImportPaths
         };
-
-        // Inject tokens.json into nunjucks global variable space
-        const jsonTokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath, 'tokens.json');
-        if (fs.existsSync(jsonTokensPath)) {
-            let file = fs.readFileSync(jsonTokensPath, {encoding: 'UTF-8'}),
-                data = {};
-
-            try {
-                data = JSON.parse(file);
-            } catch (e) {
-                // eslint-disable-next-line no-console
-                console.log(e, `Warning: Could not parse tokens file ${jsonTokensPath} into JSON for nunjucks`);
-            }
-
-            nunjucksOptions.data = data;
-        }
 
         // Compile doc src to html
         gulp.task(`${buildTaskPrefix}${t.name}`, function() {
