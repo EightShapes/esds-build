@@ -119,6 +119,26 @@ module.exports = function(){
       });
     });
 
+    describe('tokens available in nunjucks', function(){
+      const nunjucksTokensTestFilepath = './tests/sample_project/docs/using-tokens-example.njk';
+      beforeEach(function(){
+        fs.writeFileSync(nunjucksTokensTestFilepath, "<h1>These tokens are {{ esds['what-are-the-tokens'] }}</h1>");
+        return gulp('clean:webroot')
+            .then(result => gulp('tokens:build:all'));
+      });
+
+      afterEach(function(){
+        return del(nunjucksTokensTestFilepath);
+      });
+
+      it('should compile docs that use custom Product-level filters', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/using-tokens-example.html`, 'These tokens are limegreen');
+          });
+      });
+    });
+
     describe('watch:markup:macros', function(){
       it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
         exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch

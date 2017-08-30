@@ -45,9 +45,8 @@ function writeTokensJsonFile(tokens) {
     const jsonOutputFilename = path.parse(c.tokensSourceFile).name + '.json',
             jsonOutputFilepath = path.join(c.rootPath, c.tokensPath, jsonOutputFilename);
 
-    let jsonTokens = {
-            tokens: tokens
-        };
+    let jsonTokens = {};
+        jsonTokens[c.codeNamespace] = tokens;
 
     // JSON tokens
     if (!fs.existsSync(tokenConfig.outputPath)) {
