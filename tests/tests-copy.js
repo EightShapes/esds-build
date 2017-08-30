@@ -25,4 +25,34 @@ module.exports = function(){
                 });
         });
     });
+
+    describe('copying named assets to fonts directory', function(){
+        beforeEach(function(){
+            return gulp('clean:webroot');
+        });
+
+        it('should copy miscellaneous files specified in the build config', function(done) {
+            gulp('copy:fonts')
+                .then(result => {
+                    assert.file(`${webroot}/fonts/font-format-1.woff`);
+                    assert.file(`${webroot}/fonts/font-format-2.ttf`);
+                    // assert.file(`${webroot}/scripts/dependencies/random-file-to-be-copied.js`);
+                    done();
+                });
+        });
+    });
+
+    describe('copying random dependencies to a dependencies directory', function(){
+        beforeEach(function(){
+            return gulp('clean:webroot');
+        });
+
+        it('should copy random dependencies specified in the build config', function(done) {
+            gulp('copy:random-dependencies')
+                .then(result => {
+                    assert.file(`${webroot}/scripts/dependencies/random-file-to-be-copied.js`);
+                    done();
+                });
+        });
+    });
 };

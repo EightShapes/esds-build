@@ -156,6 +156,18 @@ function getCopyConfig(buildConfig) {
 
     let tasks = [imageTask];
 
+    if (c.copyTasks) {
+        c.copyTasks.forEach(t => {
+            let task = {
+                name: t.name,
+                sources: t.sources,
+                destination: t.destination
+            };
+
+            tasks.push(task);
+        });
+    }
+
     return {
         copyTaskPrefix: [c.copyTaskName].join(':') + ':',
         tasks: tasks
