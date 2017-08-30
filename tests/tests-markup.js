@@ -2,6 +2,7 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global afterEach */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -95,6 +96,25 @@ module.exports = function(){
           .then(result => gulp('markup:build:all'))
           .then(result => {
             assert.fileContent(`${webroot}/latest/index.html`, '<button>I\'m a button from Product A</button>');
+          });
+      });
+    });
+
+    describe('custom nunjucks filters', function(){
+      const customFilterTestFilepath = './tests/sample_project/docs/custom-filter-example.njk';
+      beforeEach(function(){
+        fs.writeFileSync(customFilterTestFilepath, "{% set test_array = ['a', 'b', 'c'] %}{% set is_it_an_array = test_array | isarray %}{% if is_it_an_array %}<p>Yes! It IS an array!</p>{% endif %}");
+        return gulp('clean:webroot');
+      });
+
+      afterEach(function(){
+        return del(customFilterTestFilepath);
+      });
+
+      it('should compile docs that use custom Product-level filters', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/custom-filter-example.html`, 'Yes! It IS an array!');
           });
       });
     });

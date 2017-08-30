@@ -104,8 +104,8 @@ function generateWatchDocsTask(c) {
     }
 }
 
-function generateBuildTask(c) {
-    if (c.docSourceFilePaths) {
+function generateBuildTask(t) {
+    if (t.docSourceFilePaths) {
         let nunjucksOptions = {
                 data: {},
                 envOptions: {
@@ -113,27 +113,30 @@ function generateBuildTask(c) {
                 },
                 manageEnv: function(env) {
                     addDocLibraryNunjucksFilters(env);
+                    if (buildConfig.manageNunjucksEnv) {
+                        buildConfig.manageNunjucksEnv(env);
+                    }
                 },
-                path: c.docTemplateImportPaths
+                path: t.docTemplateImportPaths
             };
 
-        if (c.docDataFile && fs.existsSync(c.docDataFile)) {
-            let file = fs.readFileSync(c.docDataFile, {encoding: 'UTF-8'}),
+        if (t.docDataFile && fs.existsSync(t.docDataFile)) {
+            let file = fs.readFileSync(t.docDataFile, {encoding: 'UTF-8'}),
                 data = {};
 
             try {
                 data = JSON.parse(file);
             } catch (e) {
                 // eslint-disable-next-line no-console
-                console.log(e, `Warning: Could not parse ${c.docDataFile} into JSON for nunjucks`);
+                console.log(e, `Warning: Could not parse ${t.docDataFile} into JSON for nunjucks`);
             }
 
             nunjucksOptions.data = data;
         }
 
         // Compile doc src to html
-        gulp.task(`${buildTaskPrefix}${c.name}`, function() {
-            return gulp.src(c.docSourceFilePaths)
+        gulp.task(`${buildTaskPrefix}${t.name}`, function() {
+            return gulp.src(t.docSourceFilePaths)
                 .pipe(
                     nunjucksRender(nunjucksOptions).on('error', function(e){
                         gutil.log(e);
@@ -141,7 +144,7 @@ function generateBuildTask(c) {
                         this.emit('end');
                     })
                 )
-                .pipe(gulp.dest(c.docOutputPath));
+                .pipe(gulp.dest(t.docOutputPath));
         });
     }
 }
