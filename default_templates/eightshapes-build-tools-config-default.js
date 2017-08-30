@@ -50,22 +50,21 @@ module.exports = {
     markupSourceExtension: '.njk',                                      // Markup template file extension
     scriptsSourceExtension: '.js',                                      // Scripts file extension
     stylesSourceExtension: '.scss',                                     // Styles file extension
-    //Gulp task name segments, like watch:markup, styles:build, etc.
-    allTaskName: 'all',
-    copyTaskName: 'copy',
-    buildTaskName: 'build',
-    concatTaskName: 'concatenate',
-    docsTaskName: 'docs',
-    iconsTaskName: 'icons',
-    imagesTaskName: 'images',
-    lintTaskName: 'lint',
-    markupTaskName: 'markup',
-    macrosTaskName: 'macros',
-    optimizeTaskName: 'optimize',
-    postprocessTaskName: 'postprocess',
-    precompileTaskName: 'precompile',
-    productTaskName: sanitizedProductName,
-    scriptsTaskName: 'scripts',
-    stylesTaskName: 'styles',
-    watchTaskName: 'watch'
+    allTaskName: 'all',                                                 // gulp task name segment, ex: build:all, watch:all
+    copyTaskName: 'copy',                                               // gulp task name segment, ex: copy:images
+    buildTaskName: 'build',                                             // gulp task name segment, ex: markup:build, styles:build
+    concatTaskName: 'concatenate',                                      // gulp task name segment, ex: markup:concatenate:macros, scripts:concatenate
+    docsTaskName: 'docs',                                               // gulp task name segment, ex: markup:build:docs
+    iconsTaskName: 'icons',                                             // gulp task name segment, ex: icons:optimize
+    imagesTaskName: 'images',                                           // gulp task name segment, ex: copy:images
+    lintTaskName: 'lint',                                               // gulp task name segment, ex: styles:lint, scripts:lint
+    markupTaskName: 'markup',                                           // gulp task name segment, ex: markup:build, watch:markup
+    macrosTaskName: 'macros',                                           // gulp task name segment, ex: markup:concatenate:macros
+    optimizeTaskName: 'optimize',                                       // gulp task name segment, ex: icons:optimize
+    postprocessTaskName: 'postprocess',                                 // gulp task name segment, ex: styles:postprocess
+    precompileTaskName: 'precompile',                                   // gulp task name segment, ex: styles:precompile
+    productTaskName: sanitizedProductName,                              // gulp task name segment, by default, a sanitized version of the "name" key in package.json, ex: eightshapes-build-tools
+    scriptsTaskName: 'scripts',                                         // gulp task name segment, ex: scripts:build
+    stylesTaskName: 'styles',                                           // gulp task name segment, ex: styles:build
+    watchTaskName: 'watch'                                              // gulp task name segment, ex: watch:scripts, watch:styles
 };
