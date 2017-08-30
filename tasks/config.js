@@ -23,8 +23,8 @@ function retrieveDefaultBuildConfig() {
 
 function retrieveBuildConfig(rootPath) {
     rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
-    const defaultConfig = JSON.parse(JSON.stringify(retrieveDefaultBuildConfig())), // deep copy technique
-            productConfig = JSON.parse(JSON.stringify(retrieveProductBuildConfig(rootPath))); // deep copy technique
+    const defaultConfig = Object.assign({}, retrieveDefaultBuildConfig()), // copy technique, won't work when config is more than one level dep
+            productConfig = Object.assign({}, retrieveProductBuildConfig(rootPath)); // copy technique, won't work when config is more than one level dep
 
     let buildConfig = Object.assign(defaultConfig, productConfig),
         useProductConfig = buildConfig.configMethod === 'overwrite';
