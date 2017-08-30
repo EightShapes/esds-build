@@ -1,29 +1,25 @@
 # Installation Instructions
-  1. Create a new node project:
+  1. Be sure `gulp-cli` is installed globally:
+
+  `npm install gulp-cli -g`
   
-  `npm init`
-  
-  2. Install required gulp dependencies:  
-  
-  `npm install gulp-cli --save-dev`
-  
-  `npm install git+https://github.com/gulpjs/gulp.git#4.0 --save-dev`
-  
-  3. Install this node module:
+  2. Install this node module:
   
   `npm install @eightshapes/eightshapes-build-tools --save-dev`
   
-  4. Create a `gulpfile.js` in the root of your project. Add the following line:
-  
-  `const gulp = require('@eightshapes/eightshapes-build-tools');`
-
-  5. Generate the project scaffold:
+  3. Generate the project scaffold:
   
   `gulp generate:project-scaffold`
 
-  6. Run the local environment:
+  4. Run the local environment:
   
   `gulp`
+
+## Generate top level directories
+`gulp generate:scaffold`
+
+## Generate default config file
+`gulp generate:default-config
 
 ## Generate new component files
 `gulp generate:new-component`
