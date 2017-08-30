@@ -66,4 +66,13 @@ module.exports = function(){
           });
       });
     });
+
+    describe('invalid tokens file', function(){
+      it('should return an empty object when parsing an empty tokens file', function(){
+        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/tests/sample_project/empty-tokens/empty-tokens.yaml`),
+              keys = Object.keys(tokens);
+        assert(typeof tokens === 'object');
+        assert(keys.length === 0);
+      });
+    });
 };
