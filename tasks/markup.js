@@ -3,6 +3,7 @@
 const config = require('./config.js'),
         concat = require('gulp-concat-util'),
         fs = require('fs'),
+        path = require('path'),
         gulp = require('gulp'),
         gutil = require('gulp-util'),
         marked = require('marked'),
@@ -107,28 +108,30 @@ function generateWatchDocsTask(c) {
 function generateBuildTask(t) {
     if (t.docSourceFilePaths) {
         let nunjucksOptions = {
-                data: {},
-                envOptions: {
-                    watch: false
-                },
-                manageEnv: function(env) {
-                    addDocLibraryNunjucksFilters(env);
-                    if (buildConfig.manageNunjucksEnv) {
-                        buildConfig.manageNunjucksEnv(env);
-                    }
-                },
-                path: t.docTemplateImportPaths
-            };
+            data: {},
+            envOptions: {
+                watch: false
+            },
+            manageEnv: function(env) {
+                addDocLibraryNunjucksFilters(env);
+                if (buildConfig.manageNunjucksEnv) {
+                    buildConfig.manageNunjucksEnv(env);
+                }
+            },
+            path: t.docTemplateImportPaths
+        };
 
-        if (t.docDataFile && fs.existsSync(t.docDataFile)) {
-            let file = fs.readFileSync(t.docDataFile, {encoding: 'UTF-8'}),
+        // Inject tokens.json into nunjucks global variable space
+        const jsonTokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath, 'tokens.json');
+        if (fs.existsSync(jsonTokensPath)) {
+            let file = fs.readFileSync(jsonTokensPath, {encoding: 'UTF-8'}),
                 data = {};
 
             try {
                 data = JSON.parse(file);
             } catch (e) {
                 // eslint-disable-next-line no-console
-                console.log(e, `Warning: Could not parse ${t.docDataFile} into JSON for nunjucks`);
+                console.log(e, `Warning: Could not parse tokens file ${jsonTokensPath} into JSON for nunjucks`);
             }
 
             nunjucksOptions.data = data;
