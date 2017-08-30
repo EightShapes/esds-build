@@ -11,6 +11,22 @@ const config = require('./config.js'),
         yaml = require('yamljs'),
         tokenConfig = c.tokens;
 
+function tokensToJson(sourceFile) {
+    let tokens = {},
+        parsedTokens;
+    try {
+        parsedTokens = yaml.load(sourceFile);
+        parsedTokens = interpolateYamlVariables(parsedTokens);
+        if (parsedTokens !== null) {
+            tokens = parsedTokens;
+        }
+    } catch (e) {
+        // eslint-disable-next-line no-console
+        console.log(e, `Warning: Could not parse tokens file ${sourceFile} into JSON`);
+    }
+    return tokens;
+}
+
 function interpolateYamlVariables(variables_object) {
     const regex = /!{\*(.*?)}/g;
     let json = JSON.stringify(variables_object);
@@ -79,8 +95,7 @@ function writeTokensScssFile(tokens) {
 
 function convertTokensYaml(sourceFile, done) {
     if (tokensSourceFileExists(sourceFile)) {
-        // First the tokens.yaml file is parsed into JSON
-        let tokens = interpolateYamlVariables(yaml.load(tokenConfig.sourceFile));
+        let tokens = tokensToJson(sourceFile);
         tokenConfig.formats.forEach(format => {
             switch (format) {
                 case '.json':
@@ -108,6 +123,7 @@ gulp.task('watch:tokens:all', function(){
 });
 
 module.exports = {
-    convertTokensYaml: convertTokensYaml
+    convertTokensYaml: convertTokensYaml,
+    tokensToJson: tokensToJson
 };
 
