@@ -146,15 +146,25 @@ function getTokensConfig(buildConfig) {
 
 function getCopyConfig(buildConfig) {
     const c = buildConfig, // for brevity
+        latestVersionWebroot = path.join(c.rootPath, c.webroot, c.latestVersionPath),
         imageTask = {
             name: c.imagesTaskName,
             sources: [
                 path.join(c.rootPath, c.imagesPath, '**', '*')
             ],
             destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)
+        },
+        distTask = {
+            name: c.distTaskName,
+            sources: [
+                path.join(latestVersionWebroot, c.stylesPath, '*.css'),
+                path.join(latestVersionWebroot, c.scriptsPath, `${c.codeNamespace}.js`),
+                path.join(latestVersionWebroot, c.iconsPath, `${c.codeNamespace}.svg`)
+            ],
+            destination: path.join(c.rootPath, c.distPath)
         };
 
-    let tasks = [imageTask];
+    let tasks = [imageTask, distTask];
 
     if (c.copyTasks) {
         c.copyTasks.forEach(t => {

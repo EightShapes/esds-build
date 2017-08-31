@@ -1,0 +1,9 @@
+.esds-nav {
+  border: solid 3px #000;
+  color: lemonchiffon;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-row: 1;
+      grid-row-start: 1; }
+  .esds-nav:before {
+    content: "content token in product-a"; }
