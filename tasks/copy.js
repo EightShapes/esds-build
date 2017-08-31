@@ -4,7 +4,7 @@ const config = require('./config.js'),
         c = config.get(),
         gulp = require('gulp'),
         copyTasks = c.copy.tasks,
-        copyTaskNames = copyTasks.map(t => `${c.copy.copyTaskPrefix}${t.name}`);
+        copyTaskNames = copyTasks.filter(t => t.name !== 'dist').map(t => `${c.copy.copyTaskPrefix}${t.name}`); // don't include the copy:dist task with the copy:all tasks
 
 function generateCopyTask(t) {
     gulp.task(`${c.copy.copyTaskPrefix}${t.name}`, function() {
