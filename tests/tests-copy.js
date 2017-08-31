@@ -5,7 +5,9 @@
 
 'use strict';
 const assert = require('yeoman-assert'),
-gulp = require('./tests-gulp.js'),
+        gulp = require('./tests-gulp.js'),
+        fs = require('fs'),
+        mkdirp = require('mkdirp'),
         projectPath = './tests/sample_project',
         webroot = `${projectPath}/_site/latest`,
         webrootImages = `${webroot}/images`;
@@ -62,14 +64,30 @@ module.exports = function(){
                 .then(result => gulp('tokens:build:all'))
                 .then(result => gulp('styles:build:all'))
                 .then(result => gulp('scripts:build:all'))
-                .then(result => gulp('icons:build:all'))
-                .then(result => gulp('copy:dist'));
+                .then(result => gulp('icons:build:all'));
         });
 
         it('should copy compiled css, js, and svg sprite to /dist directory', function() {
-            assert.file(`${projectPath}/dist/esds.js`);
-            assert.file(`${projectPath}/dist/esds.svg`);
-            assert.file(`${projectPath}/dist/doc.css`);
+            return gulp('copy:dist')
+                .then(result => {
+                    assert.file(`${projectPath}/dist/esds.js`);
+                    assert.file(`${projectPath}/dist/esds.svg`);
+                    assert.file(`${projectPath}/dist/doc.css`);
+                });
+        });
+
+        it('should not blow up the build when any of the expected dist assets cannot be copied', function(){
+            return gulp('clean:webroot')
+                .then(result => {
+                    mkdirp.sync(`${webroot}/icons`);
+                    fs.writeFileSync(`${webroot}/icons/esds.svg`, '<xml stuff here/>');
+                })
+                .then(result => gulp('copy:dist'))
+                .then(result => {
+                    assert.noFile(`${projectPath}/dist/esds.js`); // JS not copied
+                    assert.noFile(`${projectPath}/dist/doc.css`); // CSS not copied
+                    assert.file(`${projectPath}/dist/esds.svg`); // SVG is copied because it exists
+                });
         });
     });
 };
