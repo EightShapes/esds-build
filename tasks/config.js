@@ -157,9 +157,9 @@ function getCopyConfig(buildConfig) {
         distTask = {
             name: c.distTaskName,
             sources: [
-                path.join(latestVersionWebroot, c.stylesPath, '*.css'),
-                path.join(latestVersionWebroot, c.scriptsPath, `${c.codeNamespace}.js`),
-                path.join(latestVersionWebroot, c.iconsPath, `${c.codeNamespace}.svg`)
+                path.join(latestVersionWebroot, c.stylesPath, '*.css'), // copy any css file from the root of webroot/styles
+                path.join(latestVersionWebroot, c.scriptsPath, `*.js`), // copy any js file from the root of webroot/scripts
+                path.join(latestVersionWebroot, c.iconsPath, `*.svg`) // copy any svg file from the root of webroot/icons
             ],
             destination: path.join(c.rootPath, c.distPath)
         };
