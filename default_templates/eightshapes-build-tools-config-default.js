@@ -56,6 +56,7 @@ module.exports = {
     copyTaskName: 'copy',                                               // gulp task name segment, ex: copy:images
     buildTaskName: 'build',                                             // gulp task name segment, ex: markup:build, styles:build
     concatTaskName: 'concatenate',                                      // gulp task name segment, ex: markup:concatenate:macros, scripts:concatenate
+    distTaskName: 'dist',                                               // gulp task name segment, ex: copy:dist
     docsTaskName: 'docs',                                               // gulp task name segment, ex: markup:build:docs
     iconsTaskName: 'icons',                                             // gulp task name segment, ex: icons:optimize
     imagesTaskName: 'images',                                           // gulp task name segment, ex: copy:images

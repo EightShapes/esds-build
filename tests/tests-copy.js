@@ -55,4 +55,21 @@ module.exports = function(){
                 });
         });
     });
+
+    describe('copying default dist assets to a dist directory', function(){
+        beforeEach(function(){
+            return gulp('clean:dist')
+                .then(result => gulp('tokens:build:all'))
+                .then(result => gulp('styles:build:all'))
+                .then(result => gulp('scripts:build:all'))
+                .then(result => gulp('icons:build:all'))
+                .then(result => gulp('copy:dist'));
+        });
+
+        it('should copy compiled css, js, and svg sprite to /dist directory', function() {
+            assert.file(`${projectPath}/dist/esds.js`);
+            assert.file(`${projectPath}/dist/esds.svg`);
+            assert.file(`${projectPath}/dist/doc.css`);
+        });
+    });
 };
