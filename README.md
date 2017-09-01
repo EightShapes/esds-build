@@ -1,15 +1,15 @@
 # Installation Instructions
-  1. Be sure `gulp-cli` is installed globally:
+  1. Install `gulp-cli` globally (if it's not already):
 
   `npm install gulp-cli -g`
   
-  2. Install this node module:
+  2. Install:
   
   `npm install @eightshapes/eightshapes-build-tools --save-dev`
   
-  3. Generate the project scaffold:
+  3. Generate top level directories:
   
-  `gulp generate:project-scaffold`
+  `gulp generate:scaffold`
 
   4. Run the local environment:
   
