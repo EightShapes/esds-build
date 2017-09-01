@@ -131,10 +131,54 @@ module.exports = function(){
         return del(nunjucksTokensTestFilepath);
       });
 
-      it('should compile docs that use custom Product-level filters', function(){
+      it('should compile docs that reference tokens', function(){
         return gulp('markup:build:all')
           .then(result => {
             assert.fileContent(`${webroot}/latest/using-tokens-example.html`, 'These tokens are limegreen');
+          });
+      });
+    });
+
+    describe('child module tokens copied and available in nunjucks', function(){
+      const childTokensTestFilepath = './tests/sample_project/docs/using-child-module-tokens-example.njk';
+      beforeEach(function(){
+        fs.writeFileSync(childTokensTestFilepath, "<h1>This is a token from the child module: {{ product_a.color.text.default }}</h1>");
+        return gulp('clean:webroot')
+            .then(result => gulp('tokens:build:all'));
+      });
+
+      afterEach(function(){
+        return del(childTokensTestFilepath);
+      });
+
+      it('should compile docs that use copied tokens from a child module', function(){
+        return gulp('copy:all')
+          .then(result => gulp('markup:build:all'))
+          .then(result => {
+            assert.file(`${projectPath}/tokens/product_a_tokens.json`);
+            assert.fileContent(`${webroot}/latest/using-child-module-tokens-example.html`, 'This is a token from the child module: #656565');
+            del(`${projectPath}/tokens/product_a_tokens.json`);
+          });
+      });
+    });
+
+    describe('child module tokens referenced and available in nunjucks', function(){
+      const childTokensReferenceTestFilepath = './tests/sample_project/docs/using-child-module-tokens-by-reference-example.njk';
+      beforeEach(function(){
+        fs.writeFileSync(childTokensReferenceTestFilepath, "<h1>This is a token from the child module: {{ product_b.color.text.default }}</h1>");
+        return gulp('clean:webroot')
+            .then(result => gulp('tokens:build:all'));
+      });
+
+      afterEach(function(){
+        return del(childTokensReferenceTestFilepath);
+      });
+
+      it('should compile docs that use copied tokens from a child module', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.noFile(`${projectPath}/tokens/product_b_tokens.json`);
+            assert.fileContent(`${webroot}/latest/using-child-module-tokens-by-reference-example.html`, 'This is a token from the child module: #ff0055');
           });
       });
     });

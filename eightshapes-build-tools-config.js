@@ -20,5 +20,17 @@ module.exports = {
             sources: [`${rootPath}/node_modules/random-file-to-be-copied.js`],
             destination: `${rootPath}/_site/latest/scripts/dependencies`
         }
+    ],
+    dependencies: [
+        {
+            moduleName: 'product-a',
+            codeNamespace: 'product_a',
+            tokens: 'copy'  // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
+        },
+        {
+            moduleName: 'product-b',
+            codeNamespace: 'product_b',
+            tokens: 'reference' // Reference makes the tokens from this module available to the nunjucks environment without actually copying the tokens.json file
+        }
     ]
 };

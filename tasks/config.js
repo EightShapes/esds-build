@@ -144,8 +144,30 @@ function getTokensConfig(buildConfig) {
     };
 }
 
+function getDependencyCopyTasks(c) {
+    const tasks = [];
+    if (c.dependencies) {
+        const tokensCopyTasks = c.dependencies.filter(d => d.tokens && d.tokens === 'copy');
+
+        tokensCopyTasks.forEach(t => {
+            const moduleTokensPath = path.join(c.rootPath, c.dependenciesPath, t.moduleName, c.tokensPath), // This will break if the module has redefined tokensPath to be something different than the parent module's tokensPath
+                task = {
+                    name: `${t.moduleName}:${c.tokensTaskName}`,
+                    sources: [path.join(moduleTokensPath, 'tokens.json')],
+                    destination: path.join(c.rootPath, c.tokensPath),
+                    rename: `${t.codeNamespace}_tokens`
+                };
+
+            tasks.push(task);
+        });
+    }
+
+    return tasks;
+}
+
 function getCopyConfig(buildConfig) {
     const c = buildConfig, // for brevity
+        dependencyCopyTasks = getDependencyCopyTasks(c),
         latestVersionWebroot = path.join(c.rootPath, c.webroot, c.latestVersionPath),
         imageTask = {
             name: c.imagesTaskName,
@@ -164,7 +186,8 @@ function getCopyConfig(buildConfig) {
             destination: path.join(c.rootPath, c.distPath)
         };
 
-    let tasks = [imageTask, distTask];
+    let tasks = [imageTask, distTask].concat(dependencyCopyTasks);
+
 
     if (c.copyTasks) {
         c.copyTasks.forEach(t => {
