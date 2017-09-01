@@ -41,7 +41,7 @@ module.exports = function(){
           .then(result => {
             assert.fileContent(tokensScss, `$${c.codeNamespace}-color-interactive-primary: #0ff`);
             assert.fileContent(tokensScss, `$esds-namespace: "${c.codeNamespace}"`);
-            assert.fileContent(tokensJson, '"esds": {');
+            assert.fileContent(tokensJson, '"esds_tokens": {');
             assert.fileContent(tokensJson, `"namespace": "${c.codeNamespace}"`);
             assert.fileContent(tokensJson, '"primary": "#0ff"');
           });

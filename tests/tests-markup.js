@@ -122,7 +122,7 @@ module.exports = function(){
     describe('tokens available in nunjucks', function(){
       const nunjucksTokensTestFilepath = './tests/sample_project/docs/using-tokens-example.njk';
       beforeEach(function(){
-        fs.writeFileSync(nunjucksTokensTestFilepath, "<h1>These tokens are {{ esds['what-are-the-tokens'] }}</h1>");
+        fs.writeFileSync(nunjucksTokensTestFilepath, "<h1>These tokens are {{ esds_tokens['what-are-the-tokens'] }}</h1>");
         return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
       });

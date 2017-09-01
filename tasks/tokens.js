@@ -62,7 +62,7 @@ function writeTokensJsonFile(tokens) {
             jsonOutputFilepath = path.join(c.rootPath, c.tokensPath, jsonOutputFilename);
 
     let jsonTokens = {};
-        jsonTokens[c.codeNamespace.replace(/-/g, '_')] = tokens;
+        jsonTokens[`${c.codeNamespace.replace(/-/g, '_')}_tokens`] = tokens;
 
     // JSON tokens
     if (!fs.existsSync(tokenConfig.outputPath)) {
