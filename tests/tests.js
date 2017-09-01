@@ -3,6 +3,7 @@
 const cleanTests = require('./tests-clean.js'),
         configTests = require('./tests-config.js'),
         copyTests = require('./tests-copy.js'),
+        esdsTests = require('./tests-esds.js'),
         generatorTests = require('./tests-generate.js'),
         iconTests = require('./tests-icons.js'),
         markupTests = require('./tests-markup.js'),
@@ -12,6 +13,7 @@ const cleanTests = require('./tests-clean.js'),
 cleanTests();
 configTests();
 copyTests();
+esdsTests();
 generatorTests();
 iconTests();
 markupTests();
