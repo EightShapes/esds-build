@@ -108,17 +108,17 @@ function generateWatchDocsTask(c) {
 function getDataForTemplates() {
     const fullDataPath = path.join(buildConfig.rootPath, buildConfig.dataPath),
             tokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);
-    let allDataFiles,
-        tokenDataFiles, // Separating these because they already contain a namespace at the top level
+    let allDataFiles = [],
+        tokenDataFiles = [], // Separating these because they already contain a namespace at the top level
         data = {};
 
 
 
     if (fs.existsSync(tokensPath)) {
         const fullTokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);
-        tokenDataFiles = fs.readdirSync(tokensPath)
-                            .filter(f => f.indexOf('.json') !== -1)
-                            .map(f => path.join(fullTokensPath, f));
+        tokenDataFiles = tokenDataFiles.concat(fs.readdirSync(tokensPath)
+                                                .filter(f => f.indexOf('.json') !== -1)
+                                                .map(f => path.join(fullTokensPath, f)));
     }
     // Get reference tokens.json files from child modules
     if (buildConfig.dependencies) {
@@ -146,7 +146,7 @@ function getDataForTemplates() {
 
 
     if (fs.existsSync(fullDataPath)) {
-        allDataFiles = fs.readdirSync(fullDataPath).filter(f => f.indexOf('.json') !== -1);
+        allDataFiles = allDataFiles.concat(fs.readdirSync(fullDataPath).filter(f => f.indexOf('.json') !== -1));
     }
     allDataFiles.forEach(f => {
         let namespace = f.replace(/.json/, ''),
