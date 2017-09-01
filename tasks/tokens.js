@@ -62,7 +62,7 @@ function writeTokensJsonFile(tokens) {
             jsonOutputFilepath = path.join(c.rootPath, c.tokensPath, jsonOutputFilename);
 
     let jsonTokens = {};
-        jsonTokens[c.codeNamespace] = tokens;
+        jsonTokens[c.codeNamespace.replace(/-/g, '_')] = tokens;
 
     // JSON tokens
     if (!fs.existsSync(tokenConfig.outputPath)) {
@@ -114,12 +114,12 @@ function convertTokensYaml(sourceFile, done) {
     }
 }
 
-gulp.task('tokens:build:all', function(done){
+gulp.task(`${c.tokensTaskName}:${c.buildTaskName}:${c.allTaskName}`, function(done){
     convertTokensYaml(tokenConfig.sourceFile, done);
 });
 
-gulp.task('watch:tokens:all', function(){
-    return gulp.watch([tokenConfig.sourceFile], gulp.series('tokens:build:all'));
+gulp.task(`${c.watchTaskName}:${c.tokensTaskName}:${c.allTaskName}`, function(){
+    return gulp.watch([tokenConfig.sourceFile], gulp.series(`${c.tokensTaskName}:${c.buildTaskName}:${c.allTaskName}`));
 });
 
 module.exports = {

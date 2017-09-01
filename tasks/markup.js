@@ -105,36 +105,62 @@ function generateWatchDocsTask(c) {
     }
 }
 
-
-
 function getDataForTemplates() {
-    const fullDataPath = path.join(buildConfig.rootPath, buildConfig.dataPath);
-    let allDataFiles = ['tokens.json'],
+    const fullDataPath = path.join(buildConfig.rootPath, buildConfig.dataPath),
+            tokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);
+    let allDataFiles,
+        tokenDataFiles, // Separating these because they already contain a namespace at the top level
         data = {};
 
+
+
+    if (fs.existsSync(tokensPath)) {
+        const fullTokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);
+        tokenDataFiles = fs.readdirSync(tokensPath)
+                            .filter(f => f.indexOf('.json') !== -1)
+                            .map(f => path.join(fullTokensPath, f));
+    }
+    // Get reference tokens.json files from child modules
+    if (buildConfig.dependencies) {
+        const referenceTokenDependencies = buildConfig.dependencies
+                                            .filter(d => d.tokens && d.tokens === 'reference');
+        referenceTokenDependencies.forEach(d => {
+            const referenceTokenPath = path.join(buildConfig.rootPath, buildConfig.dependenciesPath, d.moduleName, buildConfig.tokensPath, 'tokens.json'); // Assumes the child module's tokens exist at /tokens/tokens.json
+            tokenDataFiles.push(referenceTokenPath);
+        });
+    }
+    tokenDataFiles.forEach(f => {
+        if (fs.existsSync(f)) {
+            let contents = fs.readFileSync(f, {encoding: 'UTF-8'}),
+                json;
+
+            try {
+                json = JSON.parse(contents);
+                Object.assign(data, json);
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.log(e, `Warning: Could not parse tokens file ${f} into JSON for nunjucks`);
+            }
+        }
+    });
+
+
     if (fs.existsSync(fullDataPath)) {
-        allDataFiles = allDataFiles.concat(fs.readdirSync(fullDataPath));
+        allDataFiles = fs.readdirSync(fullDataPath).filter(f => f.indexOf('.json') !== -1);
     }
     allDataFiles.forEach(f => {
-        if (f.indexOf('.json') !== -1) {
-            let namespace = f.replace(/.json/, ''),
-                dataDirectory = f === 'tokens.json' ? buildConfig.tokensPath : buildConfig.dataPath,
-                fullFilepath = path.join(buildConfig.rootPath, dataDirectory, f);
-            if (fs.existsSync(fullFilepath)) {
-                let contents = fs.readFileSync(fullFilepath, {encoding: 'UTF-8'}),
-                    json;
+        let namespace = f.replace(/.json/, ''),
+            fullFilepath = path.join(buildConfig.rootPath, buildConfig.dataPath, f);
+        if (fs.existsSync(fullFilepath)) {
+            let contents = fs.readFileSync(fullFilepath, {encoding: 'UTF-8'}),
+                json;
 
-                try {
-                    json = JSON.parse(contents);
-                    if (namespace === 'tokens') {
-                        Object.assign(data, json);
-                    } else {
-                        data[namespace] = json;
-                    }
-                } catch (e) {
-                    // eslint-disable-next-line no-console
-                    console.log(e, `Warning: Could not parse data file ${fullFilepath} into JSON for nunjucks`);
-                }
+            try {
+                json = JSON.parse(contents);
+                data[namespace] = json;
+            } catch (e) {
+                // eslint-disable-next-line no-console
+                console.log(e, `Warning: Could not parse data file ${fullFilepath} into JSON for nunjucks`);
             }
         }
     });

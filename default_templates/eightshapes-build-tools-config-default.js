@@ -67,6 +67,7 @@ module.exports = {
     postprocessTaskName: 'postprocess',                                 // gulp task name segment, ex: styles:postprocess
     precompileTaskName: 'precompile',                                   // gulp task name segment, ex: styles:precompile
     productTaskName: sanitizedProductName,                              // gulp task name segment, by default, a sanitized version of the "name" key in package.json, ex: eightshapes-build-tools
+    tokensTaskName: 'tokens',                                         // gulp task name segment, ex: scripts:build
     scriptsTaskName: 'scripts',                                         // gulp task name segment, ex: scripts:build
     stylesTaskName: 'styles',                                           // gulp task name segment, ex: styles:build
     watchTaskName: 'watch'                                              // gulp task name segment, ex: watch:scripts, watch:styles
