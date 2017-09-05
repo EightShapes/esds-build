@@ -68,7 +68,7 @@ The flat directory structure created by the scaffold generator provides a locati
 * tests
 * tokens
 
-## Components
+## components
 ### Used by
 * Design system component libraries
 
@@ -86,7 +86,7 @@ All of the assets that form a component. Each component's markup, style and scri
 │   │   └── data_table.scss
 ````
 
-## Data
+## data
 ### Used by
 * Documentation sites
 * Websites
@@ -130,3 +130,35 @@ the following variables will be available globally in the nunjucks templating en
 ````
 {{ animals.elephant }}  {# would render "gray" #}
 {{ content.copyright }} {# would render "© 2017 Your Company Name" #}
+````
+
+## dist
+### Used by
+* Design system component libraries
+
+### Contains
+Compiled project assets. These are committed to version control and intended to be published through various distribution channels such as NPM. Default `dist` files include:
+````
+├── dist
+│   ├── product.css   // Product's compiled stylesheet, based on contents of /styles and /components/**/*.scss
+│   ├── product.js    // Product's concatenated scripts, based on contents of /scripts and /components/**/*.js
+│   └── product.svg   // Product's generated SVG sprite, based on contents of /icons
+````
+
+## docs
+### Used by
+* Documentation sites
+* Websites
+* Design system component libraries (sink pages)
+
+### Contains
+The source nunjucks files that are compiled into the `.html` pages that make up the product's webroot. For example:
+````
+├── docs
+│   ├── about
+│   │   └── release-history.njk
+│   └── index.njk
+````
+Will compile to:
+`http://producturl.com/about/release-history.html` and
+`http://producturl.com/index.html`
