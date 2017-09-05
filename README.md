@@ -49,7 +49,7 @@ This will trigger a command line prompt asking for the name of the new component
 ````
 
 # Project structure
-The flat directory structure of each project makes it easy to understand where to put various types of code. The directory structure is as follows:
+The flat directory structure created by the scaffold generator provides a location for various types of code. The directory structure is as follows:
 * components
 * data
 * dist
@@ -64,10 +64,10 @@ The flat directory structure of each project makes it easy to understand where t
 * tokens
 
 ## Components
-Used by:
+### Used by
 * Design system component libraries
 
-Contains:
+### Contains
 All of the assets that form a component. Each component's markup, style and script is housed in a subdirectory with that component's name:
 ````
 .
@@ -79,15 +79,16 @@ All of the assets that form a component. Each component's markup, style and scri
 │   ├── data_table
 │   │   ├── data_table.njk
 │   │   └── data_table.scss
-```
+````
 
 ## Data
-Used by:
+### Used by
 * Documentation sites
 * Websites
 
-Contains:
+### Contains
 `.json` files with key/value pairs that are made available to the nunjucks templating engine. Each file is parsed and namespaced in nunjucks using the filename. For example, given the following files:
+
 ````
 ├── data
 │   ├── animals.json
