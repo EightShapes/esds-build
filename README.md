@@ -15,6 +15,11 @@
   
   `gulp`
 
+# Updating
+To update to the latest version of `eightshapes-build-tools` run:
+`npm update @eightshapes/eightshapes-build-tools --save` from the root of your project.
+
+# Helpers
 ## Generate top level directories
 `gulp generate:scaffold`
 Generates the following top level directories:
