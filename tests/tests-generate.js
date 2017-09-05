@@ -38,7 +38,6 @@ module.exports = function(){
                 'docs',
                 'icons',
                 'images',
-                'includes',
                 'scripts',
                 'styles',
                 'templates',
@@ -48,6 +47,8 @@ module.exports = function(){
         generate.createTopLevelDirectories(scaffoldDir);
         defaultProjectDirectories.forEach(dir => assert.file(`${scaffoldDir}/${dir}`));
         assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
+        assert.fileContent(`${scaffoldDir}/.gitignore`, '/_site');
+        assert.fileContent(`${scaffoldDir}/.gitignore`, 'node_modules');
       });
     });
 

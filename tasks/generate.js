@@ -19,7 +19,6 @@ function createTopLevelDirectories(rootPath) {
         'docs',
         'icons',
         'images',
-        'includes',
         'scripts',
         'styles',
         'templates',
@@ -30,6 +29,7 @@ function createTopLevelDirectories(rootPath) {
     topLevelDirectories.forEach(dir => mkdirp.sync(path.join(rootPath, dir)));
 
     fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, `${rootPath}/docs/index.njk`);
+    fs.copySync(`${__dirname}/../default_templates/.gitignore-default`, `${rootPath}/.gitignore`);
 }
 
 function copyDefaultConfig(rootPath) {
