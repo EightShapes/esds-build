@@ -107,12 +107,26 @@ function generateWatchDocsTask(c) {
 
 function getDataForTemplates() {
     const fullDataPath = path.join(buildConfig.rootPath, buildConfig.dataPath),
-            tokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);
+            tokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath),
+            packageJsonPath = path.join(buildConfig.rootPath, 'package.json');
+
     let allDataFiles = [],
         tokenDataFiles = [], // Separating these because they already contain a namespace at the top level
         data = {};
 
+    // package.json
+    if (fs.existsSync(packageJsonPath)) {
+        let contents = fs.readFileSync(packageJsonPath, {encoding: 'UTF-8'}),
+            json;
 
+        try {
+            json = JSON.parse(contents);
+            data.package = json;
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log(e, `Warning: Could not parse package.json file: ${packageJsonPath} into JSON for nunjucks`);
+        }
+    }
 
     if (fs.existsSync(tokensPath)) {
         const fullTokensPath = path.join(buildConfig.rootPath, buildConfig.tokensPath);

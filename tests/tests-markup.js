@@ -189,7 +189,7 @@ module.exports = function(){
             .then(result => gulp('tokens:build:all'));
       });
 
-      it('should compile docs that use custom Product-level filters', function(){
+      it('should compile docs that reference content defined in data/*.json files', function(){
         return gulp('markup:build:all')
           .then(result => {
             assert.fileContent(`${webroot}/latest/using-content-example.html`, 'The elephant is gray.');
@@ -197,6 +197,20 @@ module.exports = function(){
             assert.fileContent(`${webroot}/latest/using-content-example.html`, 'The duck is yellow.');
             assert.fileContent(`${webroot}/latest/using-content-example.html`, '&copy; 2017 Your Company Name');
             assert.fileContent(`${webroot}/latest/using-content-example.html`, '<a href="/">Home</a>');
+          });
+      });
+    });
+
+    describe('package.json content available in nunjucks', function(){
+      beforeEach(function(){
+        return gulp('clean:webroot');
+      });
+
+      it('should compile docs that reference package.json keys', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/using-package-json-example.html`, 'esds-sample-project');
+            assert.fileContent(`${webroot}/latest/using-package-json-example.html`, '1.10.2');
           });
       });
     });
