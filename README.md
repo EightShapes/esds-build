@@ -54,17 +54,17 @@ This will trigger a command line prompt asking for the name of the new component
 
 # Project structure
 The flat directory structure created by the scaffold generator provides a location for various types of code. The directory structure is as follows:
-* components
-* data
-* dist
-* docs
-* icons
-* images
-* scripts
-* styles
-* templates
-* tests
-* tokens
+* [components](#components)
+* [data](#data)
+* [dist](#dist)
+* [docs](#docs)
+* [icons](#icons)
+* [images](#images)
+* [scripts](#scripts)
+* [styles](#styles)
+* [templates](#templates)
+* [tests](#tests)
+* [tokens](#tokens)
 
 ## components
 ### Used by
