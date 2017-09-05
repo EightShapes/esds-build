@@ -36,6 +36,11 @@ Generates the following top level directories:
 
 ## Generate default config file
 `gulp generate:default-config`
+Copies the [default config](https://github.com/EightShapes/eightshapes-build-tools/blob/master/default_templates/eightshapes-build-tools-config-default.js) into the root of your project at:
+````
+.
+└── eightshapes-build-tools-config.js
+````
 
 ## Generate new component files
 `gulp generate:new-component`
