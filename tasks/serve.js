@@ -5,6 +5,8 @@ const config = require('./config.js'),
         browserSync = require('browser-sync'),
         gulp = require('gulp'),
         path = require('path'),
+        scriptConfig = c.scripts,
+        scriptWatchPaths = scriptConfig.tasks.map(t => `${t.outputPath}/**/*.js`),
         styleConfig = c.styles,
         styleWatchPaths = styleConfig.tasks.map(t => `${t.outputPath}/**/*.css`),
         markupConfig = c.markup,
@@ -47,7 +49,7 @@ gulp.task('watch:serve:reload:styles', function(){
 
 // Watch markup
 gulp.task('watch:serve:reload:files', function(){
-    return gulp.watch(markupWatchPaths, gulp.series('browser-sync-reload'));
+    return gulp.watch(markupWatchPaths.concat(scriptWatchPaths), gulp.series('browser-sync-reload'));
 });
 
 gulp.task('watch:serve:all', gulp.parallel('watch:serve:reload:styles', 'watch:serve:reload:files'));
