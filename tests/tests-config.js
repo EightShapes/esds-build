@@ -131,4 +131,16 @@ module.exports = function(){
             assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });
     });
+
+    describe('when retrieving dependency config', function(){
+        beforeEach(function(){
+            config = require('../tasks/config.js');
+        });
+
+        it('should return a config for a node module dependency when given the node module name', function(){
+            const dependencyConfig = config.getDependencyConfig('product-a', `tests/sample_project/`);
+            assert(typeof dependencyConfig.manageNunjucksEnv === 'function');
+            assert(dependencyConfig.codeNamespace === 'product-a');
+        });
+    });
 };
