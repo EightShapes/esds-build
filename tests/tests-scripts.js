@@ -47,6 +47,13 @@ module.exports = function(){
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
+
+        it('should concatenate /scripts contents before /components/**/*.js contents', function(){
+          return gulp('scripts:concatenate:all')
+            .then(result => {
+              assert.fileContent(docJsFile, "var endOfGlobalFile = 'testing';\n\n'use strict';\nvar startOfComponentFile = 'testing';");
+            });
+        });
       });
 
       describe('scripts:lint', function(){
