@@ -53,9 +53,10 @@ module.exports = {
     manageNunjucksEnv: false,                                           // hook to configure the Nunjucks templating environment, add additional filters, etc.
     copyTasks: [],                                                      // Product specific set of tasks to copy a file from one destination to another. For copying jQuery from node_modules to the webroot as an example
     allTaskName: 'all',                                                 // gulp task name segment, ex: build:all, watch:all
-    copyTaskName: 'copy',                                               // gulp task name segment, ex: copy:images
     buildTaskName: 'build',                                             // gulp task name segment, ex: markup:build, styles:build
+    cleanTaskName: 'clean',                                             // gulp task name segment, ex: clean:webroot
     concatTaskName: 'concatenate',                                      // gulp task name segment, ex: markup:concatenate:macros, scripts:concatenate
+    copyTaskName: 'copy',                                               // gulp task name segment, ex: copy:images
     distTaskName: 'dist',                                               // gulp task name segment, ex: copy:dist
     docsTaskName: 'docs',                                               // gulp task name segment, ex: markup:build:docs
     iconsTaskName: 'icons',                                             // gulp task name segment, ex: icons:optimize
@@ -70,6 +71,6 @@ module.exports = {
     tokensTaskName: 'tokens',                                           // gulp task name segment, ex: tokens:build
     scriptsTaskName: 'scripts',                                         // gulp task name segment, ex: scripts:build
     stylesTaskName: 'styles',                                           // gulp task name segment, ex: styles:build
-    watchTaskName: 'watch'                                              // gulp task name segment, ex: watch:scripts, watch:styles
-
+    watchTaskName: 'watch',                                             // gulp task name segment, ex: watch:scripts, watch:styles
+    webrootTaskName: 'webroot'                                          // gulp task name segment, ex: clean:webroot
 };

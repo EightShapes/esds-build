@@ -6,17 +6,17 @@ const config = require('./config.js'),
         path = require('path'),
         del = require('del');
 
-gulp.task('clean:dist', function(){
+gulp.task(`${c.cleanTaskName}:${c.distTaskName}`, function(){
     return del(path.join(c.rootPath, c.distPath, '**', '*'));
 });
 
-gulp.task('clean:tokens', function(){
+gulp.task(`${c.cleanTaskName}:${c.tokensTaskName}`, function(){
     const tokenFiles = path.join(c.tokens.outputPath, '*'),
             tokenSourceFile = c.tokens.sourceFile;
     return del([ tokenFiles, `!${tokenSourceFile}`]);
 });
 
-gulp.task('clean:concatenated-macros', function(done){
+gulp.task(`${c.cleanTaskName}:concatenated-macros`, function(done){
     c.markup.tasks.forEach(t => {
         if (t.componentMacroOutputPath) {
             del(path.join(t.componentMacroOutputPath, t.componentMacroFilename));
@@ -25,7 +25,7 @@ gulp.task('clean:concatenated-macros', function(done){
     done();
 });
 
-gulp.task('clean:webroot', function(done){
+gulp.task(`${c.cleanTaskName}:${c.webrootTaskName}`, function(done){
     let webrootPaths = [path.join(c.rootPath, c.webroot, c.latestVersionPath, '**', '*')];
     if (c.versionedDocs) {
         const versionedDocPaths = path.join(c.rootPath, c.webroot, 'v');
