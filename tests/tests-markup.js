@@ -227,6 +227,7 @@ module.exports = function(){
             assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, 'Is Number: true');
             assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, 'Is Number: false');
             assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, "<a href='#'>Link</a>");
+            assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, "STOMP!");
           });
       });
     });

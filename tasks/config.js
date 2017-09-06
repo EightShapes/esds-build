@@ -166,8 +166,8 @@ function getDependencyCopyTasks(c) {
 }
 
 function getDependencyConfig(dependency, rootPath) {
-    const fullRootPath = rootPath.indexOf(process.cwd() === -1) ? path.join(process.cwd(), rootPath) : rootPath,
-            c = retrieveBuildConfig(fullRootPath),
+    const fullRootPath = rootPath.includes(process.cwd()) ? rootPath : path.join(process.cwd(), rootPath);
+    const c = retrieveBuildConfig(fullRootPath),
             dependencyPath = path.join(fullRootPath, c.dependenciesPath, dependency);
     return getTaskConfig(dependencyPath);
 }

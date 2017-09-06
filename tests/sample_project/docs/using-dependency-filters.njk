@@ -7,3 +7,6 @@ Is Number: {{ im_a_number | isnumber }}
 Is Number: {{ not_a_number | isnumber }}
 {% set unformatted_html = "<div>Foo<br><a href='#'>Link</a><br></div>" %}
 {{ unformatted_html | htmlbeautify | safe  }}
+
+{% set overwrite_this = "Don't Stomp!" %}
+{{ overwrite_this | stomp  }}

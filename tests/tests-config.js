@@ -142,5 +142,12 @@ module.exports = function(){
             assert(typeof dependencyConfig.manageNunjucksEnv === 'function');
             assert(dependencyConfig.codeNamespace === 'product-a');
         });
+
+        it('should return a separate configs for multiple dependencies when given the node module names', function(){
+            const dependencyAConfig = config.getDependencyConfig('product-a', `tests/sample_project/`),
+                    dependencyBConfig = config.getDependencyConfig('product-b', `tests/sample_project/`);
+            assert(dependencyAConfig.codeNamespace === 'product-a');
+            assert(dependencyBConfig.codeNamespace === 'product-b');
+        });
     });
 };
