@@ -1,0 +1,9 @@
+{% set im_an_array = ['apple', 'banana', 'cucumber'] %}
+{% set im_a_number = 10 %}
+{% set not_a_number = 'kumquat' %}
+
+Is Array: {{ im_an_array | isarray }}
+Is Number: {{ im_a_number | isnumber }}
+Is Number: {{ not_a_number | isnumber }}
+{% set unformatted_html = "<div>Foo<br><a href='#'>Link</a><br></div>" %}
+{{ unformatted_html | htmlbeautify | safe  }}

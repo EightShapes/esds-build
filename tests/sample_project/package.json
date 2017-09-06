@@ -1,5 +1,6 @@
 {
   "name": "esds-sample-project",
   "version": "1.10.2",
-  "description": "Just a sample package.json to test things with."
+  "description": "Just a sample package.json to test things with.",
+  "dependencies": {}
 }

@@ -215,6 +215,22 @@ module.exports = function(){
       });
     });
 
+    describe('nunjucks filters defined in a dependency', function(){
+      beforeEach(function(){
+        return gulp('clean:webroot');
+      });
+
+      it('should compile docs that use custom filters defined in a dependency', function(){
+        return gulp('markup:build:all')
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, 'Is Array: true');
+            assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, 'Is Number: true');
+            assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, 'Is Number: false');
+            assert.fileContent(`${webroot}/latest/using-dependency-filters.html`, "<a href='#'>Link</a>");
+          });
+      });
+    });
+
     describe('watch:markup:macros', function(){
       it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
         exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch

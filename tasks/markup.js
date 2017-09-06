@@ -194,6 +194,16 @@ function generateBuildTask(t) {
                 if (buildConfig.manageNunjucksEnv) {
                     buildConfig.manageNunjucksEnv(env);
                 }
+
+                // Loop over all dependencies, if a dependency defines a "manageNunjucksEnv" function, run it here too
+                if (buildConfig.dependencies) {
+                    buildConfig.dependencies.forEach(d => {
+                        const dependencyConfig = config.getDependencyConfig(d.moduleName, buildConfig.rootPath);
+                        if (dependencyConfig.manageNunjucksEnv) {
+                            dependencyConfig.manageNunjucksEnv(env);
+                        }
+                    });
+                }
             },
             path: t.docTemplateImportPaths
         };
