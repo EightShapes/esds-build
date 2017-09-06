@@ -114,8 +114,8 @@ function getScriptsConfig(buildConfig) {
             outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
             outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath),
             sourcePaths: [
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension),
-                path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)
+                path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension),
+                path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension)
             ],
             lintOptions: {
                 configFile: c.scriptsLintConfig

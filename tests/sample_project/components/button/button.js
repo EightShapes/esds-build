@@ -1,6 +1,7 @@
+'use strict';
+var startOfComponentFile = 'testing';
 /* global Uds */
 
-'use strict';
 
 Uds.Button = {
     something: function() {
