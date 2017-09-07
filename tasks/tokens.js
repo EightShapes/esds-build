@@ -17,7 +17,7 @@ function tokensToJson(sourceFile) {
     try {
         parsedTokens = yaml.load(sourceFile);
         parsedTokens = interpolateYamlVariables(parsedTokens);
-        if (parsedTokens !== null) {
+        if (parsedTokens !== null && typeof parsedTokens === 'object') {
             tokens = parsedTokens;
         }
     } catch (e) {
