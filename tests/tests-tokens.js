@@ -74,5 +74,12 @@ module.exports = function(){
         assert(typeof tokens === 'object');
         assert(keys.length === 0);
       });
+
+      it('should return an empty object when parsing a tokens file that contains the text "tokens.yaml"', function(){
+        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/tests/sample_project/invalid-tokens/invalid-tokens.yaml`),
+              keys = Object.keys(tokens);
+        assert(typeof tokens === 'object');
+        assert(keys.length === 0);
+      });
     });
 };
