@@ -1,6 +1,6 @@
 {
   "name": "@eightshapes/eightshapes-build-tools",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "Kevin Powell <kevinmpowell@gmail.com>",
     "Nathan Curtis <nathan@eightshapes.com>"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "app-root-path": "^2.0.1",
     "autoprefixer": "^7.1.2",
