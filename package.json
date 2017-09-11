@@ -3,6 +3,7 @@
   "version": "0.15.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
+  "engines" : { "node" : ">=6" },
   "scripts": {
     "test": "mocha tests/tests.js --timeout 15000",
     "postinstall": "node scripts/postinstall.js"
