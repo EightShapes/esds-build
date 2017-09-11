@@ -1,18 +1,16 @@
-# Installation Instructions
-  1. Install `gulp-cli` globally (if it's not already):
+[![Build Status](https://travis-ci.org/EightShapes/esds-build.svg?branch=master)](https://travis-ci.org/EightShapes/esds-build)
 
+# Installation Instructions
+  1. Install `gulp-cli` globally (if it's not already):  
   `npm install gulp-cli -g`
   
-  2. Install:
-  
+  2. Install:  
   `npm install @eightshapes/eightshapes-build-tools --save-dev`
   
-  3. Generate top level directories:
-  
+  3. Generate top level directories:  
   `gulp generate:scaffold`
 
-  4. Run the local environment:
-  
+  4. Run the local environment:  
   `gulp`
 
 # Updating
