@@ -32,7 +32,7 @@ module.exports = function(){
         it('should retrieve default config with a sanitized version of the package.json "name" key set as the codeNamespace', function(){
             const defaultConfig = config.retrieveDefaultBuildConfig();
             assert(defaultConfig.configMethod === 'extend');
-            assert(defaultConfig.codeNamespace === 'eightshapes-eightshapes-build-tools');
+            assert(defaultConfig.codeNamespace === 'eightshapes-esds-build');
         });
 
         it('should retrieve the default config as the build config when no product build config exists', function(){

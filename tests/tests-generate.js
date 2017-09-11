@@ -63,7 +63,7 @@ module.exports = function(){
         assert.file(`${scaffoldDir}/eightshapes-build-tools-config.js`);
 
         const defaultConfig = require(`${__dirname}/scaffold_test/eightshapes-build-tools-config.js`);
-        assert(defaultConfig.rootPath.includes('/eightshapes-build-tools'));
+        assert(defaultConfig.rootPath.includes('/esds-build'));
         assert(defaultConfig.webroot === '_site');
       });
     });

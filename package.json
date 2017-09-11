@@ -1,6 +1,6 @@
 {
-  "name": "@eightshapes/eightshapes-build-tools",
-  "version": "0.13.0",
+  "name": "@eightshapes/esds-build",
+  "version": "0.14.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "scripts": {
@@ -50,10 +50,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EightShapes/eightshapes-build-tools.git"
+    "url": "git+https://github.com/EightShapes/esds-build.git"
   },
   "bugs": {
-    "url": "https://github.com/EightShapes/eightshapes-build-tools/issues"
+    "url": "https://github.com/EightShapes/esds-build/issues"
   },
-  "homepage": "https://github.com/EightShapes/eightshapes-build-tools#readme"
+  "homepage": "https://github.com/EightShapes/esds-build#readme"
 }
