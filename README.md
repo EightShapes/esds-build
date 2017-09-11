@@ -233,3 +233,6 @@ Within `index.njk` the file may contain:
 
 ### Contains
 `tokens.yaml` source file that is compiled into `tokens.scss` and `tokens.json` for consumption by scss and nunjucks respectively. Place [design tokens](https://medium.com/eightshapes-llc/tokens-in-design-systems-25dd82d58421) in `/tokens/tokens.yaml`
+
+# License
+Code released under the  [MIT License](https://github.com/EightShapes/esds-build/blob/master/LICENSE.txt).
