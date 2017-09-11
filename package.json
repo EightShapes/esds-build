@@ -1,6 +1,6 @@
 {
-  "name": "@eightshapes/esds-build",
-  "version": "0.14.1",
+  "name": "esds-build",
+  "version": "0.15.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "scripts": {
