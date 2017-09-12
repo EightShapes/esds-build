@@ -109,15 +109,6 @@ module.exports = function(){
       });
 
       describe('watch:scripts', function(){
-        it('should watch scripts for changes', function(done) {
-          exec(`gulp watch:scripts:${c.productTaskName}`); // start watch
-          gulp('clean:webroot') // clear webroot
-            .then(result => {
-              exec(`touch ${projectPath}/scripts/global.js`);
-              recursivelyCheckForFiles([docJsFile], done);
-            });
-        });
-
         it('should watch all scripts for changes', function(done) {
           exec(`gulp watch:scripts:all`); // start watch
           gulp('clean:webroot') // clear webroot
