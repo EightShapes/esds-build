@@ -24,7 +24,7 @@ module.exports = function(){
         });
 
         it('should return a config object when the product config file is found', function(){
-            const productConfig = config.retrieveProductBuildConfig(`${process.cwd()}/tests/sample_project_extends_config/`);
+            const productConfig = config.retrieveProductBuildConfig(`${process.cwd()}/test/sample_project_extends_config/`);
             assert(typeof productConfig === 'object');
             assert(productConfig.codeNamespace === 'esds-testing');
         });
@@ -49,7 +49,7 @@ module.exports = function(){
         });
 
         it('should retrieve merged default and product config as the build config when the product build config exists', function(){
-            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_extends_config/`);
+            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/test/sample_project_extends_config/`);
             assert(buildConfig.configMethod === 'extend');
             assert(buildConfig.codeNamespace === 'esds-testing');
             assert(buildConfig.docsPath === 'pages');
@@ -62,7 +62,7 @@ module.exports = function(){
         });
 
         it('should return only product config as the build config when the product build config exists and sets configMethod to override', function(){
-            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/tests/sample_project_override_config/`);
+            const buildConfig = config.retrieveBuildConfig(`${process.cwd()}/test/sample_project_override_config/`);
             assert(buildConfig.configMethod === 'overwrite');
             assert(buildConfig.codeNamespace === 'off-the-rails');
             assert(buildConfig.docsPath === 'blog');
@@ -120,13 +120,13 @@ module.exports = function(){
         });
 
         it('should return a task config with product level extensions when a product config file is present', function(){
-            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_extends_config/`),
+            const taskConfig = config.get(`${process.cwd()}/test/sample_project_extends_config/`),
                     c = taskConfig; //for brevity
             assert(c.markup.tasks[0].docSourceFilePaths === path.join(c.rootPath, 'pages', '**', '*.nunjucks'));
         });
 
         it('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
-            const taskConfig = config.get(`${process.cwd()}/tests/sample_project_override_config/`),
+            const taskConfig = config.get(`${process.cwd()}/test/sample_project_override_config/`),
                     c = taskConfig; //for brevity
             assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });
@@ -138,14 +138,14 @@ module.exports = function(){
         });
 
         it('should return a config for a node module dependency when given the node module name', function(){
-            const dependencyConfig = config.getDependencyConfig('product-a', `tests/sample_project/`);
+            const dependencyConfig = config.getDependencyConfig('product-a', `test/sample_project/`);
             assert(typeof dependencyConfig.manageNunjucksEnv === 'function');
             assert(dependencyConfig.codeNamespace === 'product-a');
         });
 
         it('should return a separate configs for multiple dependencies when given the node module names', function(){
-            const dependencyAConfig = config.getDependencyConfig('product-a', `tests/sample_project/`),
-                    dependencyBConfig = config.getDependencyConfig('product-b', `tests/sample_project/`);
+            const dependencyAConfig = config.getDependencyConfig('product-a', `test/sample_project/`),
+                    dependencyBConfig = config.getDependencyConfig('product-b', `test/sample_project/`);
             assert(dependencyAConfig.codeNamespace === 'product-a');
             assert(dependencyBConfig.codeNamespace === 'product-b');
         });

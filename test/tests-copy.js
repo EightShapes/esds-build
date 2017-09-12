@@ -8,7 +8,7 @@ const assert = require('yeoman-assert'),
         gulp = require('./tests-gulp.js'),
         fs = require('fs'),
         mkdirp = require('mkdirp'),
-        projectPath = './tests/sample_project',
+        projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
         webrootImages = `${webroot}/images`;
 

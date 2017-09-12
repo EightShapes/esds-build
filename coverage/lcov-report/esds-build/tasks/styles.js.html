@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for esds-build/tasks/styles.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">esds-build/tasks/</a> styles.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">84% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>42/50</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">58.33% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>7/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">63.64% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">84% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>42/50</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+const config = require('./config.js'),
+        buildConfig = config.get(),
+        autoprefixer = require('autoprefixer'),
+        gulp = require('gulp'),
+        gulpSassError = require('gulp-sass-error').gulpSassError,
+        failBuild = process.env.NODE_ENV === 'production',
+        postcss = require('gulp-postcss'),
+        // rename = require('gulp-rename'),
+        sass = require('gulp-sass'),
+        sassLint = require('gulp-sass-lint'),
+        fs = require('fs'),
+        styleConfig = buildConfig.styles,
+        styleTasks = styleConfig.tasks,
+        buildTaskPrefix = styleConfig.buildTaskPrefix,
+        compileTaskPrefix = styleConfig.compileTaskPrefix,
+        lintTaskPrefix = styleConfig.lintTaskPrefix,
+        postprocessTaskPrefix = styleConfig.postprocessTaskPrefix,
+        watchTaskPrefix = styleConfig.watchTaskPrefix,
+        buildTasks = styleTasks.map(task =&gt; `${buildTaskPrefix}${task.name}`),
+        compileTasks = styleTasks.map(task =&gt; `${compileTaskPrefix}${task.name}`),
+        lintTasks = styleTasks.map(task =&gt; `${lintTaskPrefix}${task.name}`),
+        watchTasks = styleTasks.map(task =&gt; `${watchTaskPrefix}${task.name}`);
+&nbsp;
+function getLintOptions(c) {
+    let sassLintOptions = {};
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (c.lintOptions) {
+        sassLintOptions = c.lintOptions;
+    }
+    if (sassLintOptions.configFile &amp;&amp; !fs.existsSync(sassLintOptions.configFile)) {
+        // eslint-disable-next-line no-console
+        console.log(`Warning: ${sassLintOptions.configFile} cannot be found, using sass-lint defaults`);
+        delete sassLintOptions.configFile;
+    }
+    return sassLintOptions;
+}
+&nbsp;
+function generateLintTask(c) {
+    let sassLintOptions = getLintOptions(c);
+&nbsp;
+    gulp.task(`${lintTaskPrefix}${c.name}`, <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >      return gulp.src(c.lintPaths)</span>
+        .pipe(sassLint(sassLintOptions))
+        .pipe(sassLint.format());
+    });
+}
+&nbsp;
+function generateCompileTask(c) {
+    let sassCompileOptions = {};
+&nbsp;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (c.compileImportPaths) {
+        sassCompileOptions.includePaths = c.compileImportPaths;
+    }
+&nbsp;
+    gulp.task(`${compileTaskPrefix}${c.name}`, <span class="fstat-no" title="function not covered" >function(){</span>
+<span class="cstat-no" title="statement not covered" >        return gulp.src(c.compileSourceFiles)</span>
+            .pipe(sass(sassCompileOptions).on('error', gulpSassError(failBuild)))
+            // .pipe(rename(c.compiledFileName)) //TODO: Maybe add this back in as a feature at some point?
+            .pipe(gulp.dest(c.outputPath));
+    });
+}
+&nbsp;
+function generatePostprocessTask(c) {
+    gulp.task(`${postprocessTaskPrefix}${c.name}`, <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >        let autoprefixerOptions = {};</span>
+<span class="cstat-no" title="statement not covered" >        if (c.autoprefixerOptions) {</span>
+<span class="cstat-no" title="statement not covered" >            autoprefixerOptions = c.autoprefixerOptions;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var plugins = [</span>
+            autoprefixer(autoprefixerOptions)
+        ];
+<span class="cstat-no" title="statement not covered" >        return gulp.src(`${c.outputPath}/*.css`)</span>
+            .pipe(postcss(plugins))
+            .pipe(gulp.dest(c.outputPath));
+    });
+}
+&nbsp;
+function generateWatchTask(c) {
+    gulp.task(`${watchTaskPrefix}${c.name}`, <span class="fstat-no" title="function not covered" >function(){</span>
+<span class="cstat-no" title="statement not covered" >        return gulp.watch(c.watchFiles, gulp.series(`${buildTaskPrefix}${c.name}`));</span>
+    });
+}
+&nbsp;
+function generateBuildTask(c) {
+    gulp.task(`${buildTaskPrefix}${c.name}`,
+                gulp.series(
+                    `${lintTaskPrefix}${c.name}`,
+                    `${compileTaskPrefix}${c.name}`,
+                    `${postprocessTaskPrefix}${c.name}`));
+}
+&nbsp;
+// Dynamically generate compile, lint, and watch tasks
+styleTasks.forEach(function(c){
+    const buildLintTask = c.lintPaths;
+&nbsp;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (buildLintTask) {
+        generateLintTask(c);
+    }
+&nbsp;
+    generateCompileTask(c);
+    generatePostprocessTask(c);
+    generateBuildTask(c);
+    generateWatchTask(c);
+});
+&nbsp;
+// Lint all scss files
+gulp.task(`${lintTaskPrefix}all`, gulp.parallel(lintTasks));
+&nbsp;
+// Compile all scss files
+gulp.task(`${compileTaskPrefix}all`, gulp.parallel(compileTasks));
+&nbsp;
+// Build all scss files
+gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
+&nbsp;
+// Watch tokens.scss and recompile
+gulp.task(`${watchTaskPrefix}tokens`, gulp.series(`${buildTaskPrefix}all`));
+&nbsp;
+// Run all watch tasks in parallel
+watchTasks.push(`${watchTaskPrefix}tokens`);
+gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));
+&nbsp;
+module.exports = {
+    getLintOptions: getLintOptions
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Sep 12 2017 07:45:53 GMT-0500 (CDT)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

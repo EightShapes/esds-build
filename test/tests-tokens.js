@@ -26,7 +26,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    const projectPath = './tests/sample_project',
+    const projectPath = './test/sample_project',
           tokensPath = `${projectPath}/tokens`,
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
@@ -69,14 +69,14 @@ module.exports = function(){
 
     describe('invalid tokens file', function(){
       it('should return an empty object when parsing an empty tokens file', function(){
-        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/tests/sample_project/empty-tokens/empty-tokens.yaml`),
+        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/test/sample_project/empty-tokens/empty-tokens.yaml`),
               keys = Object.keys(tokens);
         assert(typeof tokens === 'object');
         assert(keys.length === 0);
       });
 
       it('should return an empty object when parsing a tokens file that contains the text "tokens.yaml"', function(){
-        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/tests/sample_project/invalid-tokens/invalid-tokens.yaml`),
+        const tokens = tokensTasks.tokensToJson(`${process.cwd()}/test/sample_project/invalid-tokens/invalid-tokens.yaml`),
               keys = Object.keys(tokens);
         assert(typeof tokens === 'object');
         assert(keys.length === 0);

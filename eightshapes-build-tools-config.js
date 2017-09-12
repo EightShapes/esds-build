@@ -1,5 +1,5 @@
 'use strict';
-const rootPath = "tests/sample_project/";
+const rootPath = "test/sample_project/";
 
 module.exports = {
     rootPath: rootPath,

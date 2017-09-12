@@ -12,7 +12,7 @@ const gulp = require('./tests-gulp.js'),
       configDefaults = require('../eightshapes-build-tools-config.js');
 
 module.exports = function(){
-    const projectPath = './tests/sample_project',
+    const projectPath = './test/sample_project',
           tokensPath = `${projectPath}/tokens`,
           dist = `${projectPath}/dist`;
 

@@ -22,7 +22,7 @@ function createTopLevelDirectories(rootPath) {
         'scripts',
         'styles',
         'templates',
-        'tests',
+        'test',
         'tokens'
     ];
 

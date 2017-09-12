@@ -25,7 +25,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    const projectPath = './tests/sample_project',
+    const projectPath = './test/sample_project',
           compiledCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
     describe('styles', function(){

@@ -1,13 +1,14 @@
 {
   "name": "esds-build",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "engines": {
     "node": ">=6"
   },
   "scripts": {
-    "test": "mocha tests/tests.js --timeout 20000",
+    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/.bin/_mocha test/tests.js --timeout 20000",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "postinstall": "node scripts/postinstall.js"
   },
   "contributors": [
@@ -46,10 +47,12 @@
     "yeoman-assert": "^3.0.0"
   },
   "devDependencies": {
-    "mocha": "^3.5.0"
+    "coveralls": "^2.13.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.5.3"
   },
   "directories": {
-    "test": "tests"
+    "test": "test"
   },
   "repository": {
     "type": "git",

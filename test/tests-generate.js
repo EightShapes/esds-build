@@ -8,7 +8,7 @@
 const assert = require('yeoman-assert'),
       del = require('del'),
       fs = require('fs'),
-      scaffoldDir = './tests/scaffold_test';
+      scaffoldDir = './test/scaffold_test';
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -41,7 +41,7 @@ module.exports = function(){
                 'scripts',
                 'styles',
                 'templates',
-                'tests',
+                'test',
                 'tokens'
             ];
         generate.createTopLevelDirectories(scaffoldDir);

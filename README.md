@@ -32,7 +32,7 @@ Generates the following top level directories:
 ├── scripts
 ├── styles
 ├── templates
-├── tests
+├── test
 └── tokens
 ````
 
@@ -66,7 +66,7 @@ The flat directory structure created by the scaffold generator provides a locati
 * [scripts](#scripts)
 * [styles](#styles)
 * [templates](#templates)
-* [tests](#tests)
+* [test](#test)
 * [tokens](#tokens)
 
 ## components

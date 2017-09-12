@@ -25,7 +25,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    const projectPath = './tests/sample_project',
+    const projectPath = './test/sample_project',
           docJsFile = `${projectPath}/_site/latest/scripts/${c.codeNamespace}.js`;
 
     describe('scripts', function(){

@@ -12,7 +12,7 @@ const { exec } = require('child_process'),
       assert = require('yeoman-assert'),
       del = require('del'),
       fs = require('fs'),
-      projectPath = './tests/sample_project',
+      projectPath = './test/sample_project',
       nodeModulesPath = `${projectPath}/node_modules`,
       componentMacros = `${projectPath}/components`,
       webroot = `${projectPath}/_site`;
@@ -101,7 +101,7 @@ module.exports = function(){
     });
 
     describe('custom nunjucks filters', function(){
-      const customFilterTestFilepath = './tests/sample_project/docs/custom-filter-example.njk';
+      const customFilterTestFilepath = './test/sample_project/docs/custom-filter-example.njk';
       beforeEach(function(){
         fs.writeFileSync(customFilterTestFilepath, "{% set test_array = ['a', 'b', 'c'] %}{% set is_it_an_array = test_array | isarray %}{% if is_it_an_array %}<p>Yes! It IS an array!</p>{% endif %}");
         return gulp('clean:webroot');
@@ -120,7 +120,7 @@ module.exports = function(){
     });
 
     describe('tokens available in nunjucks', function(){
-      const nunjucksTokensTestFilepath = './tests/sample_project/docs/using-tokens-example.njk';
+      const nunjucksTokensTestFilepath = './test/sample_project/docs/using-tokens-example.njk';
       beforeEach(function(){
         fs.writeFileSync(nunjucksTokensTestFilepath, "<h1>These tokens are {{ esds_tokens['what-are-the-tokens'] }}</h1>");
         return gulp('clean:webroot')
@@ -140,7 +140,7 @@ module.exports = function(){
     });
 
     describe('child module tokens copied and available in nunjucks', function(){
-      const childTokensTestFilepath = './tests/sample_project/docs/using-child-module-tokens-example.njk';
+      const childTokensTestFilepath = './test/sample_project/docs/using-child-module-tokens-example.njk';
       beforeEach(function(){
         fs.writeFileSync(childTokensTestFilepath, "<h1>This is a token from the child module: {{ product_a.color.text.default }}</h1>");
         return gulp('clean:webroot')
@@ -163,7 +163,7 @@ module.exports = function(){
     });
 
     describe('child module tokens referenced and available in nunjucks', function(){
-      const childTokensReferenceTestFilepath = './tests/sample_project/docs/using-child-module-tokens-by-reference-example.njk';
+      const childTokensReferenceTestFilepath = './test/sample_project/docs/using-child-module-tokens-by-reference-example.njk';
       beforeEach(function(){
         fs.writeFileSync(childTokensReferenceTestFilepath, "<h1>This is a token from the child module: {{ product_b.color.text.default }}</h1>");
         return gulp('clean:webroot')
