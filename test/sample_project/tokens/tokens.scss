@@ -7,3 +7,22 @@ $esds-border-medium: solid 3px #000;
 $esds-what-are-the-tokens: limegreen;
 
 $esds-namespace: "esds";
+$esds-tokens: (
+    color: (
+    interactive: (
+    primary: #0ff
+    )
+    ),
+    border: (
+    medium: solid 3px #000
+    ),
+    what-are-the-tokens: limegreen,
+    namespace: "esds"
+);
+@function esds-token($keys...) {
+$map: $esds-tokens;
+@each $key in $keys {
+$map: map-get($map, $key);
+}
+@return $map;
+}

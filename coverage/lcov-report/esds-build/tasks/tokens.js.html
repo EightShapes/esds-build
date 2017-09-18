@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40.98% </span>
+        <span class="strong">38.81% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>25/61</span>
+        <span class='fraction'>26/67</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">27.78% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>5/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40% </span>
+        <span class="strong">36.36% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/10</span>
+        <span class='fraction'>4/11</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40.98% </span>
+        <span class="strong">38.81% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>25/61</span>
+        <span class='fraction'>26/67</span>
       </div>
     </div>
   </div>
@@ -172,7 +172,32 @@
 127
 128
 129
-130</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,6 +210,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,6 +281,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,6 +305,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,6 +360,14 @@ const config = require('./config.js'),
         path = require('path'),
         gulp = require('gulp'),
         jsBeautify = require('js-beautify'),
+        cssBeautify = require('js-beautify').css,
+        cssBeautifyOptions = {
+            "newline_between_rules": true,
+            "selector_separator_newline": true,
+            "preserve_newlines": true,
+            "max_preserve_newlines": 1
+        },
+        jsontosass = require('jsontosass'),
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),
         tokenConfig = c.tokens;
@@ -375,9 +433,18 @@ function tokensSourceFileExists(sourceFile) {
 <span class="cstat-no" title="statement not covered" >    fs.writeFileSync(jsonOutputFilepath, jsBeautify(JSON.stringify(jsonTokens)));</span>
 }
 &nbsp;
+<span class="fstat-no" title="function not covered" >function getTokensScssMap(tokens) {</span>
+<span class="cstat-no" title="statement not covered" >    let tokensWithNamespace = {};</span>
+<span class="cstat-no" title="statement not covered" >    tokensWithNamespace[`${tokenConfig.namespace}-tokens`] = tokens;</span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return jsontosass.convert(JSON.stringify(tokensWithNamespace));</span>
+}
+&nbsp;
 <span class="fstat-no" title="function not covered" >function writeTokensScssFile(tokens) {</span>
 <span class="cstat-no" title="statement not covered" >    const scssOutputFilename = path.parse(c.tokensSourceFile).name + '.scss',</span>
-            scssOutputFilepath = path.join(c.rootPath, c.tokensPath, scssOutputFilename);
+            scssOutputFilepath = path.join(c.rootPath, c.tokensPath, scssOutputFilename),
+            scssMap = getTokensScssMap(tokens);
 <span class="cstat-no" title="statement not covered" >    let flattenedTokens = flatten(tokens, {delimiter: '-'}),</span>
         scss = `// DO NOT EDIT: This file is automatically generated by a build task\n\n`,
         prevVarNameParent = false;
@@ -393,6 +460,14 @@ function tokensSourceFileExists(sourceFile) {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        scss += `$${tokenConfig.namespace}-${varName}: ${value};\n`;</span>
     }
+<span class="cstat-no" title="statement not covered" >    scss += scssMap + '\n';</span>
+<span class="cstat-no" title="statement not covered" >    scss += `@function ${tokenConfig.namespace}-token($keys...) {\n` +</span>
+                `$map: $${tokenConfig.namespace}-tokens;\n` +
+                '@each $key in $keys {\n' +
+                    '$map: map-get($map, $key);\n' +
+                '}\n' +
+                '@return $map;\n' +
+            '}\n';
 <span class="cstat-no" title="statement not covered" >    fs.writeFileSync(scssOutputFilepath, scss);</span>
 }
 &nbsp;
@@ -436,7 +511,7 @@ module.exports = {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Sep 13 2017 14:44:42 GMT-0500 (CDT)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Sep 18 2017 15:10:53 GMT-0500 (CDT)
 </div>
 </div>
 <script src="../../prettify.js"></script>
