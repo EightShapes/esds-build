@@ -85,7 +85,7 @@ function generateComponentFiles(answers, rootPath) {
         }
 
         // Create the component's sink page
-        const sinkPageContent = `{% extends "templates/sink.njk" %}`;
+        const sinkPageContent = `{% extends "${c.templatesPath}/sink.${c.markupSourceExtension}" %}`;
 
         if (!fs.existsSync(componentSinkDirectory)) {
             mkdirp.sync(componentSinkDirectory);
