@@ -47,6 +47,13 @@ module.exports = function(){
           });
       });
 
+      it('should convert tokens.yaml to a nested sass map', function() {
+        return gulp('tokens:build:all')
+          .then(result => {
+            assert.fileContent(tokensScss, `$${c.codeNamespace}-tokens: (`);
+          });
+      });
+
       it('should return a warning when the tokens.yaml source file does not exist', function(){
         tokensTasks.convertTokensYaml('/path/does/not/exist', function(){});
         assert.noFile(`${tokensPath}/tokens.json`);

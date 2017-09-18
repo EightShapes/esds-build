@@ -43,6 +43,14 @@ module.exports = function(){
             });
         });
 
+        it('should be able to compile styles with tokens accessed via sass maps', function() {
+          return gulp(`styles:precompile:${c.productTaskName}`)
+            .then(result => {
+              assert.fileContent(compiledCssFile, `.map-testing {`);
+              assert.fileContent(compiledCssFile, 'fill: #0ff;');
+            });
+        });
+
         it('should be able to compile the primary Product styles using tokens from a dependency', function(){
           return gulp(`styles:precompile:${c.productTaskName}`)
             .then(result => {
