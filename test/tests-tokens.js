@@ -54,6 +54,13 @@ module.exports = function(){
           });
       });
 
+      it('should wrap sass map values in quotes if the value contains a comma or a space', function() {
+        return gulp('tokens:build:all')
+          .then(result => {
+            assert.fileContent(tokensScss, `'sans-serif': $esds-font-sans-serif`);
+          });
+      });
+
       it('should return a warning when the tokens.yaml source file does not exist', function(){
         tokensTasks.convertTokensYaml('/path/does/not/exist', function(){});
         assert.noFile(`${tokensPath}/tokens.json`);

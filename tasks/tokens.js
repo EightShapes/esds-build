@@ -14,7 +14,6 @@ const config = require('./config.js'),
             "preserve_newlines": true,
             "max_preserve_newlines": 1
         },
-        jsontosass = require('jsontosass'),
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),
         tokenConfig = c.tokens;
@@ -81,11 +80,44 @@ function writeTokensJsonFile(tokens) {
 }
 
 function getTokensScssMap(tokens) {
-    let tokensWithNamespace = {};
-    tokensWithNamespace[`${tokenConfig.namespace}-tokens`] = tokens;
+    let sassMap = `$${tokenConfig.namespace}-tokens: (\n`,
+        indentationLevel = 1,
+        variablePrefix = `$${tokenConfig.namespace}-`;
 
+    sassMap += generateScssMapSection(tokens, indentationLevel, variablePrefix);
+    sassMap += ');\n';
+    return sassMap;
+}
 
-    return jsontosass.convert(JSON.stringify(tokensWithNamespace));
+function getIndentationString(indentationLevel) {
+    let indentation = '';
+    for (var i = 0; i < indentationLevel; i++) {
+        indentation += '    ';
+    }
+
+    return indentation;
+}
+
+function generateScssMapSection(node, indentationLevel, variablePrefix) {
+    let output = '',
+        indentation = getIndentationString(indentationLevel);
+    for (var key in node) {
+        let value = node[key],
+            prefix = `${variablePrefix}${key}-`;
+
+        if (typeof value === 'object') {
+            value = generateScssMapSection(value, indentationLevel + 1, prefix);
+            output += `${indentation}'${key}': (\n`;
+            output += value;
+            output += `${indentation}),\n`;
+        } else {
+            output += `${indentation}'${key}': ${variablePrefix}${key},\n`;
+        }
+    }
+
+    output = output.replace(/,\n$/, '\n');
+
+    return output;
 }
 
 function writeTokensScssFile(tokens) {
@@ -109,12 +141,12 @@ function writeTokensScssFile(tokens) {
     }
     scss += scssMap + '\n';
     scss += `@function ${tokenConfig.namespace}-token($keys...) {\n` +
-                `$map: $${tokenConfig.namespace}-tokens;\n` +
-                '@each $key in $keys {\n' +
-                    '$map: map-get($map, $key);\n' +
-                '}\n' +
-                '@return $map;\n' +
-            '}\n';
+                `    $map: $${tokenConfig.namespace}-tokens;\n` +
+                '    @each $key in $keys {\n' +
+                '        $map: map-get($map, $key);\n' +
+                '    }\n' +
+                '    @return $map;\n' +
+                '}\n';
     fs.writeFileSync(scssOutputFilepath, scss);
 }
 
