@@ -13,6 +13,7 @@
 }
 
 .map-testing {
+    border: esds-token('border', 'heavy');
     color: black;
     fill: esds-token('color', 'interactive', 'primary');
 }

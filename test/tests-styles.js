@@ -48,6 +48,7 @@ module.exports = function(){
             .then(result => {
               assert.fileContent(compiledCssFile, `.map-testing {`);
               assert.fileContent(compiledCssFile, 'fill: #0ff;');
+              assert.fileContent(compiledCssFile, 'border: solid 10px #ff0000;');
             });
         });
 

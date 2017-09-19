@@ -3,3 +3,4 @@
 test/sample_project/_site
 test/sample_project/node_modules/doc-component-module/_site
 test/sample_project/node_modules/library-component-module/_site
+/coverage

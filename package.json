@@ -1,13 +1,13 @@
 {
   "name": "esds-build",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "engines": {
     "node": ">=6"
   },
   "scripts": {
-    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/.bin/_mocha test/tests.js --timeout 20000",
+    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/.bin/_mocha test/tests.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "postinstall": "node scripts/postinstall.js"
   },
@@ -39,7 +39,6 @@
     "gulp-util": "^3.0.8",
     "inquirer": "^3.2.2",
     "js-beautify": "^1.6.14",
-    "jsontosass": "^0.1.1",
     "marked": "^0.3.6",
     "mkdirp": "^0.5.1",
     "pluralize": "^7.0.0",
