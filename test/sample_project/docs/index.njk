@@ -1,10 +1,17 @@
 {% import 'components/esds.njk' as components with context %}
 {% import 'product-a/components/product-a.njk' as another_library with context %}
-<h1>Doc Site Homepage</h1>
+<html>
+    <head>
+        <body>
+            <h1>Doc Site Homepage</h1>
 
-{{ components.button() }}
-{{ another_library.button() }}
+            {{ components.button() }}
+            {{ another_library.button() }}
 
-{% filter markdown %}
-# Doc Compiled from Markdown
-{% endfilter %}
+            {% filter markdown %}
+            # Doc Compiled from Markdown
+            ![logo](/images/eightshapes_logo.png)
+            {% endfilter %}
+        </body>
+    </head>
+</html>

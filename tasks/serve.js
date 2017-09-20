@@ -10,7 +10,10 @@ const config = require('./config.js'),
         styleConfig = c.styles,
         styleWatchPaths = styleConfig.tasks.map(t => `${t.outputPath}/**/*.css`),
         markupConfig = c.markup,
-        markupWatchPaths = markupConfig.tasks.map(t => `${t.docOutputPath}/**/*.html`);
+        markupWatchPaths = markupConfig.tasks.map(t => `${t.docOutputPath}/**/*.html`),
+        webroot = path.join(c.rootPath, c.webroot),
+        assetWatchPaths = [path.join(webroot, '**', c.imagesPath, '**', '*'),
+                          path.join(webroot, '**', c.iconsPath, '**', '*')];
 
 // Start local server and auto-reload browser when relevant files change
 gulp.task('serve:local-docs', function() {
@@ -21,7 +24,7 @@ gulp.task('serve:local-docs', function() {
             scroll: true
         },
         server: {
-            baseDir: path.join(c.rootPath, c.webroot)
+            baseDir: webroot
         },
         middleware: function(req, res, next) {
           if (!req.url.match(/\/v\//g)) {
@@ -49,7 +52,7 @@ gulp.task('watch:serve:reload:styles', function(){
 
 // Watch markup
 gulp.task('watch:serve:reload:files', function(){
-    return gulp.watch(markupWatchPaths.concat(scriptWatchPaths), gulp.series('browser-sync-reload'));
+    return gulp.watch(markupWatchPaths.concat(scriptWatchPaths, assetWatchPaths), gulp.series('browser-sync-reload'));
 });
 
 gulp.task('watch:serve:all', gulp.parallel('watch:serve:reload:styles', 'watch:serve:reload:files'));

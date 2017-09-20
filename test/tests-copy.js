@@ -4,13 +4,27 @@
 /* global beforeEach */
 
 'use strict';
-const assert = require('yeoman-assert'),
+const { exec } = require('child_process'),
+        assert = require('yeoman-assert'),
         gulp = require('./tests-gulp.js'),
         fs = require('fs'),
         mkdirp = require('mkdirp'),
         projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
         webrootImages = `${webroot}/images`;
+
+// TODO Move this function to a commonly shared place
+function recursivelyCheckForFiles(filePaths, done) {
+  let allFilesFound = filePaths.every(file => fs.existsSync(file));
+
+  if (allFilesFound) {
+    done();
+  } else {
+    setTimeout(function() {
+      recursivelyCheckForFiles(filePaths, done);
+    }, 20);
+  }
+}
 
 module.exports = function(){
     describe('copy:images', function(){
@@ -25,6 +39,17 @@ module.exports = function(){
                     assert.file(`${webrootImages}/components/button/eightshapes_logo_for_component.png`);
                     done();
                 });
+        });
+    });
+
+    describe('watching files for changes and copying when updated', function(){
+        it('should sense changes to copied files and re-copy when updated', function(done) {
+            exec('gulp watch:copy:all'); // start watch
+            gulp('clean:webroot') // clear webroot
+                .then(result => {
+                  exec(`touch ${projectPath}/images/eightshapes_logo.png`);
+                  recursivelyCheckForFiles([`${webrootImages}/eightshapes_logo.png`], done);
+            });
         });
     });
 
