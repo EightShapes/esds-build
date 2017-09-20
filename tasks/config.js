@@ -181,7 +181,8 @@ function getCopyConfig(buildConfig) {
             sources: [
                 path.join(c.rootPath, c.imagesPath, '**', '*')
             ],
-            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)
+            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath),
+            watch: true
         },
         distTask = {
             name: c.distTaskName,
