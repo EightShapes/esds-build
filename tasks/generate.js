@@ -30,6 +30,7 @@ function createTopLevelDirectories(rootPath) {
 
     fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, `${rootPath}/docs/index.njk`);
     fs.copySync(`${__dirname}/../default_templates/.gitignore-default`, `${rootPath}/.gitignore`);
+    fs.copySync(`${__dirname}/../default_templates/.npmignore-default`, `${rootPath}/.npmignore`);
 }
 
 function copyDefaultConfig(rootPath) {

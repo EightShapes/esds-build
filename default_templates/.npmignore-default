@@ -21,18 +21,5 @@ jspm_packages/
 # default webroot build directory
 /_site
 
-# Auto-generated files
-/dist
-
-/tokens/*
-# Keep yaml token source file
-!/tokens/*.yaml 
-
-# Ignore root .njk files in /components
-/components/*
-# keep files in subdirectories in /components
-!/components/*/
-
-
 # MacOS folder attributes
 *.DS_Store

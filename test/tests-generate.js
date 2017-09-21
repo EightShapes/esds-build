@@ -49,6 +49,8 @@ module.exports = function(){
         assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/_site');
         assert.fileContent(`${scaffoldDir}/.gitignore`, 'node_modules');
+        assert.fileContent(`${scaffoldDir}/.gitignore`, '/dist');
+        assert.noFileContent(`${scaffoldDir}/.npmignore`, '/dist'); // npm package SHOULD contain /dist
       });
     });
 
