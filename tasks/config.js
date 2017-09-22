@@ -199,11 +199,7 @@ function getCopyConfig(buildConfig) {
 
     if (c.copyTasks) {
         c.copyTasks.forEach(t => {
-            let task = {
-                name: t.name,
-                sources: t.sources,
-                destination: t.destination
-            };
+            let task = t;
 
             tasks.push(task);
         });
