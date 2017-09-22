@@ -191,7 +191,8 @@ function getCopyConfig(buildConfig) {
                 path.join(latestVersionWebroot, c.scriptsPath, `*.js`), // copy any js file from the root of webroot/scripts
                 path.join(latestVersionWebroot, c.iconsPath, `*.svg`) // copy any svg file from the root of webroot/icons
             ],
-            destination: path.join(c.rootPath, c.distPath)
+            destination: path.join(c.rootPath, c.distPath),
+            watch: true
         };
 
     let tasks = [imageTask, distTask].concat(dependencyCopyTasks);
@@ -199,11 +200,7 @@ function getCopyConfig(buildConfig) {
 
     if (c.copyTasks) {
         c.copyTasks.forEach(t => {
-            let task = {
-                name: t.name,
-                sources: t.sources,
-                destination: t.destination
-            };
+            let task = t;
 
             tasks.push(task);
         });

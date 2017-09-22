@@ -18,7 +18,8 @@ module.exports = {
         {
             name: 'random-dependencies',
             sources: [`${rootPath}/node_modules/random-file-to-be-copied.js`],
-            destination: `${rootPath}/_site/latest/scripts/dependencies`
+            destination: `${rootPath}/_site/latest/scripts/dependencies`,
+            watch: true
         }
     ],
     dependencies: [
