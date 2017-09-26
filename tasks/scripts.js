@@ -5,7 +5,6 @@ const config = require('./config.js'),
         gulp = require('gulp'),
         concat = require('gulp-concat-util'),
         eslint = require('gulp-eslint'),
-        fs = require('fs'),
         scriptConfig = buildConfig.scripts,
         buildTaskPrefix = scriptConfig.buildTaskPrefix,
         concatTaskPrefix = scriptConfig.concatTaskPrefix,
@@ -21,11 +20,6 @@ function getLintOptions(c) {
     let lintOptions = {};
     if (c.lintOptions) {
         lintOptions = c.lintOptions;
-    }
-    if (lintOptions.configFile && !fs.existsSync(lintOptions.configFile)) {
-        // eslint-disable-next-line no-console
-        console.log(`Warning: ${lintOptions.configFile} cannot be found, using eslint defaults`);
-        delete lintOptions.configFile;
     }
     return lintOptions;
 }

@@ -9,7 +9,7 @@ const { exec } = require('child_process'),
       c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs-extra');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -70,18 +70,6 @@ module.exports = function(){
             .then(result => {
               assert(result.stderr.includes('scripts/global.js'));
             });
-        });
-
-        it('should get an empty set of eslint options that does not include a lint config file when the config file does not exist', function(){
-          const nonExistentConfigPath = './path/does/not/exist',
-                scriptsTasks = require('../tasks/scripts.js'),
-                taskConfig = {
-                  lintOptions: {
-                    configFile: nonExistentConfigPath
-                  }
-                },
-                lintOptions = scriptsTasks.getLintOptions(taskConfig);
-          assert(typeof lintOptions.configFile === 'undefined');
         });
       });
 

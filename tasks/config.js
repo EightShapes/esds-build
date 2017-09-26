@@ -107,6 +107,28 @@ function getMarkupConfig(buildConfig) {
     };
 }
 
+function setScriptLintConfig(t) {
+    // use eslint's own methods to see if an .eslintrc file exists, otherwise switch the config to use built-in eslint defaults
+    var CLIEngine = require("eslint").CLIEngine;
+
+    var cli = new CLIEngine();
+
+    try {
+        cli.getConfigForFile(t.sourcePaths[0]);
+    } catch (e) {
+        // Exception occurs if a config file can't be found. In this case update the lint options
+        if (t.lintOptions.configFile) {
+            // eslint-disable-next-line no-console
+            console.log(`Warning: ${t.lintOptions.configFile} cannot be found, using eslint defaults`);
+            delete t.lintOptions.configFile;
+        } else {
+            // eslint-disable-next-line no-console
+            console.log(`Warning: No eslint config file found, using eslint defaults`);
+        }
+        t.lintOptions.useEslintrc = false;
+    }
+}
+
 function getScriptsConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
@@ -121,6 +143,8 @@ function getScriptsConfig(buildConfig) {
                 configFile: c.scriptsLintConfig
             }
         };
+
+    setScriptLintConfig(defaultTask);
 
     let tasks = [defaultTask];
 
