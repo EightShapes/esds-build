@@ -29,7 +29,7 @@ module.exports = function(){
         return del(scaffoldDir);
       });
 
-      it.only('should generate a project scaffold with top level directories and basic files', function() {
+      it('should generate a project scaffold with top level directories and basic files', function() {
         const generate = require('../tasks/generate.js'),
               defaultProjectDirectories = [
                 'components',
