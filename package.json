@@ -9,7 +9,8 @@
   "scripts": {
     "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/.bin/_mocha test/tests.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "prepack": "gulp build:all"
   },
   "contributors": [
     "Kevin Powell <kevinmpowell@gmail.com>",
@@ -21,6 +22,7 @@
     "autoprefixer": "^7.1.2",
     "browser-sync": "^2.18.13",
     "del": "^3.0.0",
+    "eslint": "^4.7.2",
     "flat": "^4.0.0",
     "fs": "0.0.1-security",
     "fs-extra": "^4.0.1",

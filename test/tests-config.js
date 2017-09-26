@@ -2,11 +2,13 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
 /* global after */
 
 'use strict';
 const assert = require('yeoman-assert'),
-        path = require('path');
+        path = require('path'),
+        fs = require('fs-extra');
 
 let config;
 
@@ -38,7 +40,6 @@ module.exports = function(){
         it('should retrieve the default config as the build config when no product build config exists', function(){
             const buildConfig = config.retrieveBuildConfig('/path/doesnt/exist/');
             assert(buildConfig.configMethod === 'extend');
-            assert(buildConfig.codeNamespace === buildConfig.codeNamespace);
             assert(buildConfig.docsPath === 'docs');
             assert(buildConfig.componentsPath === 'components');
             assert(buildConfig.tokensPath === 'tokens');
@@ -80,7 +81,7 @@ module.exports = function(){
             config = require('../tasks/config.js');
         });
 
-        it('should return a task config based on defaults when a product config file cannot be found', function(){
+        it('should return a task config based on defaults when a product config file cannot be found', function(done){
             const taskConfig = config.get('/path/doesnt/exist/'),
                     c = taskConfig; //for brevity
             assert(c.styles.tasks.length === 1);
@@ -117,6 +118,7 @@ module.exports = function(){
             assert(c.copy.copyTaskPrefix === 'copy:');
             assert(c.copy.tasks[0].name === 'images');
             assert(c.copy.tasks[0].destination === path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath));
+            done();
         });
 
         it('should return a task config with product level extensions when a product config file is present', function(){
@@ -148,6 +150,27 @@ module.exports = function(){
                     dependencyBConfig = config.getDependencyConfig('product-b', `test/sample_project/`);
             assert(dependencyAConfig.codeNamespace === 'product-a');
             assert(dependencyBConfig.codeNamespace === 'product-b');
+        });
+    });
+
+    describe('when retrieving script lint config', function(){
+        before(function(done){
+            config = require('../tasks/config.js');
+            fs.moveSync('.eslintrc', 'renamed.eslintrc');
+            done();
+        });
+
+        after(function(done){
+            fs.moveSync('renamed.eslintrc', '.eslintrc');
+            done();
+        });
+
+        it('should return a task config based on defaults when a product config file cannot be found', function(done){
+            const taskConfig = config.get('/path/doesnt/exist/'),
+                    c = taskConfig; //for brevity
+            assert(typeof c.scripts.tasks[0].lintOptions.configFile === 'undefined');
+            assert(c.scripts.tasks[0].lintOptions.useEslintrc === false);
+            done();
         });
     });
 };
