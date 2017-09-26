@@ -34,6 +34,7 @@ module.exports = {
     docsPath: 'docs',                                                   // Name of the top-level docs directory
     iconsPath: 'icons',                                                 // Name of the top-level icons directory
     imagesPath: 'images',                                               // Name of the top-level images directory
+    includesPath: 'includes',                                           // Name of the top-level includes directory
     scriptsPath: 'scripts',                                             // Name of the top-level scripts directory
     sinksPath: 'sink-pages',                                            // Name of the top-level sink-pages directory
     stylesPath: 'styles',                                               // Name of the top-level styles directory

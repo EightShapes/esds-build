@@ -29,7 +29,7 @@ module.exports = function(){
         return del(scaffoldDir);
       });
 
-      it('should generate a project scaffold with top level directories and basic files', function() {
+      it.only('should generate a project scaffold with top level directories and basic files', function() {
         const generate = require('../tasks/generate.js'),
               defaultProjectDirectories = [
                 'components',
@@ -50,6 +50,9 @@ module.exports = function(){
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/_site');
         assert.fileContent(`${scaffoldDir}/.gitignore`, 'node_modules');
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/dist');
+        assert.fileContent(`${scaffoldDir}/templates/sink.njk`, `{% include 'includes/hostile-inline-styles.njk' %}`);
+        assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<link rel="stylesheet" href="/styles/[your-main-stylesheet].css">`);
+        assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<script src="/scripts/[your-main-script].js">`);
         assert.noFileContent(`${scaffoldDir}/.npmignore`, '/dist'); // npm package SHOULD contain /dist
       });
     });
