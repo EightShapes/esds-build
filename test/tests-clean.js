@@ -9,7 +9,7 @@ const gulp = require('./tests-gulp.js'),
       fs = require('fs'),
       path = require('path'),
       mkdirp = require('mkdirp'),
-      configDefaults = require('../eightshapes-build-tools-config.js');
+      configDefaults = require('../esds-build-config.js');
 
 module.exports = function(){
     const projectPath = './test/sample_project',

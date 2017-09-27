@@ -1,6 +1,6 @@
 'use strict';
 
-const productBuildConfigFileName = 'eightshapes-build-tools-config',
+const productBuildConfigFileName = 'esds-build-config',
         fs = require('fs'),
         path = require('path');
 
