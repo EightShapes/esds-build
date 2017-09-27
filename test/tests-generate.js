@@ -50,7 +50,7 @@ module.exports = function(){
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/_site');
         assert.fileContent(`${scaffoldDir}/.gitignore`, 'node_modules');
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/dist');
-        assert.fileContent(`${scaffoldDir}/templates/sink.njk`, `{% include 'includes/hostile-inline-styles.njk' %}`);
+        assert.fileContent(`${scaffoldDir}/templates/sink.njk`, `color: darkorange;`);
         assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<link rel="stylesheet" href="/styles/[your-main-stylesheet].css">`);
         assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<script src="/scripts/[your-main-script].js">`);
         assert.noFileContent(`${scaffoldDir}/.npmignore`, '/dist'); // npm package SHOULD contain /dist
