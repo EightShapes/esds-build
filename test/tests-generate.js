@@ -27,11 +27,15 @@ function recursivelyCheckForFiles(filePaths, done) {
 
 module.exports = function(){
     describe('generate:scaffold', function(){
-      after(function() {
-        // return del(scaffoldDir);
+      beforeEach(function() {
+        return del(scaffoldDir);
       });
 
-      it('should generate a project scaffold with top level directories and basic files', function() {
+      after(function() {
+        return del(scaffoldDir);
+      });
+
+      it.only('should generate a project scaffold with top level directories and basic files', function() {
         const generate = require('../tasks/generate.js'),
               defaultProjectDirectories = [
                 'components',
@@ -47,6 +51,7 @@ module.exports = function(){
                 'tokens'
             ];
         generate.createTopLevelDirectories(scaffoldDir);
+        generate.copyDefaultStarterFiles(scaffoldDir);
         defaultProjectDirectories.forEach(dir => assert.file(`${scaffoldDir}/${dir}`));
         assert.fileContent(`${scaffoldDir}/docs/index.njk`, '<h1>Design System</h1>');
         assert.fileContent(`${scaffoldDir}/.gitignore`, '/_site');
@@ -68,6 +73,18 @@ module.exports = function(){
 
         generate.createTopLevelDirectories(scaffoldDir);
         assert.fileContent(path.join(docsDir, 'dont-overwrite-me.njk'), 'Nothing to see here');
+      });
+
+      it.only('should prompt before overwriting any existing files when the scaffold is generated', function(){
+        // const docsDir = path.join(scaffoldDir, 'docs'),
+        //       generate = require('../tasks/generate.js'),
+        //       testFile = path.join(docsDir, 'index.njk');
+
+        // mkdirp.sync(docsDir);
+        // fs.writeFileSync(testFile, 'Nothing to see here');
+
+        // generate.createTopLevelDirectories(scaffoldDir);
+        // assert.fileContent(path.join(docsDir, 'dont-overwrite-me.njk'), 'Nothing to see here');
       });
     });
 
