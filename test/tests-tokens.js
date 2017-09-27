@@ -2,6 +2,8 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
+/* global after */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -10,7 +12,7 @@ const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs-extra');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -65,6 +67,23 @@ module.exports = function(){
         tokensTasks.convertTokensYaml('/path/does/not/exist', function(){});
         assert.noFile(`${tokensPath}/tokens.json`);
         assert.noFile(`${tokensPath}/tokens.scss`);
+      });
+    });
+
+    describe('when the /tokens directory does not exist', function(){
+      before(function(){
+        fs.moveSync(`${projectPath}/tokens`, `${projectPath}/moved-tokens`);
+      });
+
+      after(function(){
+        fs.moveSync(`${projectPath}/moved-tokens`, `${projectPath}/tokens`);
+      });
+
+      it('should run the tokens:build:all task without failing', function() {
+        return gulp('tokens:build:all')
+          .then(result => {
+            assert(result.stdout.includes("Finished 'tokens:build:all'"));
+          });
       });
     });
 

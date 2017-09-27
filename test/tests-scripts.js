@@ -2,6 +2,8 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
+/* global after */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -92,6 +94,23 @@ module.exports = function(){
             .then(result => {
               assert(result.stderr.includes('scripts/global.js'));
               assert.fileContent(docJsFile, 'GlobalDocFunction');
+            });
+        });
+      });
+
+      describe('when the /scripts directory does not exist', function(){
+        before(function(){
+          fs.moveSync(`${projectPath}/scripts`, `${projectPath}/moved-scripts`);
+        });
+
+        after(function(){
+          fs.moveSync(`${projectPath}/moved-scripts`, `${projectPath}/scripts`);
+        });
+
+        it('should run the scripts:build:all task without failing', function() {
+          return gulp('scripts:build:all')
+            .then(result => {
+              assert(result.stdout.includes("Finished 'scripts:build:all'"));
             });
         });
       });

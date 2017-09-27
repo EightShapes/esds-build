@@ -3,6 +3,8 @@
 /* global describe */
 /* global beforeEach */
 /* global afterEach */
+/* global before */
+/* global after */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -11,7 +13,7 @@ const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       del = require('del'),
-      fs = require('fs'),
+      fs = require('fs-extra'),
       projectPath = './test/sample_project',
       nodeModulesPath = `${projectPath}/node_modules`,
       componentMacros = `${projectPath}/components`,
@@ -54,7 +56,23 @@ module.exports = function(){
             assert.fileContent(`${componentMacros}/${c.codeNamespace}.njk`, '{% macro button(');
           });
       });
+    });
 
+    describe('when the /components directory does not exist', function(){
+      before(function(){
+        fs.moveSync(componentMacros, `${projectPath}/moved-components`);
+      });
+
+      after(function(){
+        fs.moveSync(`${projectPath}/moved-components`, componentMacros);
+      });
+
+      it('should run the markup:concatenate:macros:all task without failing', function() {
+        return gulp('markup:concatenate:macros:all')
+          .then(result => {
+            assert(result.stdout.includes("Finished 'markup:concatenate:macros:all'"));
+          });
+      });
     });
 
     describe('markup:build:', function(){
@@ -96,6 +114,23 @@ module.exports = function(){
           .then(result => gulp('markup:build:all'))
           .then(result => {
             assert.fileContent(`${webroot}/latest/index.html`, '<button>I\'m a button from Product A</button>');
+          });
+      });
+    });
+
+    describe('when the /docs directory does not exist', function(){
+      before(function(){
+        fs.moveSync(`${projectPath}/docs`, `${projectPath}/moved-docs`);
+      });
+
+      after(function(){
+        fs.moveSync(`${projectPath}/moved-docs`, `${projectPath}/docs`);
+      });
+
+      it('should run the markup:build:all task without failing', function() {
+        return gulp('markup:build:all')
+          .then(result => {
+            assert(result.stdout.includes("Finished 'markup:build:all'"));
           });
       });
     });
