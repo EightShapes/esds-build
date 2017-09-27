@@ -28,9 +28,11 @@ function createTopLevelDirectories(rootPath) {
 
     topLevelDirectories.forEach(dir => mkdirp.sync(path.join(rootPath, dir)));
 
-    fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, `${rootPath}/docs/index.njk`);
+    fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, path.join(rootPath, c.docsPath, `index${c.markupSourceExtension}`));
     fs.copySync(`${__dirname}/../default_templates/.gitignore-default`, `${rootPath}/.gitignore`);
     fs.copySync(`${__dirname}/../default_templates/.npmignore-default`, `${rootPath}/.npmignore`);
+    fs.copySync(`${__dirname}/../default_templates/templates/sink.njk`, path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`));
+    fs.copySync(`${__dirname}/../default_templates/templates/base.njk`, path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`));
 }
 
 function copyDefaultConfig(rootPath) {
@@ -50,10 +52,15 @@ gulp.task('generate:default-config', function(done){
     done();
 });
 
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
 /* eslint-disable no-console */
 function generateComponentFiles(answers, rootPath) {
     const componentName = answers.componentName.toLowerCase().replace(/\s/g, '_'),
             pluralComponentName = pluralize.plural(componentName),
+            componentSinkTitle = toTitleCase(pluralComponentName.replace(/_/g, ' ')),
             hyphenatedComponentName = pluralComponentName.replace(/_/g, '-'),
             componentDirectory = path.join(rootPath, c.componentsPath, componentName),
             componentMarkupFilename = path.join(componentDirectory, `${componentName}${c.markupSourceExtension}`),
@@ -86,7 +93,13 @@ function generateComponentFiles(answers, rootPath) {
         }
 
         // Create the component's sink page
-        const sinkPageContent = `{% extends "${c.templatesPath}/sink${c.markupSourceExtension}" %}`;
+        const sinkPageContent = `{% extends "${c.templatesPath}/sink${c.markupSourceExtension}" %}
+{% block body %}
+    {% filter markdown %}
+        # ${componentSinkTitle} Sink
+    {% endfilter %} 
+    {# Your sink examples go here #} 
+{% endblock body %}`;
 
         if (!fs.existsSync(componentSinkDirectory)) {
             mkdirp.sync(componentSinkDirectory);
