@@ -116,6 +116,35 @@ module.exports = function(){
             assert.fileContent(`${webroot}/latest/index.html`, '<button>I\'m a button from Product A</button>');
           });
       });
+
+
+    });
+
+    describe('markup:build: when tokens are updated', function(){
+      before(function(){
+        fs.copySync(`${projectPath}/tokens/tokens.yaml`, `${projectPath}/tokens/moved-tokens.yaml`);
+        fs.copySync(`${projectPath}/docs/index.njk`, `${projectPath}/docs/moved-index.njk`);
+      });
+
+      after(function(){
+        fs.moveSync(`${projectPath}/tokens/moved-tokens.yaml`, `${projectPath}/tokens/tokens.yaml`, { overwrite: true });
+        fs.moveSync(`${projectPath}/docs/moved-index.njk`, `${projectPath}/docs/index.njk`, { overwrite: true });
+      });
+
+      it('should compile docs with the latest data', function() {
+        return gulp('tokens:build:all')
+          .then(result => gulp('markup:build:all'))
+          .then(result => {
+            fs.appendFileSync(`${projectPath}/docs/index.njk`, '{{ esds_tokens.something_new }} {{ esds_tokens.another_value }}');
+            fs.appendFileSync(`${projectPath}/tokens/tokens.yaml`, "something_new: 'testing-1-2-3'");
+          })
+          .then(result => gulp('tokens:build:all'))
+          .then(result => gulp('markup:build:all'))
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/index.html`, 'hotpink');
+            assert.fileContent(`${webroot}/latest/index.html`, 'testing-1-2-3');
+          });
+      });
     });
 
     describe('when the /docs directory does not exist', function(){

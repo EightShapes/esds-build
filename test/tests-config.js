@@ -81,7 +81,7 @@ module.exports = function(){
             config = require('../tasks/config.js');
         });
 
-        it('should return a task config based on defaults when a product config file cannot be found', function(done){
+        it.only('should return a task config based on defaults when a product config file cannot be found', function(done){
             const taskConfig = config.get('/path/doesnt/exist/'),
                     c = taskConfig; //for brevity
             assert(c.styles.tasks.length === 1);
@@ -101,6 +101,9 @@ module.exports = function(){
             assert(c.markup.tasks[0].name === c.productTaskName);
             assert(c.markup.tasks[0].docOutputPath === path.join(c.rootPath, c.webroot, c.latestVersionPath));
             assert(c.markup.tasks[0].componentMacroFilename === `${c.codeNamespace}${c.markupSourceExtension}`);
+            assert(c.markup.tasks[0].docTemplateWatchPaths.includes(path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension)));
+            assert(c.markup.tasks[0].docTemplateWatchPaths.includes(path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)));
+            assert(c.markup.tasks[0].docTemplateWatchPaths.includes(path.join(c.rootPath, c.tokensPath, '*.json'))); // Rebuild docs if tokens.json changes
 
             assert(c.scripts.buildTaskPrefix === 'scripts:build:');
             assert(c.scripts.concatTaskPrefix === 'scripts:concatenate:');

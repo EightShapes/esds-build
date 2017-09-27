@@ -90,7 +90,8 @@ function getMarkupConfig(buildConfig) {
             docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
+                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
+                path.join(c.rootPath, c.tokensPath, '*.json') // Watch tokens.json for changes and rebuild docs if they change
             ],
             docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
         };

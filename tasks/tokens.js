@@ -7,13 +7,6 @@ const config = require('./config.js'),
         path = require('path'),
         gulp = require('gulp'),
         jsBeautify = require('js-beautify'),
-        cssBeautify = require('js-beautify').css,
-        cssBeautifyOptions = {
-            "newline_between_rules": true,
-            "selector_separator_newline": true,
-            "preserve_newlines": true,
-            "max_preserve_newlines": 1
-        },
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),
         tokenConfig = c.tokens;
