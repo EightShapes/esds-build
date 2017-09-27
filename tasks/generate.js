@@ -55,7 +55,9 @@ function copyDefaultStarterFiles(rootPath) {
         ];
 
     starterFiles.forEach(sf => {
-        fs.copySync(sf.file, sf.destination);
+        if (!fs.existsSync(sf.destination)) {
+            fs.copySync(sf.file, sf.destination);
+        }
     });
 }
 

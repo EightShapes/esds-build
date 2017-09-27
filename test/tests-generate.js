@@ -35,7 +35,7 @@ module.exports = function(){
         return del(scaffoldDir);
       });
 
-      it.only('should generate a project scaffold with top level directories and basic files', function() {
+      it('should generate a project scaffold with top level directories and basic files', function() {
         const generate = require('../tasks/generate.js'),
               defaultProjectDirectories = [
                 'components',
@@ -63,7 +63,7 @@ module.exports = function(){
         assert.noFileContent(`${scaffoldDir}/.npmignore`, '/dist'); // npm package SHOULD contain /dist
       });
 
-      it.only('should not overwrite any existing directories when the scaffold is generated', function(){
+      it('should not overwrite any existing directories when the scaffold is generated', function(){
         const docsDir = path.join(scaffoldDir, 'docs'),
               generate = require('../tasks/generate.js'),
               testFile = path.join(docsDir, 'dont-overwrite-me.njk');
@@ -75,16 +75,17 @@ module.exports = function(){
         assert.fileContent(path.join(docsDir, 'dont-overwrite-me.njk'), 'Nothing to see here');
       });
 
-      it.only('should prompt before overwriting any existing files when the scaffold is generated', function(){
-        // const docsDir = path.join(scaffoldDir, 'docs'),
-        //       generate = require('../tasks/generate.js'),
-        //       testFile = path.join(docsDir, 'index.njk');
+      it('should not overwrite any existing files when the scaffold is generated', function(){
+        const docsDir = path.join(scaffoldDir, 'docs'),
+              generate = require('../tasks/generate.js'),
+              testFile = path.join(docsDir, 'index.njk');
 
-        // mkdirp.sync(docsDir);
-        // fs.writeFileSync(testFile, 'Nothing to see here');
+        mkdirp.sync(docsDir);
+        fs.writeFileSync(testFile, 'Please don\'t overwrite me!');
 
-        // generate.createTopLevelDirectories(scaffoldDir);
-        // assert.fileContent(path.join(docsDir, 'dont-overwrite-me.njk'), 'Nothing to see here');
+        generate.copyDefaultStarterFiles(scaffoldDir);
+        assert.fileContent(path.join(docsDir, 'index.njk'), 'Please don\'t overwrite me!'); // the default index.njk does not contain this content
+        assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<script src="/scripts/[your-main-script].js">`); // It should still write default files that don't already exist
       });
     });
 
