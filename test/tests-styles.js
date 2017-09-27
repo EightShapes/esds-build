@@ -2,6 +2,8 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
+/* global after */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -9,7 +11,7 @@ const { exec } = require('child_process'),
       c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs');
+      fs = require('fs-extra');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -134,6 +136,23 @@ module.exports = function(){
             .then(result => {
               assert(result.stdout.includes('warning  Color \'lemonchiffon\' should be written in its hexadecimal form #fffacd'));
               assert.file(compiledCssFile);
+            });
+        });
+      });
+
+      describe('when the /styles directory does not exist', function(){
+        before(function(){
+          fs.moveSync(`${projectPath}/styles`, `${projectPath}/moved-styles`);
+        });
+
+        after(function(){
+          fs.moveSync(`${projectPath}/moved-styles`, `${projectPath}/styles`);
+        });
+
+        it('should run the styles:build:all task without failing', function() {
+          return gulp('styles:build:all')
+            .then(result => {
+              assert(result.stdout.includes("Finished 'styles:build:all'"));
             });
         });
       });

@@ -3,6 +3,8 @@
 /* global describe */
 /* global beforeEach */
 /* global afterEach */
+/* global before */
+/* global after */
 
 'use strict';
 const { exec } = require('child_process'),
@@ -11,7 +13,7 @@ const { exec } = require('child_process'),
         assert = require('yeoman-assert'),
         gulp = require('./tests-gulp.js'),
         del = require('del'),
-        fs = require('fs'),
+        fs = require('fs-extra'),
         path = require('path'),
         projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
@@ -95,6 +97,23 @@ module.exports = function(){
                 assert.noFileContent(`${webrootIcons}/${c.codeNamespace}.svg`, 'Adobe Illustrator');
             });
        });
+    });
+
+    describe('when the /icons directory does not exist', function(){
+      before(function(){
+        fs.moveSync(`${projectPath}/icons`, `${projectPath}/moved-icons`);
+      });
+
+      after(function(){
+        fs.moveSync(`${projectPath}/moved-icons`, `${projectPath}/icons`);
+      });
+
+      it('should run the icons:build:all task without failing', function() {
+        return gulp('icons:build:all')
+          .then(result => {
+            assert(result.stdout.includes("Finished 'icons:build:all'"));
+          });
+      });
     });
 
     describe('icons:watch', function(){
