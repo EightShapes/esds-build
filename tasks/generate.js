@@ -33,7 +33,6 @@ function createTopLevelDirectories(rootPath) {
     fs.copySync(`${__dirname}/../default_templates/.npmignore-default`, `${rootPath}/.npmignore`);
     fs.copySync(`${__dirname}/../default_templates/templates/sink.njk`, path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`));
     fs.copySync(`${__dirname}/../default_templates/templates/base.njk`, path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`));
-    fs.copySync(`${__dirname}/../default_templates/includes/hostile-inline-styles.njk`, path.join(rootPath, c.includesPath, `hostile-inline-styles${c.markupSourceExtension}`));
 }
 
 function copyDefaultConfig(rootPath) {

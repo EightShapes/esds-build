@@ -90,8 +90,7 @@ function getMarkupConfig(buildConfig) {
             docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.includesPath, '**', '*' + c.markupSourceExtension)
+                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)
             ],
             docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
         };
