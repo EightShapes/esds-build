@@ -8,6 +8,8 @@
 const assert = require('yeoman-assert'),
       del = require('del'),
       fs = require('fs'),
+      mkdirp = require('mkdirp'),
+      path = require('path'),
       scaffoldDir = './test/scaffold_test';
 
 // TODO Move this function to a commonly shared place
@@ -26,7 +28,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 module.exports = function(){
     describe('generate:scaffold', function(){
       after(function() {
-        return del(scaffoldDir);
+        // return del(scaffoldDir);
       });
 
       it('should generate a project scaffold with top level directories and basic files', function() {
@@ -54,6 +56,18 @@ module.exports = function(){
         assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<link rel="stylesheet" href="/styles/[your-main-stylesheet].css">`);
         assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<script src="/scripts/[your-main-script].js">`);
         assert.noFileContent(`${scaffoldDir}/.npmignore`, '/dist'); // npm package SHOULD contain /dist
+      });
+
+      it.only('should not overwrite any existing directories when the scaffold is generated', function(){
+        const docsDir = path.join(scaffoldDir, 'docs'),
+              generate = require('../tasks/generate.js'),
+              testFile = path.join(docsDir, 'dont-overwrite-me.njk');
+
+        mkdirp.sync(docsDir);
+        fs.writeFileSync(testFile, 'Nothing to see here');
+
+        generate.createTopLevelDirectories(scaffoldDir);
+        assert.fileContent(path.join(docsDir, 'dont-overwrite-me.njk'), 'Nothing to see here');
       });
     });
 

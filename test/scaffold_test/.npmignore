@@ -1,0 +1,25 @@
+# Logs
+logs
+npm-debug.log*
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+
+# default webroot build directory
+/_site
+
+# MacOS folder attributes
+*.DS_Store
