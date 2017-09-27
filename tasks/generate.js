@@ -27,12 +27,38 @@ function createTopLevelDirectories(rootPath) {
     ];
 
     topLevelDirectories.forEach(dir => mkdirp.sync(path.join(rootPath, dir)));
+}
 
-    fs.copySync(`${__dirname}/../default_templates/docs/index.njk`, path.join(rootPath, c.docsPath, `index${c.markupSourceExtension}`));
-    fs.copySync(`${__dirname}/../default_templates/.gitignore-default`, `${rootPath}/.gitignore`);
-    fs.copySync(`${__dirname}/../default_templates/.npmignore-default`, `${rootPath}/.npmignore`);
-    fs.copySync(`${__dirname}/../default_templates/templates/sink.njk`, path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`));
-    fs.copySync(`${__dirname}/../default_templates/templates/base.njk`, path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`));
+function copyDefaultStarterFiles(rootPath) {
+    const defaultTemplatesDir = path.join(__dirname, '..', 'default_templates'),
+        starterFiles = [
+            {
+                file: path.join(defaultTemplatesDir, 'docs', 'index.njk'),
+                destination: path.join(rootPath, c.docsPath, `index${c.markupSourceExtension}`)
+            },
+            {
+                file: path.join(defaultTemplatesDir, '.gitignore-default'),
+                destination: path.join(rootPath, '.gitignore')
+            },
+            {
+                file: path.join(defaultTemplatesDir, '.npmignore-default'),
+                destination: path.join(rootPath, '.npmignore')
+            },
+            {
+                file: path.join(defaultTemplatesDir, 'templates', 'sink.njk'),
+                destination: path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`)
+            },
+            {
+                file: path.join(defaultTemplatesDir, 'templates', 'base.njk'),
+                destination: path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`)
+            }
+        ];
+
+    starterFiles.forEach(sf => {
+        if (!fs.existsSync(sf.destination)) {
+            fs.copySync(sf.file, sf.destination);
+        }
+    });
 }
 
 function copyDefaultConfig(rootPath) {
@@ -44,6 +70,7 @@ function copyDefaultConfig(rootPath) {
 
 gulp.task('generate:scaffold', function(done){
     createTopLevelDirectories(c.rootPath);
+    copyDefaultStarterFiles(c.rootPath);
     done();
 });
 
@@ -135,5 +162,6 @@ gulp.task('generate:new-component', function(done){
 module.exports = {
     generateComponentFiles: generateComponentFiles,
     createTopLevelDirectories: createTopLevelDirectories,
+    copyDefaultStarterFiles: copyDefaultStarterFiles,
     copyDefaultConfig: copyDefaultConfig
 };
