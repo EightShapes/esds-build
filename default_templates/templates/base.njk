@@ -7,9 +7,10 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% block head_content_prepend %}{% endblock head_content_prepend %}
         <link rel="stylesheet" href="/styles/[your-main-stylesheet].css">
         <script src="/scripts/[your-main-script].js"></script>
-        {% block head_assets %}{% endblock head_assets %}
+        {% block head_content_append %}{% endblock head_content_append %}
     </head>
     <body>
         {% block body %}{% endblock body %}
