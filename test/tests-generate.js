@@ -97,9 +97,9 @@ module.exports = function(){
       it('should generate a default config', function() {
         const generate = require('../tasks/generate.js');
         generate.copyDefaultConfig(scaffoldDir);
-        assert.file(`${scaffoldDir}/eightshapes-build-tools-config.js`);
+        assert.file(`${scaffoldDir}/esds-build-config.js`);
 
-        const defaultConfig = require(`${__dirname}/scaffold_test/eightshapes-build-tools-config.js`);
+        const defaultConfig = require(`${__dirname}/scaffold_test/esds-build-config.js`);
         assert(defaultConfig.rootPath.includes('/esds-build'));
         assert(defaultConfig.webroot === '_site');
       });

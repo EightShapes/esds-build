@@ -38,10 +38,10 @@ Generates the following top level directories:
 
 ## Generate default config file
 `gulp generate:default-config`
-Copies the [default config](https://github.com/EightShapes/eightshapes-build-tools/blob/master/default_templates/eightshapes-build-tools-config-default.js) into the root of your project at:
+Copies the [default config](https://github.com/EightShapes/esds-build/blob/master/default_templates/esds-build-config-default.js) into the root of your project at:
 ````
 .
-└── eightshapes-build-tools-config.js
+└── esds-build-config.js
 ````
 
 ## Generate new component files
