@@ -9,8 +9,7 @@
   "scripts": {
     "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/.bin/_mocha test/tests.js",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "postinstall": "node scripts/postinstall.js",
-    "prepack": "gulp build:all"
+    "postinstall": "node scripts/postinstall.js"
   },
   "contributors": [
     "Kevin Powell <kevinmpowell@gmail.com>",
