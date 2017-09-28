@@ -12,6 +12,7 @@ const config = require('./config.js'),
         markupConfig = buildConfig.markup,
         markupTasks = markupConfig.tasks,
         nunjucksRender = require('gulp-nunjucks-render'),
+        nunjucksData = require('gulp-data'),
         concatMacrosTaskPrefix = markupConfig.concatMacrosTaskPrefix,
         buildTaskPrefix = markupConfig.buildTaskPrefix,
         watchTaskPrefix = markupConfig.watchTaskPrefix,
@@ -23,18 +24,6 @@ const config = require('./config.js'),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`);
 
 function addDocLibraryNunjucksFilters(env) {
-    // env.addFilter('htmlbeautify', function(string) {
-    //     return htmlBeautify(string, htmlBeautifyOptions);
-    // });
-
-    // env.addFilter('cssbeautify', function(string) {
-    //     return cssBeautify(string, cssBeautifyOptions);
-    // });
-
-    // env.addFilter('stripindent', function(string){
-    //     return stripIndent(string);
-    // });
-
     env.addFilter('markdown', function(string, wrap, wrapper_class) {
         var rendered_markup = marked(stripIndent(string));
         wrap = typeof wrap === 'undefined' ? false : wrap;
@@ -46,18 +35,6 @@ function addDocLibraryNunjucksFilters(env) {
 
         return env.filters.safe(rendered_markup);
     });
-
-    // env.addFilter('nunjucksrenderstring', function(string, context){
-    //     return env.renderString(string, context);
-    // });
-
-    // env.addFilter('getcontext', function(){
-    //     return this.ctx;
-    // });
-
-    // env.addGlobal('getContext', function(name) {
-    //     return name ? this.ctx[name] : this.ctx;
-    // });
 }
 
 function generateMacroConcatenateTask(c) {
@@ -147,7 +124,6 @@ function getDataForTemplates() {
         if (fs.existsSync(f)) {
             let contents = fs.readFileSync(f, {encoding: 'UTF-8'}),
                 json;
-
             try {
                 json = JSON.parse(contents);
                 Object.assign(data, json);
@@ -185,7 +161,6 @@ function getDataForTemplates() {
 function generateBuildTask(t) {
     if (t.docSourceFilePaths) {
         let nunjucksOptions = {
-            data: getDataForTemplates(),
             envOptions: {
                 watch: false
             },
@@ -211,6 +186,7 @@ function generateBuildTask(t) {
         // Compile doc src to html
         gulp.task(`${buildTaskPrefix}${t.name}`, function() {
             return gulp.src(t.docSourceFilePaths)
+                .pipe(nunjucksData(getDataForTemplates)) // Using the 'gulp-data' plugin to live fetch any data changes each time markup is rebuilt
                 .pipe(
                     nunjucksRender(nunjucksOptions).on('error', function(e){
                         gutil.log(e);
