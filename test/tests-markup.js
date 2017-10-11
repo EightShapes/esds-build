@@ -124,6 +124,7 @@ module.exports = function(){
         fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
         let newConfig = {
           rootPath: 'test/sample_project/',
+          includeMarkdownWrapper: true,
           markdownWrapperClass: 'my-special-markdown-filter-class'
         };
 
@@ -135,7 +136,7 @@ module.exports = function(){
         del.sync('esds-build-config.json');
       });
 
-      it.only('should allow the markdown filter wrapper to be customized via config', function() {
+      it('should allow the markdown filter wrapper to be customized via config', function() {
         return gulp('clean:webroot')
           .then(result => gulp('markup:build:all'))
           .then(result => {

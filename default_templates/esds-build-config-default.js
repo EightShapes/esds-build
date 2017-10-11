@@ -51,6 +51,8 @@ module.exports = {
     scriptsSourceExtension: '.js',                                      // Scripts file extension
     stylesSourceExtension: '.scss',                                     // Styles file extension
     manageNunjucksEnv: false,                                           // hook to configure the Nunjucks templating environment, add additional filters, etc.
+    includeMarkdownWrapper: false,                                      // include a wrapper div when the nunjucks markdown filter is used
+    markdownWrapperClass: 'esds-markdown-wrap',                         // wrapper class when nunjucks markdown filter is used               
     copyTasks: [],                                                      // Product specific set of tasks to copy a file from one destination to another. For copying jQuery from node_modules to the webroot as an example
     allTaskName: 'all',                                                 // gulp task name segment, ex: build:all, watch:all
     buildTaskName: 'build',                                             // gulp task name segment, ex: markup:build, styles:build
