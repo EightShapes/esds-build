@@ -108,6 +108,7 @@ module.exports = function(){
           });
       });
 
+
       it('should compile docs while referencing a macro from a dependency', function() {
         return gulp('tokens:build:all')
           .then(result => gulp('markup:concatenate:macros:all'))
@@ -116,8 +117,32 @@ module.exports = function(){
             assert.fileContent(`${webroot}/latest/index.html`, '<button>I\'m a button from Product A</button>');
           });
       });
+    });
 
+    describe('markup customize markdown filter', function() {
+      before(function(){
+        fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
+        let newConfig = {
+          rootPath: 'test/sample_project/',
+          includeMarkdownWrapper: true,
+          markdownWrapperClass: 'my-special-markdown-filter-class'
+        };
 
+        fs.writeFileSync('esds-build-config.json', JSON.stringify(newConfig));
+      });
+
+      after(function(){
+        fs.moveSync(`moved-esds-build-config.js`, `esds-build-config.js`);
+        del.sync('esds-build-config.json');
+      });
+
+      it('should allow the markdown filter wrapper to be customized via config', function() {
+        return gulp('clean:webroot')
+          .then(result => gulp('markup:build:all'))
+          .then(result => {
+            assert.fileContent(`${webroot}/latest/index.html`, '<div class="my-special-markdown-filter-class">');
+          });
+      });
     });
 
     describe('markup:build: when tokens are updated', function(){

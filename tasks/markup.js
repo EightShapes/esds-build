@@ -24,16 +24,22 @@ const config = require('./config.js'),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`);
 
 function addDocLibraryNunjucksFilters(env) {
-    env.addFilter('markdown', function(string, wrap, wrapper_class) {
-        var rendered_markup = marked(stripIndent(string));
-        wrap = typeof wrap === 'undefined' ? false : wrap;
-        wrapper_class = typeof wrapper_class === 'undefined' ? 'esds-markdown-wrap' : wrapper_class;
+    env.addFilter('markdown', function(string, includeWrapper, wrapperClass) {
+        var renderedMarkup = marked(stripIndent(string)),
+            configWrapperClass = buildConfig.markdownWrapperClass,
+            configIncludeMarkdownWrapper = buildConfig.includeMarkdownWrapper;
 
-        if (wrap) {
-            rendered_markup = '<div class="' + wrapper_class + '">' + rendered_markup + "</div>";
+        // If includeWrapper is set when the filter is called, use that value, otherwise use config defaults
+        includeWrapper = typeof includeWrapper === 'undefined' ? configIncludeMarkdownWrapper : includeWrapper;
+
+        // If a wrapperClass is set when the filter is called, use that value, otherwise use config defaults
+        wrapperClass = typeof wrapperClass === 'undefined' ? configWrapperClass : wrapperClass;
+
+        if (includeWrapper) {
+            renderedMarkup = '<div class="' + wrapperClass + '">' + renderedMarkup + "</div>";
         }
 
-        return env.filters.safe(rendered_markup);
+        return env.filters.safe(renderedMarkup);
     });
 }
 
