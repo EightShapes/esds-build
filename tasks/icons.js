@@ -90,7 +90,9 @@ function generateIconBuildTask(t) {
 function generateIconWatchTask(t) {
     const taskName = [c.watchTaskName, c.iconsTaskName, t.name].join(':'),
             buildTask = [c.iconsTaskName, c.buildTaskName, t.name].join(':');
-    gulp.task(taskName, gulp.series(buildTask));
+    gulp.task(taskName, function(){
+        return gulp.watch(t.sources, gulp.series(buildTask));
+    });
 }
 
 
