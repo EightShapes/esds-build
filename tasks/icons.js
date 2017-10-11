@@ -1,6 +1,9 @@
 'use strict';
 
 const config = require('./config.js'),
+        fs = require('fs'),
+        path = require('path'),
+        mkdirp = require('mkdirp'),
         c = config.get(),
         iconTasks = c.icons.tasks,
         gulp = require('gulp'),
@@ -12,6 +15,35 @@ const config = require('./config.js'),
         watchAllTask = `${watchTaskPrefix}${c.allTaskName}`,
         buildTasks = iconTasks.map(t => `${buildTaskPrefix}${t.name}`),
         watchTasks = iconTasks.map(t => `${watchTaskPrefix}${t.name}`);
+
+function getIconNamesManifest() {
+    const iconDirectory = path.join(c.rootPath, c.iconsPath);
+    let icons = [];
+
+    if (fs.existsSync(iconDirectory)) {
+        const iconFilenames = fs.readdirSync(iconDirectory);
+        iconFilenames.sort().forEach(fn => {
+            if (fn.indexOf('.svg') !== 0) {
+                icons.push(fn.substring(0, fn.length - 4));
+            }
+        });
+    }
+
+    return icons;
+}
+
+function generateIconNameManifestFile() {
+    const iconNames = getIconNamesManifest(),
+            iconNamesJson = JSON.stringify(iconNames),
+            dataDirectory = path.join(c.rootPath, c.dataPath),
+            iconDataFilePath = path.join(dataDirectory, 'icons.json');
+
+    if (!fs.existsSync(dataDirectory)) {
+        mkdirp.sync(dataDirectory);
+    }
+
+    fs.writeFileSync(iconDataFilePath, iconNamesJson);
+}
 
 function generateIconOptimizeTask(t) {
     const taskName = [c.iconsTaskName, c.optimizeTaskName, t.name].join(':');
@@ -39,13 +71,20 @@ function generateIconConcatenateTask(t) {
     });
 }
 
-
+function generateIconManifestTask(t) {
+    const taskName = [c.iconsTaskName, 'manifest', t.name].join(':');
+    gulp.task(taskName, function(done){
+        generateIconNameManifestFile();
+        done();
+    });
+}
 
 function generateIconBuildTask(t) {
     const taskName = [c.iconsTaskName, c.buildTaskName, t.name].join(':'),
             optimizeTask = [c.iconsTaskName, c.optimizeTaskName, t.name].join(':'),
-            concatTask = [c.iconsTaskName, c.concatTaskName, t.name].join(':');
-    gulp.task(taskName, gulp.series(optimizeTask, concatTask));
+            concatTask = [c.iconsTaskName, c.concatTaskName, t.name].join(':'),
+            manifestTask = [c.iconsTaskName, 'manifest', t.name].join(':');
+    gulp.task(taskName, gulp.parallel(manifestTask, gulp.series(optimizeTask, concatTask)));
 }
 
 function generateIconWatchTask(t) {
@@ -54,9 +93,11 @@ function generateIconWatchTask(t) {
     gulp.task(taskName, gulp.series(buildTask));
 }
 
+
 iconTasks.forEach(t => {
     generateIconOptimizeTask(t);
     generateIconConcatenateTask(t);
+    generateIconManifestTask(t);
     generateIconBuildTask(t);
     generateIconWatchTask(t);
 });
@@ -66,3 +107,8 @@ gulp.task(buildAllTask, gulp.parallel(buildTasks));
 
 // Watch all icon files
 gulp.task(watchAllTask, gulp.parallel(watchTasks));
+
+module.exports = {
+    getIconNamesManifest: getIconNamesManifest,
+    generateIconNameManifestFile: generateIconNameManifestFile
+};

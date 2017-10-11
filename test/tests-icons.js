@@ -99,6 +99,31 @@ module.exports = function(){
        });
     });
 
+    describe('icons:generate-manifest', function(){
+      it('should generate an array containing the name of each of the SVGs in the /icons directory ordered alphabetically', function(){
+        const iconsTasks = require('../tasks/icons.js'),
+              manifest = iconsTasks.getIconNamesManifest();
+        assert.equal(manifest[0], 'heart');
+        assert.equal(manifest[1], 'user');
+      });
+
+      it('should write the array of icon names to data/icons.json', function(){
+        const iconsTasks = require('../tasks/icons.js'),
+              expectedFile = path.join(projectPath, 'data', 'icons.json');
+
+        iconsTasks.generateIconNameManifestFile();
+
+        assert.fileContent(expectedFile, '["heart","user"]');
+      });
+
+      it('should create a task to generate the manifest file', function(){
+        return gulp('--tasks')
+          .then(result => {
+            assert(result.stdout.includes('icons:manifest:esds-build'));
+          });
+      });
+    });
+
     describe('when the /icons directory does not exist', function(){
       before(function(){
         fs.moveSync(`${projectPath}/icons`, `${projectPath}/moved-icons`);
