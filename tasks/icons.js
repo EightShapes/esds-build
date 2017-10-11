@@ -23,7 +23,7 @@ function getIconNamesManifest() {
     if (fs.existsSync(iconDirectory)) {
         const iconFilenames = fs.readdirSync(iconDirectory);
         iconFilenames.sort().forEach(fn => {
-            if (fn.indexOf('.svg') !== 0) {
+            if (fn.indexOf('.svg') !== -1) {
                 icons.push(fn.substring(0, fn.length - 4));
             }
         });
