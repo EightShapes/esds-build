@@ -17,6 +17,19 @@
             text-transform: uppercase;
             text-shadow: 0 2px 1px red;
         }
+
+        /* Reset BrowserSync Notification styles since the defaults don't protect against the hostile sink */
+        #__bs_notify__ {
+            font-size: 14.4px !important;
+            font-style: normal;
+            font-weight: normal;
+            letter-spacing: 0;
+            line-height: 1;
+            text-align: left;
+            text-indent: 0;
+            text-transform: none;
+            text-shadow: none;
+        }
     </style>
 {% endblock %}
 {% block body %}
