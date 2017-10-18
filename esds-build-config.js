@@ -20,13 +20,19 @@ module.exports = {
             sources: [`${rootPath}/node_modules/random-file-to-be-copied.js`],
             destination: `${rootPath}/_site/latest/scripts/dependencies`,
             watch: true
+        },
+        {
+            name: 'renamed-dependencies',
+            sources: [`${rootPath}/node_modules/random-file-to-be-copied.js`],
+            destination: `${rootPath}/_site/latest/scripts/dependencies`,
+            rename: 'this-file-was-renamed.js'
         }
     ],
     dependencies: [
         {
             moduleName: 'product-a',
             codeNamespace: 'product_a',
-            tokens: 'copy'  // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
+            tokens: 'copy' // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
         },
         {
             moduleName: 'product-b',
