@@ -56,7 +56,7 @@ module.exports = function(){
             });
         });
 
-        describe('copying random dependencies to a dependencies directory', function(){
+        describe('copying dependencies to a dependencies directory', function(){
             beforeEach(function(){
                 return gulp('clean:webroot');
             });
@@ -65,6 +65,14 @@ module.exports = function(){
                 gulp('copy:random-dependencies')
                     .then(result => {
                         assert.file(`${webroot}/scripts/dependencies/random-file-to-be-copied.js`);
+                        done();
+                    });
+            });
+
+            it('should allow copied dependencies to be renamed based on the build config', function(done) {
+                gulp('copy:renamed-dependencies')
+                    .then(result => {
+                        assert.file(`${webroot}/scripts/dependencies/this-file-was-renamed.js`);
                         done();
                     });
             });

@@ -10,11 +10,14 @@ const config = require('./config.js'),
 
 function generateCopyTask(t) {
     gulp.task(`${c.copy.copyTaskPrefix}${t.name}`, function() {
-    return gulp.src(t.sources)
-        .pipe(rename(function (path) {
-            path.basename = t.rename ? t.rename : path.basename;
-          }))
-        .pipe(gulp.dest(t.destination));
+        if (t.rename) {
+            return gulp.src(t.sources)
+                .pipe(rename(t.rename))
+                .pipe(gulp.dest(t.destination));
+        } else {
+            return gulp.src(t.sources)
+                .pipe(gulp.dest(t.destination));
+        }
     });
 }
 

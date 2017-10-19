@@ -181,7 +181,7 @@ function getDependencyCopyTasks(c) {
                     name: `${t.moduleName}:${c.tokensTaskName}`,
                     sources: [path.join(moduleTokensPath, 'tokens.json')],
                     destination: path.join(c.rootPath, c.tokensPath),
-                    rename: `${t.codeNamespace}_tokens`
+                    rename: `${t.codeNamespace}_tokens.json`
                 };
 
             tasks.push(task);
