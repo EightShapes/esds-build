@@ -76,6 +76,14 @@ module.exports = function(){
                         done();
                     });
             });
+
+            it('should allow copied dependencies to be ZIPed based on the build config', function() {
+                return gulp('copy:zip-these-files')
+                    .then(result => {
+                        assert.file(`${webroot}/icons/my-icons-zipped.zip`);
+                        assert(fs.lstatSync(`${webroot}/icons/my-icons-zipped.zip`).isFile());
+                    });
+            });
         });
 
         describe('copying default dist assets to a dist directory', function(){
