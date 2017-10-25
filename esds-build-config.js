@@ -26,6 +26,12 @@ module.exports = {
             sources: [`${rootPath}/node_modules/random-file-to-be-copied.js`],
             destination: `${rootPath}/_site/latest/scripts/dependencies`,
             rename: 'this-file-was-renamed.js'
+        },
+        {
+            name: 'zip-these-files',
+            sources: [`${rootPath}/node_modules/product-a/icons/*.svg`],
+            destination: `${rootPath}/_site/latest/icons`,
+            zip_to: 'my-icons-zipped.zip'
         }
     ],
     dependencies: [
