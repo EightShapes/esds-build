@@ -38,7 +38,8 @@ module.exports = {
         {
             moduleName: 'product-a',
             codeNamespace: 'product_a',
-            tokens: 'copy' // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
+            tokens: 'copy', // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
+            copyDocs: true
         },
         {
             moduleName: 'product-b',

@@ -45,6 +45,7 @@
     "marked": "^0.3.6",
     "mkdirp": "^0.5.1",
     "pluralize": "^7.0.0",
+    "shelljs": "^0.7.8",
     "strip-indent": "^2.0.0",
     "yamljs": "^0.3.0",
     "yeoman-assert": "^3.0.0"

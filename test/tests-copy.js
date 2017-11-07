@@ -2,15 +2,21 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
 
 'use strict';
 const assert = require('yeoman-assert'),
         gulp = require('./tests-gulp.js'),
         fs = require('fs'),
+        del = require('del'),
+        path = require('path'),
         mkdirp = require('mkdirp'),
         projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
         webrootImages = `${webroot}/images`;
+
+let Copy,
+    Config;
 
 module.exports = function(){
     describe('copy', function(){
@@ -113,6 +119,27 @@ module.exports = function(){
                         assert.noFile(`${projectPath}/dist/esds.js`); // JS not copied
                         assert.noFile(`${projectPath}/dist/doc.css`); // CSS not copied
                         assert.file(`${projectPath}/dist/esds.svg`); // SVG is copied because it exists
+                    });
+            });
+        });
+
+        describe('copying doc pages from a child module into a parent module', function() {
+            before(function(){
+                del.sync(path.join(projectPath, 'node_modules', 'product-a', 'node_modules'));
+                Copy = require('../tasks/copy.js');
+                Config = require('../tasks/config.js');
+            });
+
+            it('should be able to cd to a dependency, then npm install, then run gulp build:all', function(){
+                Copy.expandChildModuleDependencies('product-a');
+                assert.file(path.join(projectPath, 'node_modules', 'product-a', 'node_modules', 'esds-build', 'package.json'));
+                assert.fileContent(path.join(projectPath, 'node_modules', 'product-a', '_site', 'latest', 'sink-pages', 'components', 'buttons.html'), 'This is the Buttons Sink');
+            });
+
+            it('should copy compiled child module docs to the parent module docs folder', function(){
+                return gulp('copy:product-a:docs')
+                    .then(result => {
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), 'This is the Buttons Sink');
                     });
             });
         });
