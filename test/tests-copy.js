@@ -121,6 +121,8 @@ module.exports = function(){
         });
 
         describe('copying doc pages from a child module into a parent module', function() {
+            this.timeout(120000);
+
             before(function(){
                 del.sync(path.join(projectPath, 'node_modules', 'product-a', 'node_modules'));
             });
