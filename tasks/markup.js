@@ -119,8 +119,7 @@ function getDataForTemplates() {
     }
     // Get reference tokens.json files from child modules
     if (buildConfig.dependencies) {
-        const referenceTokenDependencies = buildConfig.dependencies
-                                            .filter(d => d.tokens && d.tokens === 'reference');
+        const referenceTokenDependencies = buildConfig.dependencies;
         referenceTokenDependencies.forEach(d => {
             const referenceTokenPath = path.join(buildConfig.rootPath, buildConfig.dependenciesPath, d.moduleName, buildConfig.tokensPath, 'tokens.json'); // Assumes the child module's tokens exist at /tokens/tokens.json
             tokenDataFiles.push(referenceTokenPath);

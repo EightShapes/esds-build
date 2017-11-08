@@ -1,0 +1,69 @@
+{% extends 'templates/base.njk' %}
+{% block head_content_prepend %}
+    <style>
+        html,
+        body {
+            /* Reset margin and padding */
+            margin: 0;
+            padding: 0;
+
+            /* Hostile inherited styles*/
+            color: darkorange;
+            font-family: Georgia;
+            font-size: 43px;
+            font-style: italic;
+            font-weight: bold;
+            letter-spacing: 0.5em;
+            line-height: 3.2;
+            text-align: center;
+            text-indent: 103px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 1px red;
+            vertical-align: middle;
+        }
+
+        h1, 
+        h2, 
+        h3, 
+        h4, 
+        h5, 
+        h6, 
+        p, 
+        input,
+        button,
+        select,
+        optgroup,
+        textarea {
+            margin-bottom: 21px;
+            margin-top: 11px;
+        }
+
+        ul, 
+        ol {
+            list-style: lower-greek;
+            margin-bottom: 64px;
+            padding: 18px;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 12px 23px;
+        }
+
+        /* Reset BrowserSync Notification styles since the defaults don't protect against the hostile sink */
+        #__bs_notify__ {
+            font-size: 14.4px !important;
+            font-style: normal;
+            font-weight: normal;
+            letter-spacing: 0;
+            line-height: 1;
+            text-align: left;
+            text-indent: 0;
+            text-transform: none;
+            text-shadow: none;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    ESDS sink template default content.
+{% endblock %}

@@ -60,27 +60,20 @@ function getCompiledChildModuleDocsPath(moduleName) {
     return childCompiledDocs;
 }
 
-function expandChildModuleDependencies(moduleName) {
-    shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, moduleName)} && npm install && gulp build:all`);
-}
-
 function generateChildModuleDocsCopyTask(d) {
-    expandChildModuleDependencies(d.moduleName);
     const childModuleDocsPath = getCompiledChildModuleDocsPath(d.moduleName);
 
     gulp.task(`${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`, function(){
+        shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, d.moduleName)} && npm install && gulp build:all`);
         return gulp.src(childModuleDocsPath)
             .pipe(gulp.dest(path.join(c.rootPath, c.webroot, c.latestVersionPath)));
     });
 }
 
-c.dependencies.forEach(d => {
-    if (d.copyDocs) {
-        generateChildModuleDocsCopyTask(d);
-    }
-});
-
-module.exports = {
-    expandChildModuleDependencies: expandChildModuleDependencies,
-    getCompiledChildModuleDocsPath: getCompiledChildModuleDocsPath
-};
+if (c.dependencies) {
+    c.dependencies.forEach(d => {
+        if (d.copyDocs) {
+            generateChildModuleDocsCopyTask(d);
+        }
+    });
+}

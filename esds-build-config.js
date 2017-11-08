@@ -37,14 +37,10 @@ module.exports = {
     dependencies: [
         {
             moduleName: 'product-a',
-            codeNamespace: 'product_a',
-            tokens: 'copy', // Could be 'copy', 'reference', 'merge', or 'overwrite': 'merge' and 'overwrite' behaviors not written yet
             copyDocs: true
         },
         {
-            moduleName: 'product-b',
-            codeNamespace: 'product_b',
-            tokens: 'reference' // Reference makes the tokens from this module available to the nunjucks environment without actually copying the tokens.json file
+            moduleName: 'product-b'
         }
     ]
 };
