@@ -2,11 +2,14 @@
 /* global xit */
 /* global describe */
 /* global beforeEach */
+/* global before */
 
 'use strict';
 const assert = require('yeoman-assert'),
         gulp = require('./tests-gulp.js'),
         fs = require('fs'),
+        del = require('del'),
+        path = require('path'),
         mkdirp = require('mkdirp'),
         projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
@@ -113,6 +116,30 @@ module.exports = function(){
                         assert.noFile(`${projectPath}/dist/esds.js`); // JS not copied
                         assert.noFile(`${projectPath}/dist/doc.css`); // CSS not copied
                         assert.file(`${projectPath}/dist/esds.svg`); // SVG is copied because it exists
+                    });
+            });
+        });
+
+        describe('copying doc pages from a child module into a parent module', function() {
+            this.timeout(120000);
+
+            before(function(){
+                del.sync(path.join(projectPath, 'node_modules', 'product-a', 'node_modules'));
+            });
+
+            it('should copy compiled child module docs to the parent module docs folder', function(){
+                return gulp('copy:product-a:docs')
+                    .then(result => {
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), 'This is the Buttons Sink');
+                    });
+            });
+
+            it('should allow regex replacements of copied child module doc content', function(){
+                return gulp('copy:product-a:docs')
+                    .then(result => {
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/styles/dependencies/product-a.css');
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/styles/dependencies/product_as_scripts.js');
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/icons/dependencies/product_a.svg#stopwatch');
                     });
             });
         });

@@ -4,7 +4,10 @@ const config = require('./config.js'),
         c = config.get(),
         gulp = require('gulp'),
         rename = require('gulp-rename'),
+        replace = require('gulp-replace'),
+        path = require('path'),
         zip = require('gulp-zip'),
+        shell = require('shelljs'),
         copyTasks = c.copy.tasks,
         copyTaskNames = copyTasks.filter(t => t.name !== 'dist').map(t => `${c.copy.copyTaskPrefix}${t.name}`), // don't include the copy:dist task with the copy:all tasks
         watchTaskNames = copyTasks.filter(t => t.watch).map(t => `${c.watchTaskName}:${c.copy.copyTaskPrefix}${t.name}`); // don't include the copy:dist task with the copy:all tasks
@@ -46,3 +49,38 @@ gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(copyTaskName
 
 // Run all watch tasks
 gulp.task(`${c.watchTaskName}:${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(watchTaskNames));
+
+
+
+// CHILD MODULE AUTO-COPYING
+// Copying doc pages from a child module
+function getCompiledChildModuleDocsPath(moduleName) {
+    const childModuleRootPath = path.join(process.cwd(), c.rootPath, c.dependenciesPath, moduleName),
+            cmc = config.get(childModuleRootPath),
+            childCompiledDocs = path.join(childModuleRootPath, cmc.webroot, cmc.latestVersionPath, '**/*.html');
+    return childCompiledDocs;
+}
+
+function generateChildModuleDocsCopyTask(d) {
+    const childModuleDocsPath = getCompiledChildModuleDocsPath(d.moduleName);
+
+    gulp.task(`${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`, function(){
+        shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, d.moduleName)} && npm install && gulp build:all`);
+        let stream = gulp.src(childModuleDocsPath);
+        if (d.copyDocsReplacements) {
+            d.copyDocsReplacements.forEach(function(replacementPair) {
+                stream.pipe(replace(replacementPair[0], replacementPair[1]));
+            });
+        }
+        stream.pipe(gulp.dest(path.join(c.rootPath, c.webroot, c.latestVersionPath)));
+        return stream;
+    });
+}
+
+if (c.dependencies) {
+    c.dependencies.forEach(d => {
+        if (d.copyDocs) {
+            generateChildModuleDocsCopyTask(d);
+        }
+    });
+}
