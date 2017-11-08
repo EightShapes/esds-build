@@ -37,7 +37,12 @@ module.exports = {
     dependencies: [
         {
             moduleName: 'product-a',
-            copyDocs: true
+            copyDocs: true,
+            copyDocsReplacements: [
+                [/\/styles\/product_a.css/g, '/styles/dependencies/product-a.css'],
+                [/\/scripts\/product_a.js/g, '/styles/dependencies/product_as_scripts.js'],
+                [/\/icons\/product_a.svg/g, '/icons/dependencies/product_a.svg#stopwatch']
+            ]
         },
         {
             moduleName: 'product-b'

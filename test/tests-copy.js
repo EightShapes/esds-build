@@ -131,6 +131,15 @@ module.exports = function(){
                         assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), 'This is the Buttons Sink');
                     });
             });
+
+            it('should allow regex replacements of copied child module doc content', function(){
+                return gulp('copy:product-a:docs')
+                    .then(result => {
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/styles/dependencies/product-a.css');
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/styles/dependencies/product_as_scripts.js');
+                        assert.fileContent(path.join(webroot, 'sink-pages', 'components', 'buttons.html'), '/icons/dependencies/product_a.svg#stopwatch');
+                    });
+            });
         });
     });
 };

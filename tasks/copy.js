@@ -4,6 +4,7 @@ const config = require('./config.js'),
         c = config.get(),
         gulp = require('gulp'),
         rename = require('gulp-rename'),
+        replace = require('gulp-replace'),
         path = require('path'),
         zip = require('gulp-zip'),
         shell = require('shelljs'),
@@ -65,8 +66,14 @@ function generateChildModuleDocsCopyTask(d) {
 
     gulp.task(`${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`, function(){
         shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, d.moduleName)} && npm install && gulp build:all`);
-        return gulp.src(childModuleDocsPath)
-            .pipe(gulp.dest(path.join(c.rootPath, c.webroot, c.latestVersionPath)));
+        let stream = gulp.src(childModuleDocsPath);
+        if (d.copyDocsReplacements) {
+            d.copyDocsReplacements.forEach(function(replacementPair) {
+                stream.pipe(replace(replacementPair[0], replacementPair[1]));
+            });
+        }
+        stream.pipe(gulp.dest(path.join(c.rootPath, c.webroot, c.latestVersionPath)));
+        return stream;
     });
 }
 
