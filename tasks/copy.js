@@ -44,14 +44,6 @@ copyTasks.forEach(t => {
     }
 });
 
-// Run all copy tasks
-gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(copyTaskNames));
-
-// Run all watch tasks
-gulp.task(`${c.watchTaskName}:${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(watchTaskNames));
-
-
-
 // CHILD MODULE AUTO-COPYING
 // Copying doc pages from a child module
 function getCompiledChildModuleDocsPath(moduleName) {
@@ -62,9 +54,12 @@ function getCompiledChildModuleDocsPath(moduleName) {
 }
 
 function generateChildModuleDocsCopyTask(d) {
-    const childModuleDocsPath = getCompiledChildModuleDocsPath(d.moduleName);
+    const childModuleDocsPath = getCompiledChildModuleDocsPath(d.moduleName),
+        taskName = `${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`;
 
-    gulp.task(`${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`, function(){
+    copyTaskNames.push(taskName);
+
+    gulp.task(taskName, function(){
         shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, d.moduleName)} && npm install && gulp build:all`);
         let stream = gulp.src(childModuleDocsPath);
         if (d.copyDocsReplacements) {
@@ -84,3 +79,10 @@ if (c.dependencies) {
         }
     });
 }
+
+// Run all copy tasks
+gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(copyTaskNames));
+
+// Run all watch tasks
+gulp.task(`${c.watchTaskName}:${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(watchTaskNames));
+
