@@ -47,7 +47,11 @@ copyTasks.forEach(t => {
 // CHILD MODULE AUTO-COPYING
 // Copying doc pages from a child module
 function getCompiledChildModuleDocsPath(moduleName) {
-    const childModuleRootPath = path.join(process.cwd(), c.rootPath, c.dependenciesPath, moduleName),
+    let rootPath = c.rootPath;
+    if (process.cwd() !== c.rootPath) {
+        rootPath = path.join(process.cwd(), c.rootPath);
+    }
+    const childModuleRootPath = path.join(rootPath, c.dependenciesPath, moduleName),
             cmc = config.get(childModuleRootPath),
             childCompiledDocs = path.join(childModuleRootPath, cmc.webroot, cmc.latestVersionPath, '**/*.html');
     return childCompiledDocs;
@@ -56,9 +60,7 @@ function getCompiledChildModuleDocsPath(moduleName) {
 function generateChildModuleDocsCopyTask(d) {
     const childModuleDocsPath = getCompiledChildModuleDocsPath(d.moduleName),
         taskName = `${c.copy.copyTaskPrefix}${d.moduleName}:${c.docsTaskName}`;
-
     copyTaskNames.push(taskName);
-
     gulp.task(taskName, function(){
         shell.exec(`cd ${path.join(c.rootPath, c.dependenciesPath, d.moduleName)} && npm install && gulp build:all`);
         let stream = gulp.src(childModuleDocsPath);
