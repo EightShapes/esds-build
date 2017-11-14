@@ -17,7 +17,7 @@ if (!fs.existsSync(gulpfilePath)) {
 if (fs.existsSync(appPackageJsonPath)) {
     let appPackageJson = require(appPackageJsonPath);
     if (appPackageJson.scripts && typeof appPackageJson.scripts.prepack === 'undefined') {
-        appPackageJson.scripts.prepack = 'gulp build:all';
+        appPackageJson.scripts.prepack = 'npm install && gulp build:all';
         fs.writeFileSync(appPackageJsonPath, jsBeautify(JSON.stringify(appPackageJson), { indent_size: 2 }));
     }
 }
