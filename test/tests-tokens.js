@@ -38,10 +38,10 @@ module.exports = function(){
         return gulp('clean:tokens');
       });
 
-      it('should convert tokens.yaml to scss and json and include codeNamespace from config', function() {
+      it('should convert tokens.yaml to scss (with !default) and json and include codeNamespace from config', function() {
         return gulp('tokens:build:all')
           .then(result => {
-            assert.fileContent(tokensScss, `$${c.codeNamespace}-color-interactive-primary: #0ff`);
+            assert.fileContent(tokensScss, `$${c.codeNamespace}-color-interactive-primary: #0ff !default;`);
             assert.fileContent(tokensScss, `$esds-namespace: "${c.codeNamespace}"`);
             assert.fileContent(tokensJson, '"esds_tokens": {');
             assert.fileContent(tokensJson, `"namespace": "${c.codeNamespace}"`);
