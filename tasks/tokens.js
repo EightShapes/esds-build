@@ -130,7 +130,7 @@ function writeTokensScssFile(tokens) {
         }
         prevVarNameParent = varNameParent;
 
-        scss += `$${tokenConfig.namespace}-${varName}: ${value};\n`;
+        scss += `$${tokenConfig.namespace}-${varName}: ${value} !default;\n`;
     }
     scss += scssMap + '\n';
     scss += `@function ${tokenConfig.namespace}-token($keys...) {\n` +
