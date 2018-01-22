@@ -4,6 +4,7 @@
     "docsPath": "blog",
     "componentsPath": "modules",
     "tokensPath": "constants",
+    "tokensSourceFile": "constants.yaml",
     "stylesPath": "scss",
     "scriptsPath": "js",
     "imagesPath": "imgs",

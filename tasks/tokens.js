@@ -59,10 +59,11 @@ function tokensSourceFileExists(sourceFile) {
 
 function writeTokensJsonFile(tokens) {
     const jsonOutputFilename = path.parse(c.tokensSourceFile).name + '.json',
-            jsonOutputFilepath = path.join(c.rootPath, c.tokensPath, jsonOutputFilename);
+            jsonOutputFilepath = path.join(c.rootPath, c.tokensPath, jsonOutputFilename),
+            tokensSuffix = path.parse(c.tokensSourceFile).name;
 
     let jsonTokens = {};
-        jsonTokens[`${c.codeNamespace.replace(/-/g, '_')}_tokens`] = tokens;
+        jsonTokens[`${c.codeNamespace.replace(/-/g, '_')}_${tokensSuffix}`] = tokens;
 
     // JSON tokens
     if (!fs.existsSync(tokenConfig.outputPath)) {
@@ -73,7 +74,8 @@ function writeTokensJsonFile(tokens) {
 }
 
 function getTokensScssMap(tokens) {
-    let sassMap = `$${tokenConfig.namespace}-tokens: (\n`,
+    let tokensSuffix = path.parse(c.tokensSourceFile).name,
+        sassMap = `$${tokenConfig.namespace}-${tokensSuffix}: (\n`,
         indentationLevel = 1,
         variablePrefix = `$${tokenConfig.namespace}-`;
 
