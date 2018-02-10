@@ -11,6 +11,7 @@ $esds-what-are-the-tokens: limegreen !default;
 $esds-another_value: hotpink !default;
 $esds-font-sans-serif: 'Lato', sans-serif !default;
 
+$esds-something_new: testing-1-2-3 !default;
 $esds-namespace: "esds" !default;
 $esds-tokens: (
     'color': (
@@ -28,6 +29,7 @@ $esds-tokens: (
     'font': (
         'sans-serif': $esds-font-sans-serif
     ),
+    'something_new': $esds-something_new,
     'namespace': $esds-namespace
 );
 
