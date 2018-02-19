@@ -17,22 +17,28 @@ const config = require('./config.js'),
 
 // Start local server and auto-reload browser when relevant files change
 gulp.task('serve:local-docs', function() {
-    browserSync.init({
-        ghostMode: {
-            clicks: false, // Syncing clicks causes form elements to be focused after clicking which doesn't happen in normal browser behavior
-            forms: true,
-            scroll: true
-        },
-        server: {
-            baseDir: webroot
-        },
-        middleware: function(req, res, next) {
-          if (!req.url.match(/\/v\//g)) {
-            req.url = `/${c.latestVersionPath}/` + req.url;
-          }
-          return next();
+  const browserSyncConfig = {
+      ghostMode: {
+          clicks: false, // Syncing clicks causes form elements to be focused after clicking which doesn't happen in normal browser behavior
+          forms: true,
+          scroll: true
+      },
+      server: {
+          baseDir: webroot
+      },
+      middleware: function(req, res, next) {
+        if (!req.url.match(/\/v\//g)) {
+          req.url = `/${c.latestVersionPath}/` + req.url;
         }
-    });
+        return next();
+      }
+  };
+
+  if (c.browserSyncConfig) {
+    Object.assign(browserSyncConfig, c.browserSyncConfig); // allow settings in config to override browser sync config
+  }
+
+  browserSync.init(browserSyncConfig);
 });
 
 gulp.task('browser-sync-reload', function reload(done) {

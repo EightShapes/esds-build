@@ -9,6 +9,9 @@ module.exports = {
           return Array.isArray(obj);
         });
     },
+    browserSyncConfig: {
+        https: true
+    },
     copyTasks: [
         {
             name: 'fonts',
