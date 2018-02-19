@@ -23,6 +23,8 @@ const config = require('./config.js'),
         watchDocsTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${watchDocsTaskPrefix}${task.name}`),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`);
 
+console.log("MARKUP TASKS", config.getProjectTaskList());
+
 function addDocLibraryNunjucksFilters(env) {
     env.addFilter('markdown', function(string, includeWrapper, wrapperClass) {
         var renderedMarkup = marked(stripIndent(string)),
@@ -224,4 +226,3 @@ gulp.task(`${watchMacrosTaskPrefix}all`, gulp.parallel(watchMacrosTasks));
 gulp.task(`${watchDocsTaskPrefix}all`, gulp.parallel(watchDocsTasks));
 
 gulp.task(`${watchTaskPrefix}all`, gulp.parallel(`${watchMacrosTaskPrefix}all`, `${watchDocsTaskPrefix}all`));
-

@@ -1,7 +1,7 @@
 'use strict';
 
 const rootPath = process.cwd(),
-        taskFiles = ['**/*.js', '!esds_tasks.js'],
+        taskFiles = ['_tmp_project_gulp_tasks.js', '**/*.js', '!esds_tasks.js'],
         gulp = require(`${rootPath}/node_modules/gulp`), // Need to make sure the "gulp" loaded is the gulp installed in ./node_modules/gulp, not the one installed in this package
         HubRegistry = require('gulp-hub'),
         config = require('./config.js'),
@@ -22,7 +22,7 @@ const rootPath = process.cwd(),
         concatenateMacros = [c.markupTaskName, c.concatTaskName, c.macrosTaskName, c.allTaskName].join(':'),
         copyDist = [c.copyTaskName, c.distTaskName].join(':'),
         cleanWebroot = [c.cleanTaskName, c.webrootTaskName].join(':'),
-        copiedGulpTasksFilename = 'tmp_project_gulp_tasks.js',
+        copiedGulpTasksFilename = '~tmp_project_gulp_tasks.js', // The ~ in the file puts the copied file after all the ESDS Task files, for some reason this allows them to be accessed by gulp registries in all the other files, seems brittle, but works for now 
         copiedGulpTasksFilepath = path.join(__dirname, copiedGulpTasksFilename);
 
 // copy gulpfile.js tasks from project into the esds-build registry into esds build registry
