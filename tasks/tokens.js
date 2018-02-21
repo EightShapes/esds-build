@@ -1,11 +1,11 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         c = config.get(),
         flatten = require('flat'),
         fs = require('fs'),
         path = require('path'),
-        gulp = require('gulp'),
         jsBeautify = require('js-beautify'),
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),

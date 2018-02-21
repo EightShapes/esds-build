@@ -1,8 +1,8 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         buildConfig = config.get(),
-        gulp = require('gulp'),
         concat = require('gulp-concat-util'),
         eslint = require('gulp-eslint'),
         scriptConfig = buildConfig.scripts,

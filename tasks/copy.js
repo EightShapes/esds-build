@@ -2,7 +2,7 @@
 
 const config = require('./config.js'),
         c = config.get(),
-        gulp = require('gulp'),
+        gulp = config.getGulpInstance(),
         rename = require('gulp-rename'),
         replace = require('gulp-replace'),
         path = require('path'),

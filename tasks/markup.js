@@ -1,10 +1,10 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         concat = require('gulp-concat-util'),
         fs = require('fs'),
         path = require('path'),
-        gulp = require('gulp'),
         gutil = require('gulp-util'),
         marked = require('marked'),
         stripIndent = require('strip-indent'),
@@ -22,8 +22,6 @@ const config = require('./config.js'),
         buildTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${buildTaskPrefix}${task.name}`),
         watchDocsTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${watchDocsTaskPrefix}${task.name}`),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`);
-
-console.log("MARKUP TASKS", config.getProjectTaskList());
 
 function addDocLibraryNunjucksFilters(env) {
     env.addFilter('markdown', function(string, includeWrapper, wrapperClass) {
@@ -214,7 +212,14 @@ markupTasks.forEach(function(c){
 });
 
 // Concatenate all macro files
-gulp.task(`${concatMacrosTaskPrefix}all`, gulp.parallel(concatTasks));
+let concatenateMacrosTasks = [gulp.parallel(concatTasks)];
+if (config.projectTaskIsDefined('esds-hook:pre:markup:concatenate:macros:all')) {
+    concatenateMacrosTasks.unshift('esds-hook:pre:markup:concatenate:macros:all');
+} else {
+    console.log('NO LIFECYCLE HOOK FOUND FOR: esds-hook:pre:markup:concatenate:macros:all');
+}
+
+gulp.task(`${concatMacrosTaskPrefix}all`, gulp.series(concatenateMacrosTasks));
 
 // Build all doc files
 gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));

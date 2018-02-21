@@ -3,7 +3,8 @@
 const productBuildConfigFileName = 'esds-build-config',
         fs = require('fs'),
         path = require('path'),
-        globals = {};
+        globals = {},
+        projectGulpTasksFilename = '~tmp_project_gulp_tasks.js';
 
 function retrieveProductBuildConfig(rootPath) {
     rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
@@ -252,16 +253,22 @@ function getTaskConfig(rootPath) {
 
 function getProjectTaskList() {
     if (typeof globals.projectTaskList === 'undefined') {
-        const thisGulp = require('gulp'),
-                HubRegistry = require('gulp-hub'),
-                thisThing = new HubRegistry(['~tmp_project_gulp_tasks.js']);
-        /* load tasks into the registry */
-        /* tell gulp to use the tasks just loaded */
-        thisGulp.registry(thisThing); // Maybe don't actually load this somehow? Or unload it?
-        globals.projectTaskList = thisGulp.tree().nodes.sort();
-        
+        globals.projectTaskList = getGulpInstance().tree().nodes;
     }
+
     return globals.projectTaskList;
+}
+
+function projectTaskIsDefined(taskName) {
+    const tasks = getProjectTaskList();
+    return tasks.includes(taskName);
+}
+
+function getGulpInstance() {
+    if (typeof globals.gulp === 'undefined') {
+        globals.gulp = require(`./${projectGulpTasksFilename}`);
+    }
+    return globals.gulp;
 }
 
 module.exports = {
@@ -270,5 +277,11 @@ module.exports = {
     retrieveProductBuildConfig: retrieveProductBuildConfig,
     retrieveDefaultBuildConfig: retrieveDefaultBuildConfig,
     retrieveBuildConfig: retrieveBuildConfig,
-    getProjectTaskList: getProjectTaskList
+    getGulpInstance: getGulpInstance,
+    projectGulpTasksFilename: projectGulpTasksFilename,
+    projectTaskIsDefined: projectTaskIsDefined
+    // getProjectTaskList: getProjectTaskList,
+    // taskIsDefined: taskIsDefined,
+    // getTaskRegistry: getTaskRegistry,
+    // getGulpWithRegistry: getGulpWithRegistry,
 };

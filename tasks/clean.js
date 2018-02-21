@@ -2,11 +2,9 @@
 
 const config = require('./config.js'),
         c = config.get(),
-        gulp = require('gulp'),
+        gulp = config.getGulpInstance(),
         path = require('path'),
         del = require('del');
-
-console.log("CLEAN TASKS", config.getProjectTaskList());
 
 gulp.task(`${c.cleanTaskName}:${c.distTaskName}`, function(){
     return del(path.join(c.rootPath, c.distPath, '**', '*'));

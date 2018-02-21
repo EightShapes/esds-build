@@ -2,10 +2,10 @@
 
 const productBuildConfigFileName = 'esds-build-config',
         config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         c = config.get(),
         fs = require('fs-extra'),
         path = require('path'),
-        gulp = require('gulp'),
         inquirer = require('inquirer'),
         mkdirp = require('mkdirp'),
         pluralize = require('pluralize');

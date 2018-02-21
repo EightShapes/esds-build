@@ -1,9 +1,9 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         buildConfig = config.get(),
         autoprefixer = require('autoprefixer'),
-        gulp = require('gulp'),
         gulpSassError = require('gulp-sass-error').gulpSassError,
         failBuild = process.env.NODE_ENV === 'production',
         postcss = require('gulp-postcss'),

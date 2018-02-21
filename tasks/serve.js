@@ -1,9 +1,9 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         c = config.get(),
         browserSync = require('browser-sync'),
-        gulp = require('gulp'),
         path = require('path'),
         scriptConfig = c.scripts,
         scriptWatchPaths = scriptConfig.tasks.map(t => `${t.outputPath}/**/*.js`),
