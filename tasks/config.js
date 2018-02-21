@@ -266,7 +266,12 @@ function projectTaskIsDefined(taskName) {
 
 function getGulpInstance() {
     if (typeof globals.gulp === 'undefined') {
-        globals.gulp = require(`./${projectGulpTasksFilename}`);
+        const projectTasksFilepath = `./${projectGulpTasksFilename}`;
+        if (fs.existsSync(projectTasksFilepath)) {
+            globals.gulp = require(projectTasksFilepath);
+        } else {
+            globals.gulp = require(`${process.cwd()}/node_modules/gulp`);
+        }
     }
     return globals.gulp;
 }

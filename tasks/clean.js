@@ -33,3 +33,8 @@ gulp.task(`${c.cleanTaskName}:${c.webrootTaskName}`, function(done){
     }
     return del(webrootPaths);
 });
+
+gulp.task('clean:foo', function(done){
+    console.log("CLEANIN SOME FOO!");
+    done();
+});

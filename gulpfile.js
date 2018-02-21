@@ -14,3 +14,8 @@ gulp.task('esds-hook:pre:markup:concatenate:macros:all', function(done){
   console.log("BANG! ZOOM! RIGHT IN THE KISSER");
   done();
 });
+
+gulp.task('foo', function(done){
+  console.log("Bar...what did you expect?");
+  done();  
+});

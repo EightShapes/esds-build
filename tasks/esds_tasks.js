@@ -52,18 +52,18 @@ const buildAllTasks = [ buildTokens,
                         copyDist];
 
 // Add prebuild all hook
-// if (definedTasks.includes('esds-hook:prebuild:all')) {
-//     buildAllTasks.unshift('esds-hook:prebuild:all');
-// } else {
-//     console.log("No esds-hook:prebuild:all task found"); // eslint-disable-line no-console
-// }
+if (config.projectTaskIsDefined('esds-hook:prebuild:all')) {
+    buildAllTasks.unshift('esds-hook:prebuild:all');
+} else {
+    console.log("No esds-hook:prebuild:all task found"); // eslint-disable-line no-console
+}
 
 // // Add postbuild all hook
-// if (definedTasks.includes('esds-hook:postbuild:all')) {
-//     buildAllTasks.push('esds-hook:postbuild:all');
-// } else {
-//     console.log("No esds-hook:postbuild:all task found"); // eslint-disable-line no-console
-// }
+if (config.projectTaskIsDefined('esds-hook:postbuild:all')) {
+    buildAllTasks.push('esds-hook:postbuild:all');
+} else {
+    console.log("No esds-hook:postbuild:all task found"); // eslint-disable-line no-console
+}
 
 
 gulp.task(buildAll, gulp.series(buildAllTasks)); // copy to dist last
@@ -75,8 +75,8 @@ gulp.task('default', gulp.series(cleanWebroot, buildAll, gulp.parallel(watchAll,
 gulp.task(watchAll, gulp.parallel(watchTaskNames));
 
 // Project tasks are already loaded into registry at this point, delete the copied project gulpfile.js contents
-// if (fs.existsSync(copiedGulpTasksFilepath)) {
-//     del(copiedGulpTasksFilepath);
-// }
+if (fs.existsSync(copiedGulpTasksFilepath)) {
+    del(copiedGulpTasksFilepath);
+}
 
 module.exports = gulp;
