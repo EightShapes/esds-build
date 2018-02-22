@@ -251,6 +251,30 @@ function getTaskConfig(rootPath) {
     return buildConfig; // If no config file has been defined, use the default config
 }
 
+function getBaseTaskName(taskName) {
+    return [taskName, 'base'].join(':');
+}
+
+function getBaseTaskWithPreAndPostHooks(taskName) {
+    const taskNames = [getBaseTaskName(taskName)],
+            preTaskName = `esds-hook:pre:${taskName}`,
+            postTaskName = `esds-hook:post:${taskName}`;
+
+    if (projectTaskIsDefined(preTaskName)) {
+        taskNames.unshift(preTaskName);
+    } else {
+        console.log(`${preTaskName} is not defined, skipping`);
+    }
+
+    if (projectTaskIsDefined(postTaskName)) {
+        taskNames.push(postTaskName);
+    } else {
+        console.log(`${postTaskName} is not defined, skipping`);
+    }
+
+    return taskNames;
+}
+
 function getProjectTaskList() {
     if (typeof globals.projectTaskList === 'undefined') {
         globals.projectTaskList = getGulpInstance().tree().nodes;
@@ -265,15 +289,20 @@ function projectTaskIsDefined(taskName) {
 }
 
 function getGulpInstance() {
+    // Try to use the gulp instance exported from the parent project's gulpfile so lifecycle hook tasks and overrides will be processed first
+    // If the parent project's gulpfile cannot be found, this will default to the version of gulp bundled with esds-build
+    const projectTasksFilepath = `${process.cwd()}/tasks/${projectGulpTasksFilename}`;
+    let response = require(`${process.cwd()}/node_modules/gulp`);
+
     if (typeof globals.gulp === 'undefined') {
-        const projectTasksFilepath = `./${projectGulpTasksFilename}`;
         if (fs.existsSync(projectTasksFilepath)) {
             globals.gulp = require(projectTasksFilepath);
-        } else {
-            globals.gulp = require(`${process.cwd()}/node_modules/gulp`);
+            response = globals.gulp;
         }
+    } else {
+        response = globals.gulp;
     }
-    return globals.gulp;
+    return response;
 }
 
 module.exports = {
@@ -284,9 +313,7 @@ module.exports = {
     retrieveBuildConfig: retrieveBuildConfig,
     getGulpInstance: getGulpInstance,
     projectGulpTasksFilename: projectGulpTasksFilename,
-    projectTaskIsDefined: projectTaskIsDefined
-    // getProjectTaskList: getProjectTaskList,
-    // taskIsDefined: taskIsDefined,
-    // getTaskRegistry: getTaskRegistry,
-    // getGulpWithRegistry: getGulpWithRegistry,
+    projectTaskIsDefined: projectTaskIsDefined,
+    getBaseTaskName: getBaseTaskName,
+    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks
 };

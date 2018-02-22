@@ -10,10 +10,23 @@ const config = require('./config.js'),
         shell = require('shelljs'),
         copyTasks = c.copy.tasks,
         copyTaskNames = copyTasks.filter(t => t.name !== 'dist').map(t => `${c.copy.copyTaskPrefix}${t.name}`), // don't include the copy:dist task with the copy:all tasks
-        watchTaskNames = copyTasks.filter(t => t.watch).map(t => `${c.watchTaskName}:${c.copy.copyTaskPrefix}${t.name}`); // don't include the copy:dist task with the copy:all tasks
+        watchTaskNames = copyTasks.filter(t => t.watch).map(t => `${c.watchTaskName}:${c.copy.copyTaskPrefix}${t.name}`), // don't include the copy:dist task with the copy:all tasks
+        lifecycleHookTaskNames = {
+            copyAll: `${c.copy.copyTaskPrefix}${c.allTaskName}`,
+            watchAll: `${c.watchTaskName}:${c.copy.copyTaskPrefix}${c.allTaskName}`
+        },
+        lifecycleHookTaskNameKeys = Object.keys(lifecycleHookTaskNames);
+
+function getCopyTaskName(taskName) {
+    return `${c.copy.copyTaskPrefix}${taskName}`;
+}
+
+function getWatchTaskName(taskName) {
+    return `${c.watchTaskName}:${c.copy.copyTaskPrefix}${taskName}`;
+}
 
 function generateCopyTask(t) {
-    gulp.task(`${c.copy.copyTaskPrefix}${t.name}`, function() {
+    gulp.task(config.getBaseTaskName(getCopyTaskName(t.name)), function() {
         if (t.zip_to) {
             return gulp.src(t.sources)
                 .pipe(zip(t.zip_to))
@@ -30,17 +43,21 @@ function generateCopyTask(t) {
 }
 
 function generateWatchTask(t) {
-    gulp.task(`${c.watchTaskName}:${c.copy.copyTaskPrefix}${t.name}`, function(){
+    gulp.task(config.getBaseTaskName(getWatchTaskName(t.name)), function(){
         return gulp.watch(t.sources, gulp.series(`${c.copy.copyTaskPrefix}${t.name}`));
     });
 }
 
 copyTasks.forEach(t => {
     // console.log(t);
-    generateCopyTask(t);
+    generateCopyTask(t); // Generates :base task
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(getCopyTaskName(t.name));
+    gulp.task(getCopyTaskName(t.name), gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
 
     if (t.watch) {
         generateWatchTask(t);
+        const watchTasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(getWatchTaskName(t.name));
+        gulp.task(getWatchTaskName(t.name), gulp.series(watchTasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
     }
 });
 
@@ -83,8 +100,15 @@ if (c.dependencies) {
 }
 
 // Run all copy tasks
-gulp.task(`${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(copyTaskNames));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.copyAll), gulp.parallel(copyTaskNames));
 
 // Run all watch tasks
-gulp.task(`${c.watchTaskName}:${c.copy.copyTaskPrefix}${c.allTaskName}`, gulp.parallel(watchTaskNames));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(watchTaskNames));
 
+// Generate lifecycle hook (pre & post) tasks (if defined)
+lifecycleHookTaskNameKeys.forEach((k) => {
+    const t = lifecycleHookTaskNames[k],
+            tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(t);
+
+    gulp.task(t, gulp.series(tasksWithPreAndPostHooks));
+});

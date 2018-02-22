@@ -19,3 +19,8 @@ gulp.task('foo', function(done){
   console.log("Bar...what did you expect?");
   done();  
 });
+
+gulp.task('esds-hook:pre:clean:webroot', function(done){
+  console.log('Do this before cleaning up the webroot!');
+  done();
+});

@@ -26,7 +26,8 @@ const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generat
 // copy gulpfile.js tasks from project into the esds-build registry into esds build registry
 if (fs.existsSync(module.parent.filename)) { // The project's gulpfile.js is what calls this file, so it's available at module.parent.filename
     const parentGulpfileText = fs.readFileSync(module.parent.filename, 'utf8');
-    const parentGulpTasks = parentGulpfileText.replace(/const gulp.+/, "gulp = require('gulp');") + `\n module.exports = gulp;`; // Replace the line with the gulp definition from the parent file with a basic require('gulp') call, it will fail when it tries to require esds-build in the new location and would throw a recursion error if it could resolve
+    // The following line intentionally exports the gulp instance out of the parent gulpfile, this is so it can be used and referenced by all of the esds-build tasks. This is crucial to allowing lifecycle hooks and task overrides to function
+    const parentGulpTasks = parentGulpfileText.replace(/gulp\s*=\s*require[^;,]+/, "gulp = require('gulp')") + `\n module.exports = gulp;`; // Replace the line with the gulp definition from the parent file with a basic require('gulp') call, it will fail when it tries to require esds-build in the new location and would throw a recursion error if it could resolve
     fs.writeFileSync(copiedGulpTasksFilepath, parentGulpTasks, 'utf8');
 }
 
