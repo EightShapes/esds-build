@@ -8,7 +8,11 @@ const productBuildConfigFileName = 'esds-build-config',
         path = require('path'),
         inquirer = require('inquirer'),
         mkdirp = require('mkdirp'),
-        pluralize = require('pluralize');
+        pluralize = require('pluralize'),
+        taskNames = {
+            generateNewComponent: 'generate:new-component'
+        },
+        taskNameKeys = Object.keys(taskNames);
 
 function createTopLevelDirectories(rootPath) {
     // TODO: Make this idempotent and non-destructive
@@ -139,7 +143,7 @@ function generateComponentFiles(answers, rootPath) {
 }
 /* eslint-enable no-console */
 
-gulp.task('generate:new-component', function(done){
+gulp.task(config.getBaseTaskName(taskNames.generateNewComponent), function(done){
     var questions = [{
                 name: 'componentName',
                 type: 'input',
@@ -156,6 +160,14 @@ gulp.task('generate:new-component', function(done){
         generateComponentFiles(answers, c.rootPath);
         done();
     });
+});
+
+// Generate lifecycle hook tasks (if defined)
+taskNameKeys.forEach((k) => {
+    const t = taskNames[k],
+            tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(t);
+
+    gulp.task(t, gulp.series(tasksWithPreAndPostHooks));
 });
 
 // Only making this a public function so it can be tested, could really be private

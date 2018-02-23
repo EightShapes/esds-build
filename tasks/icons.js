@@ -11,10 +11,13 @@ const config = require('./config.js'),
         svgSprite = require('gulp-svg-sprite'),
         buildTaskPrefix = [c.iconsTaskName, c.buildTaskName].join(':') + ':',
         watchTaskPrefix = [c.watchTaskName, c.iconsTaskName].join(':') + ':',
-        buildAllTask = `${buildTaskPrefix}${c.allTaskName}`,
-        watchAllTask = `${watchTaskPrefix}${c.allTaskName}`,
         buildTasks = iconTasks.map(t => `${buildTaskPrefix}${t.name}`),
-        watchTasks = iconTasks.map(t => `${watchTaskPrefix}${t.name}`);
+        watchTasks = iconTasks.map(t => `${watchTaskPrefix}${t.name}`),
+        lifecycleHookTaskNames = {
+            buildAll: `${buildTaskPrefix}${c.allTaskName}`,
+            watchAll: `${watchTaskPrefix}${c.allTaskName}`
+        },
+        lifecycleHookTaskNameKeys = Object.keys(lifecycleHookTaskNames);
 
 function getIconNamesManifest() {
     const iconDirectory = path.join(c.rootPath, c.iconsPath);
@@ -45,18 +48,25 @@ function generateIconNameManifestFile() {
     fs.writeFileSync(iconDataFilePath, iconNamesJson);
 }
 
+function generateBasePreAndPostTasks(taskName) {
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+}
+
 function generateIconOptimizeTask(t) {
     const taskName = [c.iconsTaskName, c.optimizeTaskName, t.name].join(':');
-    gulp.task(taskName, function() {
+    gulp.task(config.getBaseTaskName(taskName), function() {
         return gulp.src(t.sources, {since: gulp.lastRun(taskName)})
             .pipe(svgmin())
             .pipe(gulp.dest(t.optimizedFileDestination));
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateIconConcatenateTask(t) {
     const taskName = [c.iconsTaskName, c.concatTaskName, t.name].join(':');
-    gulp.task(taskName, function() {
+    gulp.task(config.getBaseTaskName(taskName), function() {
         return gulp.src(t.sources)
             .pipe(svgSprite({
                 mode: {
@@ -69,14 +79,18 @@ function generateIconConcatenateTask(t) {
             }))
             .pipe(gulp.dest(t.destination));
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateIconManifestTask(t) {
     const taskName = [c.iconsTaskName, 'manifest', t.name].join(':');
-    gulp.task(taskName, function(done){
+    gulp.task(config.getBaseTaskName(taskName), function(done){
         generateIconNameManifestFile();
         done();
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateIconBuildTask(t) {
@@ -84,17 +98,20 @@ function generateIconBuildTask(t) {
             optimizeTask = [c.iconsTaskName, c.optimizeTaskName, t.name].join(':'),
             concatTask = [c.iconsTaskName, c.concatTaskName, t.name].join(':'),
             manifestTask = [c.iconsTaskName, 'manifest', t.name].join(':');
-    gulp.task(taskName, gulp.parallel(manifestTask, gulp.series(optimizeTask, concatTask)));
+    gulp.task(config.getBaseTaskName(taskName), gulp.parallel(manifestTask, gulp.series(optimizeTask, concatTask)));
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateIconWatchTask(t) {
     const taskName = [c.watchTaskName, c.iconsTaskName, t.name].join(':'),
             buildTask = [c.iconsTaskName, c.buildTaskName, t.name].join(':');
-    gulp.task(taskName, function(){
+    gulp.task(config.getBaseTaskName(taskName), function(){
         return gulp.watch(t.sources, gulp.series(buildTask));
     });
-}
 
+    generateBasePreAndPostTasks(taskName);
+}
 
 iconTasks.forEach(t => {
     generateIconOptimizeTask(t);
@@ -105,10 +122,18 @@ iconTasks.forEach(t => {
 });
 
 // Build all icon files
-gulp.task(buildAllTask, gulp.parallel(buildTasks));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.buildAll), gulp.parallel(buildTasks));
 
 // Watch all icon files
-gulp.task(watchAllTask, gulp.parallel(watchTasks));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(watchTasks));
+
+// Generate lifecycle hook (pre & post) tasks (if defined)
+lifecycleHookTaskNameKeys.forEach((k) => {
+    const t = lifecycleHookTaskNames[k],
+            tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(t);
+
+    gulp.task(t, gulp.series(tasksWithPreAndPostHooks));
+});
 
 module.exports = {
     getIconNamesManifest: getIconNamesManifest,

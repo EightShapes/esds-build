@@ -42,6 +42,7 @@ gulp.task(config.getBaseTaskName(taskNames.cleanWebroot), function(done){
     return del(webrootPaths);
 });
 
+// Generate lifecycle hook tasks (if defined)
 taskNameKeys.forEach((k) => {
     const t = taskNames[k],
             tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(t);

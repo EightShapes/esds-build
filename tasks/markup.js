@@ -211,15 +211,7 @@ markupTasks.forEach(function(c){
     generateWatchDocsTask(c);
 });
 
-// Concatenate all macro files
-let concatenateMacrosTasks = [gulp.parallel(concatTasks)];
-if (config.projectTaskIsDefined('esds-hook:pre:markup:concatenate:macros:all')) {
-    concatenateMacrosTasks.unshift('esds-hook:pre:markup:concatenate:macros:all');
-} else {
-    console.log('NO LIFECYCLE HOOK FOUND FOR: esds-hook:pre:markup:concatenate:macros:all');
-}
-
-gulp.task(`${concatMacrosTaskPrefix}all`, gulp.series(concatenateMacrosTasks));
+gulp.task(`${concatMacrosTaskPrefix}all`, gulp.parallel(concatTasks));
 
 // Build all doc files
 gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
