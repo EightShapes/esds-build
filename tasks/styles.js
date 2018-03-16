@@ -3,6 +3,7 @@
 const config = require('./config.js'),
         gulp = config.getGulpInstance(),
         buildConfig = config.get(),
+        allTaskName = buildConfig.allTaskName,
         autoprefixer = require('autoprefixer'),
         gulpSassError = require('gulp-sass-error').gulpSassError,
         failBuild = process.env.NODE_ENV === 'production',
@@ -18,10 +19,23 @@ const config = require('./config.js'),
         lintTaskPrefix = styleConfig.lintTaskPrefix,
         postprocessTaskPrefix = styleConfig.postprocessTaskPrefix,
         watchTaskPrefix = styleConfig.watchTaskPrefix,
+        tokensTaskPrefix = buildConfig.tokensTaskName,
         buildTasks = styleTasks.map(task => `${buildTaskPrefix}${task.name}`),
         compileTasks = styleTasks.map(task => `${compileTaskPrefix}${task.name}`),
         lintTasks = styleTasks.map(task => `${lintTaskPrefix}${task.name}`),
-        watchTasks = styleTasks.map(task => `${watchTaskPrefix}${task.name}`);
+        lifecycleHookTaskNames = {
+            lintAll: `${lintTaskPrefix}${allTaskName}`,
+            compileAll: `${compileTaskPrefix}${allTaskName}`,
+            watchAll: `${watchTaskPrefix}${allTaskName}`
+        },
+        lifecycleHookTaskNameKeys = Object.keys(lifecycleHookTaskNames);
+
+let watchTasks = styleTasks.map(task => `${watchTaskPrefix}${task.name}`);
+
+function generateBasePreAndPostTasks(taskName) {
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+}
 
 function getLintOptions(c) {
     let sassLintOptions = {};
@@ -39,11 +53,14 @@ function getLintOptions(c) {
 function generateLintTask(c) {
     let sassLintOptions = getLintOptions(c);
 
-    gulp.task(`${lintTaskPrefix}${c.name}`, function () {
+    const taskName = `${lintTaskPrefix}${c.name}`; 
+    gulp.task(config.getBaseTaskName(taskName), function () {
       return gulp.src(c.lintPaths)
         .pipe(sassLint(sassLintOptions))
         .pipe(sassLint.format());
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateCompileTask(c) {
@@ -53,16 +70,20 @@ function generateCompileTask(c) {
         sassCompileOptions.includePaths = c.compileImportPaths;
     }
 
-    gulp.task(`${compileTaskPrefix}${c.name}`, function(){
+    const taskName = `${compileTaskPrefix}${c.name}`; 
+    gulp.task(config.getBaseTaskName(taskName), function(){
         return gulp.src(c.compileSourceFiles)
             .pipe(sass(sassCompileOptions).on('error', gulpSassError(failBuild)))
             // .pipe(rename(c.compiledFileName)) //TODO: Maybe add this back in as a feature at some point?
             .pipe(gulp.dest(c.outputPath));
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generatePostprocessTask(c) {
-    gulp.task(`${postprocessTaskPrefix}${c.name}`, function() {
+    const taskName = `${postprocessTaskPrefix}${c.name}`; 
+    gulp.task(config.getBaseTaskName(taskName), function() {
         let autoprefixerOptions = {};
         if (c.autoprefixerOptions) {
             autoprefixerOptions = c.autoprefixerOptions;
@@ -75,20 +96,28 @@ function generatePostprocessTask(c) {
             .pipe(postcss(plugins))
             .pipe(gulp.dest(c.outputPath));
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateWatchTask(c) {
-    gulp.task(`${watchTaskPrefix}${c.name}`, function(){
+    const taskName = `${watchTaskPrefix}${c.name}`;
+    gulp.task(config.getBaseTaskName(taskName), function(){
         return gulp.watch(c.watchFiles, gulp.series(`${buildTaskPrefix}${c.name}`));
     });
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 function generateBuildTask(c) {
-    gulp.task(`${buildTaskPrefix}${c.name}`,
+    const taskName = `${buildTaskPrefix}${c.name}`;
+    gulp.task(config.getBaseTaskName(taskName),
                 gulp.series(
                     `${lintTaskPrefix}${c.name}`,
                     `${compileTaskPrefix}${c.name}`,
                     `${postprocessTaskPrefix}${c.name}`));
+
+    generateBasePreAndPostTasks(taskName);
 }
 
 // Dynamically generate compile, lint, and watch tasks
@@ -106,20 +135,35 @@ styleTasks.forEach(function(c){
 });
 
 // Lint all scss files
-gulp.task(`${lintTaskPrefix}all`, gulp.parallel(lintTasks));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.lintAll), gulp.parallel(lintTasks));
 
 // Compile all scss files
-gulp.task(`${compileTaskPrefix}all`, gulp.parallel(compileTasks));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.compileAll), gulp.parallel(compileTasks));
 
 // Build all scss files
-gulp.task(`${buildTaskPrefix}all`, gulp.parallel(buildTasks));
+const buildAllTaskName = `${buildTaskPrefix}${allTaskName}`;
+gulp.task(config.getBaseTaskName(buildAllTaskName), gulp.parallel(buildTasks));
+generateBasePreAndPostTasks(buildAllTaskName);
+
 
 // Watch tokens.scss and recompile
-gulp.task(`${watchTaskPrefix}tokens`, gulp.series(`${buildTaskPrefix}all`));
+const watchTokensTaskName = `${watchTaskPrefix}${tokensTaskPrefix}`;
+gulp.task(config.getBaseTaskName(watchTokensTaskName), gulp.series(buildAllTaskName));
+generateBasePreAndPostTasks(watchTokensTaskName);
 
 // Run all watch tasks in parallel
-watchTasks.push(`${watchTaskPrefix}tokens`);
-gulp.task(`${watchTaskPrefix}all`, gulp.parallel(watchTasks));
+watchTasks.push(watchTokensTaskName);
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(watchTasks));
+
+
+// Generate lifecycle hook (pre & post) tasks (if defined)
+lifecycleHookTaskNameKeys.forEach((k) => {
+    const t = lifecycleHookTaskNames[k],
+            tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(t);
+
+    gulp.task(t, gulp.series(tasksWithPreAndPostHooks));
+});
+
 
 module.exports = {
     getLintOptions: getLintOptions
