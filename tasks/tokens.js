@@ -1,15 +1,20 @@
 'use strict';
 
 const config = require('./config.js'),
+        gulp = config.getGulpInstance(),
         c = config.get(),
         flatten = require('flat'),
         fs = require('fs'),
         path = require('path'),
-        gulp = require('gulp'),
         jsBeautify = require('js-beautify'),
         mkdirp = require('mkdirp'),
         yaml = require('yamljs'),
         tokenConfig = c.tokens;
+
+function generateBasePreAndPostTasks(taskName) {
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+}
 
 function tokensToJson(sourceFile) {
     let tokens = {},
@@ -166,13 +171,17 @@ function convertTokensYaml(sourceFile, done) {
     }
 }
 
-gulp.task(`${c.tokensTaskName}:${c.buildTaskName}:${c.allTaskName}`, function(done){
+const buildAllTaskName = [c.tokensTaskName, c.buildTaskName, c.allTaskName].join(':');
+gulp.task(config.getBaseTaskName(buildAllTaskName), function(done){
     convertTokensYaml(tokenConfig.sourceFile, done);
 });
+generateBasePreAndPostTasks(buildAllTaskName);
 
-gulp.task(`${c.watchTaskName}:${c.tokensTaskName}:${c.allTaskName}`, function(){
-    return gulp.watch([tokenConfig.sourceFile], gulp.series(`${c.tokensTaskName}:${c.buildTaskName}:${c.allTaskName}`));
+const watchAllTaskName = [c.watchTaskName, c.tokensTaskName, c.allTaskName].join(':');
+gulp.task(config.getBaseTaskName(watchAllTaskName), function(){
+    return gulp.watch([tokenConfig.sourceFile], gulp.series(buildAllTaskName));
 });
+generateBasePreAndPostTasks(watchAllTaskName);
 
 module.exports = {
     convertTokensYaml: convertTokensYaml,

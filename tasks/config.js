@@ -2,7 +2,9 @@
 
 const productBuildConfigFileName = 'esds-build-config',
         fs = require('fs'),
-        path = require('path');
+        path = require('path'),
+        globals = {},
+        projectGulpTasksFilename = '~tmp_project_gulp_tasks.js';
 
 function retrieveProductBuildConfig(rootPath) {
     rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
@@ -249,10 +251,69 @@ function getTaskConfig(rootPath) {
     return buildConfig; // If no config file has been defined, use the default config
 }
 
+function getBaseTaskName(taskName) {
+    return [taskName, 'base'].join(':');
+}
+
+function getBaseTaskWithPreAndPostHooks(taskName) {
+    const taskNames = [getBaseTaskName(taskName)],
+            preTaskName = `esds-hook:pre:${taskName}`,
+            postTaskName = `esds-hook:post:${taskName}`;
+
+    if (projectTaskIsDefined(preTaskName)) {
+        taskNames.unshift(preTaskName);
+    } else {
+        console.log(`${preTaskName} is not defined, skipping`);
+    }
+
+    if (projectTaskIsDefined(postTaskName)) {
+        taskNames.push(postTaskName);
+    } else {
+        console.log(`${postTaskName} is not defined, skipping`);
+    }
+
+    return taskNames;
+}
+
+function getProjectTaskList() {
+    if (typeof globals.projectTaskList === 'undefined') {
+        globals.projectTaskList = getGulpInstance().tree().nodes;
+    }
+
+    return globals.projectTaskList;
+}
+
+function projectTaskIsDefined(taskName) {
+    const tasks = getProjectTaskList();
+    return tasks.includes(taskName);
+}
+
+function getGulpInstance() {
+    // Try to use the gulp instance exported from the parent project's gulpfile so lifecycle hook tasks and overrides will be processed first
+    // If the parent project's gulpfile cannot be found, this will default to the version of gulp bundled with esds-build
+    const projectTasksFilepath = `${__dirname}/${projectGulpTasksFilename}`;
+    let response = require(`${process.cwd()}/node_modules/gulp`);
+
+    if (typeof globals.gulp === 'undefined') {
+        if (fs.existsSync(projectTasksFilepath)) {
+            globals.gulp = require(projectTasksFilepath);
+            response = globals.gulp;
+        }
+    } else {
+        response = globals.gulp;
+    }
+    return response;
+}
+
 module.exports = {
     get: getTaskConfig,
     getDependencyConfig: getDependencyConfig,
     retrieveProductBuildConfig: retrieveProductBuildConfig,
     retrieveDefaultBuildConfig: retrieveDefaultBuildConfig,
-    retrieveBuildConfig: retrieveBuildConfig
+    retrieveBuildConfig: retrieveBuildConfig,
+    getGulpInstance: getGulpInstance,
+    projectGulpTasksFilename: projectGulpTasksFilename,
+    projectTaskIsDefined: projectTaskIsDefined,
+    getBaseTaskName: getBaseTaskName,
+    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks
 };
