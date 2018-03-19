@@ -81,4 +81,24 @@ module.exports = function(){
           });
       });
     });
+
+    describe('lifecycle hooks', function(){
+      it.only('should run a lifecycle task BEFORE running clean:webroot', function(done) {
+        gulp(' clean:webroot')
+        .then(result => {
+          const output = result.stdout;
+          assert(output.indexOf('Do this before cleaning up the webroot!') !== -1);
+          done();
+        });
+      });
+
+      it.only('should run a lifecycle task AFTER running clean:webroot', function(done) {
+        gulp(' clean:webroot')
+        .then(result => {
+          const output = result.stdout;
+          assert(output.indexOf('A little post webroot cleaning task') !== -1);
+          done();
+        });
+      });
+    });
 };

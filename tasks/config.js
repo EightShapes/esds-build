@@ -291,7 +291,7 @@ function projectTaskIsDefined(taskName) {
 function getGulpInstance() {
     // Try to use the gulp instance exported from the parent project's gulpfile so lifecycle hook tasks and overrides will be processed first
     // If the parent project's gulpfile cannot be found, this will default to the version of gulp bundled with esds-build
-    const projectTasksFilepath = `${process.cwd()}/tasks/${projectGulpTasksFilename}`;
+    const projectTasksFilepath = `${__dirname}/${projectGulpTasksFilename}`;
     let response = require(`${process.cwd()}/node_modules/gulp`);
 
     if (typeof globals.gulp === 'undefined') {

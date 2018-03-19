@@ -8,10 +8,10 @@ const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generat
         gulp = require(`${process.cwd()}/node_modules/gulp`), // Load this gulp, not another version
         path = require('path'),
         c = config.get(),
-        watchAll = [c.watchTaskName, c.allTaskName].join(':'),
+        watchAllTaskName = [c.watchTaskName, c.allTaskName].join(':'),
         watchTaskTypes = [c.tokensTaskName, c.iconsTaskName, c.stylesTaskName, c.scriptsTaskName, c.markupTaskName, c.copyTaskName, 'serve'],
         watchTaskNames = watchTaskTypes.map(t => [c.watchTaskName, t, c.allTaskName].join(':')),
-        buildAll = [c.buildTaskName, c.allTaskName].join(':'),
+        buildAllTaskName = [c.buildTaskName, c.allTaskName].join(':'),
         buildTokens = [c.tokensTaskName, c.buildTaskName, c.allTaskName].join(':'),
         copyAll = [c.copyTaskName, c.allTaskName].join(':'),
         buildScripts = [c.scriptsTaskName, c.buildTaskName, c.allTaskName].join(':'),
@@ -27,22 +27,23 @@ const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generat
 if (fs.existsSync(module.parent.filename)) { // The project's gulpfile.js is what calls this file, so it's available at module.parent.filename
     const parentGulpfileText = fs.readFileSync(module.parent.filename, 'utf8');
     // The following line intentionally exports the gulp instance out of the parent gulpfile, this is so it can be used and referenced by all of the esds-build tasks. This is crucial to allowing lifecycle hooks and task overrides to function
-    const parentGulpTasks = parentGulpfileText.replace(/gulp\s*=\s*require[^;,]+/, "gulp = require('gulp')") + `\n module.exports = gulp;`; // Replace the line with the gulp definition from the parent file with a basic require('gulp') call, it will fail when it tries to require esds-build in the new location and would throw a recursion error if it could resolve
+    let parentGulpTasks = parentGulpfileText.replace(/gulp\s*=\s*require[^;,]+/, "gulp = require('gulp')") + `\n module.exports = gulp;`; // Replace the line with the gulp definition from the parent file with a basic require('gulp') call, it will fail when it tries to require esds-build in the new location and would throw a recursion error if it could resolve
     fs.writeFileSync(copiedGulpTasksFilepath, parentGulpTasks, 'utf8');
 }
-
-// const gulp = config.getGulpWithRegistry();
-
 
 /* load tasks into the registry */
 var hub = new HubRegistry(taskFiles);
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
-// const definedTasks = gulp.tree().nodes;
+
+
 /**************************************************/
 /* Composite tasks ********************************/
 /**************************************************/
-
+function generateBasePreAndPostTasks(taskName) {
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+}
 
 //Build everything
 const buildAllTasks = [ buildTokens,
@@ -51,29 +52,16 @@ const buildAllTasks = [ buildTokens,
                         gulp.series(concatenateMacros,
                                     buildMarkup)),
                         copyDist];
-
-// Add prebuild all hook
-if (config.projectTaskIsDefined('esds-hook:prebuild:all')) {
-    buildAllTasks.unshift('esds-hook:prebuild:all');
-} else {
-    console.log("No esds-hook:prebuild:all task found"); // eslint-disable-line no-console
-}
-
-// // Add postbuild all hook
-if (config.projectTaskIsDefined('esds-hook:postbuild:all')) {
-    buildAllTasks.push('esds-hook:postbuild:all');
-} else {
-    console.log("No esds-hook:postbuild:all task found"); // eslint-disable-line no-console
-}
-
-
-gulp.task(buildAll, gulp.series(buildAllTasks)); // copy to dist last
-
-// Build and serve the project, watch for changes to files
-gulp.task('default', gulp.series(cleanWebroot, buildAll, gulp.parallel(watchAll, 'serve:local-docs')));
+gulp.task(config.getBaseTaskName(buildAllTaskName), gulp.series(buildAllTasks)); // copy to dist last
+generateBasePreAndPostTasks(buildAllTaskName);
 
 // Watch everything
-gulp.task(watchAll, gulp.parallel(watchTaskNames));
+gulp.task(config.getBaseTaskName(watchAllTaskName), gulp.parallel(watchTaskNames));
+generateBasePreAndPostTasks(watchAllTaskName);
+
+// Build and serve the project, watch for changes to files
+gulp.task(config.getBaseTaskName('default'), gulp.series(cleanWebroot, buildAllTaskName, gulp.parallel(watchAllTaskName, 'serve:local-docs')));
+generateBasePreAndPostTasks('default');
 
 // Project tasks are already loaded into registry at this point, delete the copied project gulpfile.js contents
 if (fs.existsSync(copiedGulpTasksFilepath)) {
