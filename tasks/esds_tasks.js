@@ -28,6 +28,10 @@ if (fs.existsSync(module.parent.filename)) { // The project's gulpfile.js is wha
     const parentGulpfileText = fs.readFileSync(module.parent.filename, 'utf8');
     // The following line intentionally exports the gulp instance out of the parent gulpfile, this is so it can be used and referenced by all of the esds-build tasks. This is crucial to allowing lifecycle hooks and task overrides to function
     let parentGulpTasks = parentGulpfileText.replace(/gulp\s*=\s*require[^;,]+/, "gulp = require('gulp')") + `\n module.exports = gulp;`; // Replace the line with the gulp definition from the parent file with a basic require('gulp') call, it will fail when it tries to require esds-build in the new location and would throw a recursion error if it could resolve
+
+    // Inject the forward-reference functionality so custom gulp tasks can reference internal esds-build tasks
+    parentGulpTasks = parentGulpTasks.replace(/\ngulp.task/, 'const FwdRef = require("undertaker-forward-reference");\ngulp.registry(FwdRef());\ngulp.task');
+
     fs.writeFileSync(copiedGulpTasksFilepath, parentGulpTasks, 'utf8');
 }
 
