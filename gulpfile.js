@@ -29,3 +29,5 @@ gulp.task('esds-hook:post:clean:webroot', function(done){
   console.log('A little post webroot cleaning task');
   done();
 });
+
+gulp.task('test-wrapper', gulp.series('clean:webroot'));
