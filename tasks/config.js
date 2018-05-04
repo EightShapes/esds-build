@@ -258,17 +258,18 @@ function getBaseTaskName(taskName) {
 function getBaseTaskWithPreAndPostHooks(taskName) {
     const taskNames = [getBaseTaskName(taskName)],
             preTaskName = `esds-hook:pre:${taskName}`,
-            postTaskName = `esds-hook:post:${taskName}`;
+            postTaskName = `esds-hook:post:${taskName}`,
+            c = retrieveBuildConfig();
 
     if (projectTaskIsDefined(preTaskName)) {
         taskNames.unshift(preTaskName);
-    } else {
+    } else if (c.showTaskHookNames) {
         console.log(`${preTaskName} is not defined, skipping`);
     }
 
     if (projectTaskIsDefined(postTaskName)) {
         taskNames.push(postTaskName);
-    } else {
+    } else if (c.showTaskHookNames) {
         console.log(`${postTaskName} is not defined, skipping`);
     }
 
