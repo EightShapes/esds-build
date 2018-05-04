@@ -41,7 +41,6 @@ module.exports = function(){
             gulp(' --tasks')
                 .then(result => {
                     const output = result.stdout;
-                    console.log(output);
                     fs.copyFileSync('esds-build-config.js.original', 'esds-build-config.js');
                     del('esds-build-config.js.original');
                     // del('esds-build-config.json');
