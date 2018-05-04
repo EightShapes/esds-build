@@ -1,8 +1,8 @@
 'use strict';
 
-const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
-        HubRegistry = require('gulp-hub'),
+const HubRegistry = require('gulp-hub'),
         config = require('./config.js'),
+        taskFiles = [config.projectGulpTasksFilename, 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
         del = require('del'),
         fs = require('fs-extra'),
         gulp = require(`${process.cwd()}/node_modules/gulp`), // Load this gulp, not another version
@@ -32,6 +32,11 @@ if (fs.existsSync(module.parent.filename)) { // The project's gulpfile.js is wha
     parentGulpTasks = parentGulpTasks.replace(/\ngulp.task/, '\nconst FwdRef = require("undertaker-forward-reference");\ngulp.registry(FwdRef());\ngulp.task');
 
     fs.writeFileSync(copiedGulpTasksFilepath, parentGulpTasks, 'utf8');
+}
+
+if (!fs.existsSync(`${process.cwd()}/tasks/${config.projectGulpTasksFilename}`)) {
+    const index = taskFiles.indexOf(config.projectGulpTasksFilename);
+    taskFiles.splice(index, 1); // If the temp project gulp tasks file doesn't exist, don't include it
 }
 
 /* load tasks into the registry */
