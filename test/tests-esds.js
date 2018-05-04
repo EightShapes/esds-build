@@ -5,7 +5,9 @@
 
 'use strict';
 const assert = require('yeoman-assert'),
-        gulp = require('./tests-gulp.js');
+        gulp = require('./tests-gulp.js'),
+        del = require('del'),
+        fs = require('fs');
 
 module.exports = function(){
     describe('top-level composite tasks', function(){
@@ -27,6 +29,22 @@ module.exports = function(){
                     assert(output.indexOf('markup:build:all') !== -1);
                     assert(output.indexOf('copy:dist') !== -1);
                     assert(output.indexOf('serve:local-docs') !== -1);
+                    done();
+                });
+        });
+
+        it('allow additional watch tasks to be injected via the build config', function(done) {
+            fs.copyFileSync('esds-build-config.js', 'esds-build-config.js.original');
+            del('esds-build-config.js');
+            const watcherConfig = JSON.stringify({additionalWatchTasks: ["watch:something-special"]});
+            fs.writeFileSync('esds-build-config.json', watcherConfig);
+            gulp(' --tasks')
+                .then(result => {
+                    const output = result.stdout;
+                    fs.copyFileSync('esds-build-config.js.original', 'esds-build-config.js');
+                    del('esds-build-config.js.original');
+                    // del('esds-build-config.json');
+                    assert(output.indexOf('watch:something-special') !== -1);
                     done();
                 });
         });

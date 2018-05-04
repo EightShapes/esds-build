@@ -1,8 +1,8 @@
 'use strict';
 
-const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
-        HubRegistry = require('gulp-hub'),
+const HubRegistry = require('gulp-hub'),
         config = require('./config.js'),
+        taskFiles = [config.projectGulpTasksFilename, 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
         del = require('del'),
         fs = require('fs-extra'),
         gulp = require(`${process.cwd()}/node_modules/gulp`), // Load this gulp, not another version
@@ -10,7 +10,6 @@ const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generat
         c = config.get(),
         watchAllTaskName = [c.watchTaskName, c.allTaskName].join(':'),
         watchTaskTypes = [c.tokensTaskName, c.iconsTaskName, c.stylesTaskName, c.scriptsTaskName, c.markupTaskName, c.copyTaskName, 'serve'],
-        watchTaskNames = watchTaskTypes.map(t => [c.watchTaskName, t, c.allTaskName].join(':')),
         buildAllTaskName = [c.buildTaskName, c.allTaskName].join(':'),
         buildTokens = [c.tokensTaskName, c.buildTaskName, c.allTaskName].join(':'),
         copyAll = [c.copyTaskName, c.allTaskName].join(':'),
@@ -35,10 +34,21 @@ if (fs.existsSync(module.parent.filename)) { // The project's gulpfile.js is wha
     fs.writeFileSync(copiedGulpTasksFilepath, parentGulpTasks, 'utf8');
 }
 
+if (!fs.existsSync(`${process.cwd()}/tasks/${config.projectGulpTasksFilename}`)) {
+    const index = taskFiles.indexOf(config.projectGulpTasksFilename);
+    taskFiles.splice(index, 1); // If the temp project gulp tasks file doesn't exist, don't include it
+}
+
 /* load tasks into the registry */
 var hub = new HubRegistry(taskFiles);
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
+
+// If the config contains additional watch tasks, make sure to throw them in with all the other watch tasks
+let watchTaskNames = watchTaskTypes.map(t => [c.watchTaskName, t, c.allTaskName].join(':'));
+if (c.additionalWatchTasks && c.additionalWatchTasks.length > 0) {
+    watchTaskNames = watchTaskNames.concat(c.additionalWatchTasks);
+}
 
 
 /**************************************************/
