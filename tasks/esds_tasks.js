@@ -10,7 +10,6 @@ const taskFiles = ['~tmp_project_gulp_tasks.js', 'clean.js', 'copy.js', 'generat
         c = config.get(),
         watchAllTaskName = [c.watchTaskName, c.allTaskName].join(':'),
         watchTaskTypes = [c.tokensTaskName, c.iconsTaskName, c.stylesTaskName, c.scriptsTaskName, c.markupTaskName, c.copyTaskName, 'serve'],
-        watchTaskNames = watchTaskTypes.map(t => [c.watchTaskName, t, c.allTaskName].join(':')),
         buildAllTaskName = [c.buildTaskName, c.allTaskName].join(':'),
         buildTokens = [c.tokensTaskName, c.buildTaskName, c.allTaskName].join(':'),
         copyAll = [c.copyTaskName, c.allTaskName].join(':'),
@@ -41,8 +40,9 @@ var hub = new HubRegistry(taskFiles);
 gulp.registry(hub);
 
 // If the config contains additional watch tasks, make sure to throw them in with all the other watch tasks
+let watchTaskNames = watchTaskTypes.map(t => [c.watchTaskName, t, c.allTaskName].join(':'));
 if (c.additionalWatchTasks && c.additionalWatchTasks.length > 0) {
-    watchTaskNames.push(c.additionalWatchTasks[0]);
+    watchTaskNames = watchTaskNames.concat(c.additionalWatchTasks);
 }
 
 
