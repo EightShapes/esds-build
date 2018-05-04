@@ -10,11 +10,9 @@ function retrieveProductBuildConfig(rootPath) {
     rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
     const jsConfigPath = path.join(rootPath, productBuildConfigFileName + '.js'),
             jsonConfigPath = path.join(rootPath, productBuildConfigFileName + '.json');
-    console.log(jsonConfigPath);
     if (fs.existsSync(jsConfigPath)) {
         return require(jsConfigPath);
     } else if (fs.existsSync(jsonConfigPath)) {
-        console.log("FOUND SOME JSON!");
         return require(jsonConfigPath);
     } else {
         return {};
