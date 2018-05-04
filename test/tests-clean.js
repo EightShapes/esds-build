@@ -8,8 +8,7 @@ const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       fs = require('fs'),
       path = require('path'),
-      mkdirp = require('mkdirp'),
-      configDefaults = require('../esds-build-config.js');
+      mkdirp = require('mkdirp');
 
 module.exports = function(){
     const projectPath = './test/sample_project',
@@ -51,6 +50,7 @@ module.exports = function(){
 
     describe('clean:concatenated-macros', function(){
       it('should delete all concatenated macro files', function(){
+        const configDefaults = require('../esds-build-config.js');
         const concatenatedComponentsFilename = `${projectPath}/components/${configDefaults.codeNamespace}.njk`;
         mkdirp.sync(path.join(projectPath, 'components'));
 
@@ -83,7 +83,7 @@ module.exports = function(){
     });
 
     describe('lifecycle hooks', function(){
-      it.only('should run a lifecycle task BEFORE running clean:webroot', function(done) {
+      it('should run a lifecycle task BEFORE running clean:webroot', function(done) {
         gulp(' clean:webroot')
         .then(result => {
           const output = result.stdout;
@@ -92,7 +92,7 @@ module.exports = function(){
         });
       });
 
-      it.only('should run a lifecycle task AFTER running clean:webroot', function(done) {
+      it('should run a lifecycle task AFTER running clean:webroot', function(done) {
         gulp(' clean:webroot')
         .then(result => {
           const output = result.stdout;

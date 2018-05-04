@@ -40,6 +40,11 @@ var hub = new HubRegistry(taskFiles);
 /* tell gulp to use the tasks just loaded */
 gulp.registry(hub);
 
+// If the config contains additional watch tasks, make sure to throw them in with all the other watch tasks
+if (c.additionalWatchTasks && c.additionalWatchTasks.length > 0) {
+    watchTaskNames.push(c.additionalWatchTasks[0]);
+}
+
 
 /**************************************************/
 /* Composite tasks ********************************/
