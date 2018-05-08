@@ -214,7 +214,7 @@ function generateBuildTask(t) {
 
         // Compile doc src to html
         gulp.task(config.getBaseTaskName(taskName), function() {
-            return gulp.src(t.docSourceFilePaths)
+            return gulp.src(t.docSourceFilePaths, { since: gulp.lastRun(config.getBaseTaskName(taskName)) }) // The since parameter filters the incoming files so only the most recently saved file gets recompiled
                 .pipe(nunjucksData(getDataForTemplates)) // Using the 'gulp-data' plugin to live fetch any data changes each time markup is rebuilt
                 .pipe(
                     nunjucksRender(nunjucksOptions).on('error', function(e){
