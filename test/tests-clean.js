@@ -7,6 +7,7 @@
 const gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
       fs = require('fs'),
+      del = require('del'),
       path = require('path'),
       mkdirp = require('mkdirp');
 
@@ -78,6 +79,33 @@ module.exports = function(){
           .then(result => {
             assert.noFile(webrootFile);
             assert.noFile(`${webrootDirectory}/esds.css`);
+          });
+      });
+    });
+
+    describe('clean:webroot outside of project root', function(){
+      it('should delete all files in the project webroot even when the project webroot is outside of the project directory', function(){
+        fs.copyFileSync('esds-build-config.js', 'esds-build-config.js.original');
+        del('esds-build-config.js');
+        const alternateWebrootConfig = JSON.stringify({rootPath: "test/sample_project/", webroot: "../outside-webroot-docs", latestVersionPath: ""});
+        fs.writeFileSync('esds-build-config.json', alternateWebrootConfig);
+        const webroot = `${projectPath}/../outside-webroot-docs`,
+              webrootFile = `${webroot}/index.html`,
+              webrootDirectory = `${webroot}/styles`;
+
+        mkdirp.sync(webroot);
+        mkdirp.sync(webrootDirectory);
+        fs.writeFileSync(webrootFile, 'Homepage goes here');
+        fs.writeFileSync(`${webrootDirectory}/esds.css`, 'Component Library CSS goes here');
+
+        return gulp('clean:webroot')
+          .then(result => {
+            assert.noFile(webrootFile);
+            assert.noFile(`${webrootDirectory}/esds.css`);
+            fs.copyFileSync('esds-build-config.js.original', 'esds-build-config.js');
+            del('esds-build-config.js.original');
+            del('test/outside-webroot-docs');
+            del('esds-build-config.json');
           });
       });
     });

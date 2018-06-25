@@ -40,6 +40,7 @@ module.exports = {
     templatesPath: 'templates', // Name of the top-level templates directory
     tokensPath: 'tokens', // Name of the top-level tokens directory
     webroot: '_site', // Name of the top-level webroot directory
+    forceCleanWebroot: false, // Use if the webroot is outside the default project directory, useful for publishing a monorepo doc site on github pages
     versionedDocs: true, // If true, webroot folder structure will support a '/v/' directory containing previous releases
     latestVersionPath: 'latest', // If versionedDocs is true, where is the latest version of the docs built? Relative to webroot
     tokensSourceFile: 'tokens.yaml', // Tokens source filename
@@ -52,7 +53,7 @@ module.exports = {
     stylesSourceExtension: '.scss', // Styles file extension
     manageNunjucksEnv: false, // hook to configure the Nunjucks templating environment, add additional filters, etc.
     includeMarkdownWrapper: false, // include a wrapper div when the nunjucks markdown filter is used
-    markdownWrapperClass: 'esds-markdown-wrap', // wrapper class when nunjucks markdown filter is used               
+    markdownWrapperClass: 'esds-markdown-wrap', // wrapper class when nunjucks markdown filter is used
     copyTasks: [], // Product specific set of tasks to copy a file from one destination to another. For copying jQuery from node_modules to the webroot as an example
     allTaskName: 'all', // gulp task name segment, ex: build:all, watch:all
     buildTaskName: 'build', // gulp task name segment, ex: markup:build, styles:build
