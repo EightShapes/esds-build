@@ -35,11 +35,17 @@ gulp.task(config.getBaseTaskName(taskNames.cleanConcatenatedMacros), function(do
 
 gulp.task(config.getBaseTaskName(taskNames.cleanWebroot), function(done){
     let webrootPaths = [path.join(c.rootPath, c.webroot, c.latestVersionPath, '**', '*')];
+    const delOptions = {};
+
     if (c.versionedDocs) {
         const versionedDocPaths = path.join(c.rootPath, c.webroot, 'v');
         webrootPaths.push(`!${versionedDocPaths}`);
     }
-    return del(webrootPaths);
+
+    if (c.forceCleanWebroot) {
+        delOptions.force = true;
+    }
+    return del(webrootPaths, delOptions);
 });
 
 // Generate lifecycle hook tasks (if defined)
