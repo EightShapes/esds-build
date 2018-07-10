@@ -9,6 +9,15 @@ module.exports = {
           return Array.isArray(obj);
         });
     },
+    svgoConfig: {
+        plugins: [
+            {
+                removeAttrs: {
+                    attrs: 'stroke'
+                }
+            }
+        ]
+    },
     browserSyncConfig: {
         https: true
     },
