@@ -55,9 +55,10 @@ function generateBasePreAndPostTasks(taskName) {
 
 function generateIconOptimizeTask(t) {
     const taskName = [c.iconsTaskName, c.optimizeTaskName, t.name].join(':');
+    const svgoConfig = c.svgoConfig ? c.svgoConfig : {};
     gulp.task(config.getBaseTaskName(taskName), function() {
         return gulp.src(t.sources, {since: gulp.lastRun(taskName)})
-            .pipe(svgmin())
+            .pipe(svgmin(svgoConfig))
             .pipe(gulp.dest(t.optimizedFileDestination));
     });
 

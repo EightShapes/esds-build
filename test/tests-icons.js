@@ -18,7 +18,7 @@ const { exec } = require('child_process'),
         projectPath = './test/sample_project',
         webroot = `${projectPath}/_site/latest`,
         webrootIcons = `${webroot}/icons`,
-        unoptimizedSVGSource = '<?xml version="1.0" encoding="utf-8"?><!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve"><circle cx="12.223" cy="5.613" r="2.967"/><rect x="10.137" y="7.273" width="4.171" height="6.002"/></svg>',
+        unoptimizedSVGSource = '<?xml version="1.0" encoding="utf-8"?><!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" stroke="currentColor" enable-background="new 0 0 28 28" xml:space="preserve"><circle cx="12.223" cy="5.613" r="2.967"/><rect x="10.137" y="7.273" width="4.171" height="6.002"/></svg>',
         unoptimizedSVGPath = path.join(projectPath, 'icons', 'unoptimized-user.svg'),
         compiledIconsFile = path.join(webroot, 'icons', `${c.codeNamespace}.svg`);
 
@@ -50,6 +50,13 @@ module.exports = function(){
             return gulp(`icons:optimize:${c.productTaskName}`)
                 .then(result => {
                     assert.noFileContent(`${projectPath}/icons/unoptimized-user.svg`, 'Adobe Illustrator');
+                });
+        });
+
+        it.only('should optimize svgs using a custom svgmin config', function() {
+            return gulp(`icons:optimize:${c.productTaskName}`)
+                .then(result => {
+                    assert.noFileContent(`${projectPath}/icons/unoptimized-user.svg`, 'stroke="currentColor"');
                 });
         });
     });
