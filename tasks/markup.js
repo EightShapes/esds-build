@@ -118,7 +118,7 @@ function generateWatchTemplatesTask(c) {
     if (c.templateSourceFilePaths) {
         const taskName = `${watchTemplatesTaskPrefix}${c.name}`;
         gulp.task(config.getBaseTaskName(taskName), function(){
-            return gulp.watch(c.docTemplateSourceFilePaths, gulp.series(`${buildTaskPrefix}${c.name}:allDocs`)); // Make sure to rebuild ALL docs when a template is changed since we don't know what docs will be extending a particular template
+            return gulp.watch([c.templateSourceFilePaths], gulp.series(`${buildTaskPrefix}${c.name}:allDocs`));
         });
 
         generateBasePreAndPostTasks(taskName);
@@ -279,7 +279,7 @@ gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchTemplates), gulp.pa
 gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchDocs), gulp.parallel(watchDocsTasks));
 
 // Watch all .njk files
-gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(config.getBaseTaskName(lifecycleHookTaskNames.watchMacros), config.getBaseTaskName(lifecycleHookTaskNames.watchDocs), config.getBaseTaskName(lifecycleHookTaskNames.watchTemplates)));
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(config.getBaseTaskName(lifecycleHookTaskNames.watchMacros), config.getBaseTaskName(lifecycleHookTaskNames.watchTemplates), config.getBaseTaskName(lifecycleHookTaskNames.watchDocs)));
 
 // Generate lifecycle hook (pre & post) tasks (if defined)
 lifecycleHookTaskNameKeys.forEach((k) => {
