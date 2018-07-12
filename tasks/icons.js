@@ -70,6 +70,9 @@ function generateIconConcatenateTask(t) {
     gulp.task(config.getBaseTaskName(taskName), function() {
         return gulp.src(t.sources)
             .pipe(svgSprite({
+                shape: {
+                    transform: []
+                },
                 mode: {
                     symbol: {
                         dest: '.',
