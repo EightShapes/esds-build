@@ -67,6 +67,7 @@ module.exports = {
     lintTaskName: 'lint', // gulp task name segment, ex: styles:lint, scripts:lint
     markupTaskName: 'markup', // gulp task name segment, ex: markup:build, watch:markup
     macrosTaskName: 'macros', // gulp task name segment, ex: markup:concatenate:macros
+    templatesTaskName: 'templates', // gulp task name segment, ex: watch:markup:templates
     optimizeTaskName: 'optimize', // gulp task name segment, ex: icons:optimize
     postprocessTaskName: 'postprocess', // gulp task name segment, ex: styles:postprocess
     precompileTaskName: 'precompile', // gulp task name segment, ex: styles:precompile

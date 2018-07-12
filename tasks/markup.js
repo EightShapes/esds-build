@@ -19,15 +19,18 @@ const config = require('./config.js'),
         watchTaskPrefix = markupConfig.watchTaskPrefix,
         watchDocsTaskPrefix = markupConfig.watchDocsTaskPrefix,
         watchMacrosTaskPrefix = markupConfig.watchMacrosTaskPrefix,
+        watchTemplatesTaskPrefix = markupConfig.watchTemplatesTaskPrefix,
         concatTasks = markupTasks.filter(task => task.componentMacros).map(task => `${concatMacrosTaskPrefix}${task.name}`),
         buildTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${buildTaskPrefix}${task.name}`),
         watchDocsTasks = markupTasks.filter(task => task.docSourceFilePaths).map(task => `${watchDocsTaskPrefix}${task.name}`),
+        watchTemplatesTasks = markupTasks.filter(task => task.templateSourceFilePaths).map(task => `${watchTemplatesTaskPrefix}${task.name}`),
         watchMacrosTasks = markupTasks.filter(task => task.componentMacros).map(task => `${watchMacrosTaskPrefix}${task.name}`),
         lifecycleHookTaskNames = {
             concatAll: `${concatMacrosTaskPrefix}${allTaskName}`,
             buildAll: `${buildTaskPrefix}${allTaskName}`,
             watchDocs: `${watchDocsTaskPrefix}${allTaskName}`,
             watchMacros: `${watchMacrosTaskPrefix}${allTaskName}`,
+            watchTemplates: `${watchTemplatesTaskPrefix}${allTaskName}`,
             watchAll: `${watchTaskPrefix}${allTaskName}`
         },
         lifecycleHookTaskNameKeys = Object.keys(lifecycleHookTaskNames);
@@ -84,12 +87,12 @@ function generateWatchMacrosTask(c) {
             let postConcatBuildTasks = [];
 
             if (macroLibraryIsReferenced) {
-                let referencedBuildTasks = c.componentsReferencedBy.map(taskName => `${markupConfig.buildTaskPrefix}${taskName}`);
+                let referencedBuildTasks = c.componentsReferencedBy.map(taskName => `${markupConfig.buildTaskPrefix}${taskName}:allDocs`); // Make sure to rebuild ALL docs when a macro is changed since we don't know what docs will be consuming a macro
                 postConcatBuildTasks = postConcatBuildTasks.concat(referencedBuildTasks);
             }
 
             if (macroLibraryHasDocs) {
-                let macroLibraryBuildTask = `${markupConfig.buildTaskPrefix}${c.name}`;
+                let macroLibraryBuildTask = `${markupConfig.buildTaskPrefix}${c.name}:allDocs`; // Make sure to rebuild ALL docs when a macro is changed since we don't know what docs will be consuming a macro
                 postConcatBuildTasks.push(macroLibraryBuildTask);
             }
 
@@ -105,6 +108,17 @@ function generateWatchDocsTask(c) {
         const taskName = `${watchDocsTaskPrefix}${c.name}`;
         gulp.task(config.getBaseTaskName(taskName), function(){
             return gulp.watch(c.docTemplateWatchPaths, gulp.series(`${buildTaskPrefix}${c.name}`));
+        });
+
+        generateBasePreAndPostTasks(taskName);
+    }
+}
+
+function generateWatchTemplatesTask(c) {
+    if (c.templateSourceFilePaths) {
+        const taskName = `${watchTemplatesTaskPrefix}${c.name}`;
+        gulp.task(config.getBaseTaskName(taskName), function(){
+            return gulp.watch([c.templateSourceFilePaths], gulp.series(`${buildTaskPrefix}${c.name}:allDocs`));
         });
 
         generateBasePreAndPostTasks(taskName);
@@ -186,10 +200,24 @@ function getDataForTemplates() {
     return data;
 }
 
-function generateBuildTask(t) {
-    if (t.docSourceFilePaths) {
-        const taskName = `${buildTaskPrefix}${t.name}`;
-        let nunjucksOptions = {
+function compileDocs(nunjucksOptions, t, latestOnly = true) {
+    // This method compiles /docs/*.njk files into .html
+    const taskName = `${buildTaskPrefix}${t.name}`;
+    const filePathsFilter = latestOnly ? { since: gulp.lastRun(config.getBaseTaskName(taskName)) } : {}; // The since parameter filters the incoming files so only the most recently saved file gets recompiled
+    return gulp.src(t.docSourceFilePaths, filePathsFilter)
+        .pipe(nunjucksData(getDataForTemplates)) // Using the 'gulp-data' plugin to live fetch any data changes each time markup is rebuilt
+        .pipe(
+            nunjucksRender(nunjucksOptions).on('error', function(e){
+                gutil.log(e);
+                gutil.beep();
+                this.emit('end');
+            })
+        )
+        .pipe(gulp.dest(t.docOutputPath));
+}
+
+function getNunjucksOptions(t) {
+    return {
             envOptions: {
                 watch: false
             },
@@ -211,22 +239,20 @@ function generateBuildTask(t) {
             },
             path: t.docTemplateImportPaths
         };
+}
 
-        // Compile doc src to html
-        gulp.task(config.getBaseTaskName(taskName), function() {
-            return gulp.src(t.docSourceFilePaths, { since: gulp.lastRun(config.getBaseTaskName(taskName)) }) // The since parameter filters the incoming files so only the most recently saved file gets recompiled
-                .pipe(nunjucksData(getDataForTemplates)) // Using the 'gulp-data' plugin to live fetch any data changes each time markup is rebuilt
-                .pipe(
-                    nunjucksRender(nunjucksOptions).on('error', function(e){
-                        gutil.log(e);
-                        gutil.beep();
-                        this.emit('end');
-                    })
-                )
-                .pipe(gulp.dest(t.docOutputPath));
-        });
+function generateBuildTask(t) {
+    if (t.docSourceFilePaths) {
+        const taskName = `${buildTaskPrefix}${t.name}`;
+        const taskNameAllDocs = `${buildTaskPrefix}${t.name}:allDocs`;
+        const nunjucksOptions = getNunjucksOptions(t);
+
+        // These two tasks both compile .njk files in the /docs folder
+        gulp.task(config.getBaseTaskName(taskName), () => { return compileDocs(nunjucksOptions, t, true); }); // This task only compiles /docs/*.njk files that have been updated since the last time this task ran
+        gulp.task(config.getBaseTaskName(taskNameAllDocs), () => { return compileDocs(nunjucksOptions, t, false); }); // This task compiles ALL the /docs/*.njk files, and is triggered when a macro or template file changes since we don't know what /docs/*.njk files will be affected by those changes
 
         generateBasePreAndPostTasks(taskName);
+        generateBasePreAndPostTasks(taskNameAllDocs);
     }
 }
 
@@ -235,6 +261,7 @@ markupTasks.forEach(function(c){
     generateBuildTask(c);
     generateWatchMacrosTask(c);
     generateWatchDocsTask(c);
+    generateWatchTemplatesTask(c);
 });
 
 gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.concatAll), gulp.parallel(concatTasks));
@@ -245,10 +272,14 @@ gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.buildAll), gulp.parallel
 // Watch all macro files
 gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchMacros), gulp.parallel(watchMacrosTasks));
 
+// Watch all template files
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchTemplates), gulp.parallel(watchTemplatesTasks));
+
 // Watch all doc files
 gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchDocs), gulp.parallel(watchDocsTasks));
 
-gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(config.getBaseTaskName(lifecycleHookTaskNames.watchMacros), config.getBaseTaskName(lifecycleHookTaskNames.watchDocs)));
+// Watch all .njk files
+gulp.task(config.getBaseTaskName(lifecycleHookTaskNames.watchAll), gulp.parallel(config.getBaseTaskName(lifecycleHookTaskNames.watchMacros), config.getBaseTaskName(lifecycleHookTaskNames.watchTemplates), config.getBaseTaskName(lifecycleHookTaskNames.watchDocs)));
 
 // Generate lifecycle hook (pre & post) tasks (if defined)
 lifecycleHookTaskNameKeys.forEach((k) => {

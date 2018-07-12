@@ -89,6 +89,7 @@ function getMarkupConfig(buildConfig) {
             componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
             componentMacroFilename: `${c.codeNamespace}${c.markupSourceExtension}`,
             docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
+            templateSourceFilePaths: path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
             docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
             docTemplateWatchPaths: [
                 path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
@@ -107,6 +108,7 @@ function getMarkupConfig(buildConfig) {
         watchTaskPrefix: [c.watchTaskName, c.markupTaskName].join(':') + ':',
         watchDocsTaskPrefix: [c.watchTaskName, c.markupTaskName, c.docsTaskName].join(':') + ':',
         watchMacrosTaskPrefix: [c.watchTaskName, c.markupTaskName, c.macrosTaskName].join(':') + ':',
+        watchTemplatesTaskPrefix: [c.watchTaskName, c.markupTaskName, c.templatesTaskName].join(':') + ':',
         tasks: tasks
     };
 }
