@@ -53,7 +53,7 @@ module.exports = function(){
                 });
         });
 
-        it.only('should optimize svgs using a custom svgmin config', function() {
+        it('should optimize svgs using a custom svgmin config', function() {
             return gulp(`icons:optimize:${c.productTaskName}`)
                 .then(result => {
                     assert.noFileContent(`${projectPath}/icons/unoptimized-user.svg`, 'stroke="currentColor"');

@@ -20,7 +20,7 @@
   "dependencies": {
     "app-root-path": "^2.0.1",
     "autoprefixer": "^7.1.2",
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.24.6",
     "del": "^3.0.0",
     "eslint": "^4.7.2",
     "flat": "^4.0.0",
@@ -31,7 +31,7 @@
     "gulp-data": "^1.2.1",
     "gulp-eslint": "^4.0.0",
     "gulp-hub": "^4.1.0",
-    "gulp-nunjucks-render": "^2.2.1",
+    "gulp-nunjucks-render": "^2.2.2",
     "gulp-postcss": "^7.0.0",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.6.1",
@@ -53,9 +53,9 @@
     "yeoman-assert": "^3.0.0"
   },
   "devDependencies": {
-    "coveralls": "^2.13.1",
+    "coveralls": "^3.0.2",
     "istanbul": "^0.4.5",
-    "mocha": "^3.5.3"
+    "mocha": "^5.2.0"
   },
   "directories": {
     "test": "test"
