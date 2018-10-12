@@ -1,0 +1,20 @@
+{
+    "esds_alt_tokens": {
+        "color": {
+            "interactive": {
+                "primary": "#0ff",
+                "secondary": "#000000"
+            }
+        },
+        "border": {
+            "medium": "solid 3px #000",
+            "heavy": "solid 10px #ff0000"
+        },
+        "what-are-the-tokens": "limegreen",
+        "another_value": "hotpink",
+        "font": {
+            "sans-serif": "'Lato', sans-serif"
+        },
+        "namespace": "esds"
+    }
+}
