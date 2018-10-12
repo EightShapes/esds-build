@@ -159,32 +159,41 @@ module.exports = function(){
 
       describe('watch:styles', function(){
         it('should watch styles for changes', function(done) {
-          exec(`gulp watch:styles:${c.productTaskName}`); // start watch
+          const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/styles/doc.scss`);
-              recursivelyCheckForFiles([compiledCssFile], done);
+              recursivelyCheckForFiles([compiledCssFile], function(){
+                watchTask.kill();
+                done();
+              });
             });
         });
 
         it('should rebuild styles when tokens are updated', function(done) {
-          exec(`gulp watch:styles:${c.productTaskName}`); // start watch
+          const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/tokens/tokens.scss`);
-              recursivelyCheckForFiles([compiledCssFile], done);
+              recursivelyCheckForFiles([compiledCssFile], function(){
+                watchTask.kill();
+                done();
+              });
             });
         });
 
         it('should run all watch:style tasks simultaneously', function(done) {
-          exec(`gulp watch:styles:all`); // start watch
+          const watchTask = exec(`gulp watch:styles:all`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
               exec(`touch ${projectPath}/tokens/tokens.scss`);
-              recursivelyCheckForFiles([compiledCssFile], done);
+              recursivelyCheckForFiles([compiledCssFile], function(){
+                watchTask.kill();
+                done();
+              });
             });
         });
 

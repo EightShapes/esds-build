@@ -43,7 +43,7 @@ module.exports = {
     forceCleanWebroot: false, // Use if the webroot is outside the default project directory, useful for publishing a monorepo doc site on github pages
     versionedDocs: true, // If true, webroot folder structure will support a '/v/' directory containing previous releases
     latestVersionPath: 'latest', // If versionedDocs is true, where is the latest version of the docs built? Relative to webroot
-    tokensSourceFile: 'tokens.yaml', // Tokens source filename
+    tokensSourceFile: '*.yaml', // Tokens source filename
     tokensFormats: ['.scss', '.json'], // File formats of generated tokens files
     stylesLintConfig: path.join(packageRoot, '.sass-lint.yml'), // Location of styles lint config, defaults to .sass-lint.yml in the root
     scriptsLintConfig: path.join(packageRoot, '.eslintrc'), // Location of scripts lint config, defaults to .eslintrc in the root

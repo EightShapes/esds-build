@@ -34,6 +34,7 @@ module.exports = function(){
       it('should delete any tokens file except tokens.yaml', function(){
         const tokensScssFilename = `${tokensPath}/tokens.scss`,
               tokensJsonFilename = `${tokensPath}/tokens.json`,
+              tokensAltYamlFilename = `${tokensPath}/alt_tokens.yaml`,
               tokensYamlFilename = `${tokensPath}/tokens.yaml`;
 
         mkdirp.sync(tokensPath);
@@ -45,6 +46,7 @@ module.exports = function(){
             assert.noFile(tokensScssFilename);
             assert.noFile(tokensJsonFilename);
             assert.file(tokensYamlFilename);
+            assert.file(tokensAltYamlFilename);
           });
       });
     });

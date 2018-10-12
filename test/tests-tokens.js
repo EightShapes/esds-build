@@ -30,6 +30,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 module.exports = function(){
     const projectPath = './test/sample_project',
           tokensPath = `${projectPath}/tokens`,
+          altTokensScss = `${tokensPath}/alt_tokens.scss`,
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
@@ -53,6 +54,7 @@ module.exports = function(){
         return gulp('tokens:build:all')
           .then(result => {
             assert.fileContent(tokensScss, `$${c.codeNamespace}-tokens: (`);
+            assert.fileContent(altTokensScss, `$${c.codeNamespace}-alt-tokens: (`);
           });
       });
 
