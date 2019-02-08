@@ -27,10 +27,10 @@ jspm_packages/
 
 /tokens/*
 # Keep yaml token source file
-!/tokens/*.yaml 
+!/tokens/*.yaml
 
 # Ignore root .njk files in /components
-/components/*
+/components/*.njk
 # keep files in subdirectories in /components
 !/components/*/
 
