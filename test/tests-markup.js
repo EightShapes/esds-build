@@ -58,6 +58,31 @@ module.exports = function(){
       });
     });
 
+    describe('skipping macro concatenation', function(){
+      before(function(){
+        fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
+        let newConfig = {
+          concatenateComponentMacros: false
+        };
+
+        fs.writeFileSync('esds-build-config.json', JSON.stringify(newConfig));
+      });
+
+      after(function(){
+        fs.moveSync(`moved-esds-build-config.js`, `esds-build-config.js`);
+        del.sync('esds-build-config.json');
+      });
+
+      it('should not concatenate macros', function() {
+        del.sync(`${componentMacros}/${c.codeNamespace}.njk`);
+        return gulp(`markup:concatenate:macros:all`)
+          .then(result => {
+            assert(result.stdout.includes("concatenateComponentMacros is false, skipping component macro concatenation"));
+            assert.noFile(`${componentMacros}/${c.codeNamespace}.njk`);
+          });
+      });
+    });
+
     describe('when the /components directory does not exist', function(){
       before(function(){
         fs.moveSync(componentMacros, `${projectPath}/moved-components`);

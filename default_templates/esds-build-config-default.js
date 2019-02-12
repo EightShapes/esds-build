@@ -27,6 +27,7 @@ module.exports = {
     configMethod: 'extend', // Method of modifying default config. If 'extend', Product-specific config will merge with defaults, if 'override', Product-specific config will completely replace defaults
     codeNamespace: sanitizedProductName, // Used as the name for concatenated macro, icon, and script files as well as the JSON tokens namespace and SCSS token prefix. If the namespace was 'esds' this would result in: esds.njk, esds.svg, esds.js, {{ esds.token_name }}, and $esds-token-name
     rootPath: packageRoot, // The root path of the entire Product, defaults to the same directory as the Product's gulpfile.js
+    concatenateComponentMacros: true, // Set to false when esds-build is used to build single-component packages and only one macro exists in the project
     componentsPath: 'components', // Name of the top-level components directory
     dataPath: 'data', // Name of the top-level data directory
     dependenciesPath: 'node_modules', // Name of the top-level dependencies directory
