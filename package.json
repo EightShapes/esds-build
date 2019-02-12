@@ -1,6 +1,6 @@
 {
   "name": "esds-build",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "Static site generator optimized for building and documenting design systems.",
   "main": "tasks/esds_tasks.js",
   "engines": {
