@@ -54,13 +54,37 @@ function copyDefaultStarterFiles(rootPath) {
             },
             {
                 file: path.join(defaultTemplatesDir, 'templates', 'base.njk'),
-                destination: path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`)
+                destination: path.join(rootPath, c.templatesPath, `base${c.markupSourceExtension}`),
+                replace: {
+                  'CODE_NAMESPACE': c.codeNamespace
+                }
+            },
+            {
+                file: path.join(defaultTemplatesDir, 'tokens', 'tokens.yaml'),
+                destination: path.join(rootPath, c.tokensPath, `tokens.yaml`)
+            },
+            {
+                file: path.join(defaultTemplatesDir, 'styles', 'style-default.scss'),
+                destination: path.join(rootPath, c.stylesPath, `${c.codeNamespace}${c.stylesSourceExtension}`)
+            },
+            {
+                file: path.join(defaultTemplatesDir, 'components', 'default-concatenated-macro.njk'),
+                destination: path.join(rootPath, c.componentsPath, `${c.codeNamespace}${c.markupSourceExtension}`)
             }
         ];
 
     starterFiles.forEach(sf => {
         if (!fs.existsSync(sf.destination)) {
-            fs.copySync(sf.file, sf.destination);
+            if (sf.replace) {
+              let template = fs.readFileSync(sf.file, 'UTF-8');
+              for (let search in sf.replace) {
+                const regex = new RegExp(search, "g");
+                template = template.replace(regex, sf.replace[search]);
+              }
+              fs.writeFileSync(sf.destination, template, 'UTF-8');
+            } else {
+              fs.copySync(sf.file, sf.destination);
+            }
         }
     });
 }
@@ -128,8 +152,8 @@ function generateComponentFiles(answers, rootPath) {
 {% block body %}
     {% filter markdown %}
         # ${componentSinkTitle} Sink
-    {% endfilter %} 
-    {# Your sink examples go here #} 
+    {% endfilter %}
+    {# Your sink examples go here #}
 {% endblock body %}`;
 
         if (!fs.existsSync(componentSinkDirectory)) {
