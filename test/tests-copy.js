@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe */
+/* global describe.only */
 /* global beforeEach */
 /* global before */
 
@@ -16,8 +16,8 @@ const assert = require('yeoman-assert'),
         webrootImages = `${webroot}/images`;
 
 module.exports = function(){
-    describe('copy', function(){
-        describe('copy:images', function(){
+    describe.only('copy', function(){
+        describe.only('copy:images', function(){
             beforeEach(function(){
                 return gulp('clean:webroot');
             });
@@ -32,7 +32,7 @@ module.exports = function(){
             });
         });
 
-        describe('watch task generation', function(){
+        describe.only('watch task generation', function(){
             it('should have a watch task to monitor changes to copied files and re-copy when updated', function() {
                 return gulp('--tasks')
                   .then(result => {
@@ -43,7 +43,7 @@ module.exports = function(){
             });
         });
 
-        describe('copying named assets to fonts directory', function(){
+        describe.only('copying named assets to fonts directory', function(){
             beforeEach(function(){
                 return gulp('clean:webroot');
             });
@@ -59,7 +59,7 @@ module.exports = function(){
             });
         });
 
-        describe('copying dependencies to a dependencies directory', function(){
+        describe.only('copying dependencies to a dependencies directory', function(){
             beforeEach(function(){
                 return gulp('clean:webroot');
             });
@@ -89,7 +89,7 @@ module.exports = function(){
             });
         });
 
-        describe('copying default dist assets to a dist directory', function(){
+        describe.only('copying default dist assets to a dist directory', function(){
             beforeEach(function(){
                 return gulp('clean:webroot')
                         .then(result => gulp('clean:dist'));
@@ -120,7 +120,7 @@ module.exports = function(){
             });
         });
 
-        describe('copying doc pages from a child module into a parent module', function() {
+        describe.only('copying doc pages from a child module into a parent module', function() {
             this.timeout(120000);
 
             before(function(){
