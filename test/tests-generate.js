@@ -32,7 +32,7 @@ module.exports = function(){
       });
 
       after(function() {
-        return del(scaffoldDir);
+        // return del(scaffoldDir);
       });
 
       it('should generate a project scaffold with top level directories and basic files', function() {
@@ -89,6 +89,7 @@ module.exports = function(){
         mkdirp.sync(docsDir);
         fs.writeFileSync(testFile, 'Please don\'t overwrite me!');
 
+        generate.createTopLevelDirectories(scaffoldDir);
         generate.copyDefaultStarterFiles(scaffoldDir);
         assert.fileContent(path.join(docsDir, 'index.njk'), 'Please don\'t overwrite me!'); // the default index.njk does not contain this content
         assert.fileContent(`${scaffoldDir}/templates/base.njk`, `<script src="/scripts/esds.js">`); // It should still write default files that don't already exist
