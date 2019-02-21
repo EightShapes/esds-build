@@ -1,9 +1,7 @@
-<html>
-    <head>
-        <title>Design System</title>
-    </head>
-    <body>
-        <h1>Design System</h1>
-        <p>Hello world!</p>
-    </body>
-</html>
+{% extends 'TEMPLATES_DIRECTORY/base.njk' %}
+{% set title = "Design System" %}
+
+{% block body %}
+  <h1>Design System</h1>
+  <p>Hello world!</p>
+{% endblock %}

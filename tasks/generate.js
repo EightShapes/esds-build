@@ -38,7 +38,10 @@ function copyDefaultStarterFiles(rootPath) {
         starterFiles = [
             {
                 file: path.join(defaultTemplatesDir, 'docs', 'index.njk'),
-                destination: path.join(rootPath, c.docsPath, `index${c.markupSourceExtension}`)
+                destination: path.join(rootPath, c.docsPath, `index${c.markupSourceExtension}`),
+                replace: {
+                  'TEMPLATES_DIRECTORY': c.templatesPath
+                }
             },
             {
                 file: path.join(defaultTemplatesDir, '.gitignore-default'),
@@ -50,7 +53,10 @@ function copyDefaultStarterFiles(rootPath) {
             },
             {
                 file: path.join(defaultTemplatesDir, 'templates', 'sink.njk'),
-                destination: path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`)
+                destination: path.join(rootPath, c.templatesPath, `sink${c.markupSourceExtension}`),
+                replace: {
+                  'TEMPLATES_DIRECTORY': c.templatesPath
+                }
             },
             {
                 file: path.join(defaultTemplatesDir, 'templates', 'base.njk'),
