@@ -96,7 +96,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('generate:default-config', function(){
+    describe('generate:default-config', function(){
       after(function() {
         return del(scaffoldDir);
       });

@@ -34,7 +34,7 @@ module.exports = function(){
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
-    describe('tokens:build', function(){
+    describe.skip('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
