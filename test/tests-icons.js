@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe */
+/* global describe.only */
 /* global beforeEach */
 /* global afterEach */
 /* global before */
@@ -36,7 +36,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    describe('icons:optimize', function(){
+    describe.only('icons:optimize', function(){
         beforeEach(function(){
             fs.writeFileSync(unoptimizedSVGPath, unoptimizedSVGSource);
             return gulp('clean:webroot');
@@ -61,7 +61,7 @@ module.exports = function(){
         });
     });
 
-    describe('icons:concatenate', function(){
+    describe.only('icons:concatenate', function(){
         beforeEach(function(){
             return gulp('clean:webroot');
         });
@@ -75,7 +75,7 @@ module.exports = function(){
         });
     });
 
-    describe('icons:build', function(){
+    describe.only('icons:build', function(){
         beforeEach(function(){
             fs.writeFileSync(unoptimizedSVGPath, unoptimizedSVGSource);
             return gulp('clean:webroot');
@@ -106,7 +106,7 @@ module.exports = function(){
        });
     });
 
-    describe('icons:generate-manifest', function(){
+    describe.only('icons:generate-manifest', function(){
       it('should generate an array containing the name of each of the SVGs in the /icons directory ordered alphabetically', function(){
         const iconsTasks = require('../tasks/icons.js'),
               manifest = iconsTasks.getIconNamesManifest();
@@ -131,7 +131,7 @@ module.exports = function(){
       });
     });
 
-    describe('when the /icons directory does not exist', function(){
+    describe.only('when the /icons directory does not exist', function(){
       before(function(){
         fs.moveSync(`${projectPath}/icons`, `${projectPath}/moved-icons`);
       });
@@ -148,7 +148,7 @@ module.exports = function(){
       });
     });
 
-    describe('icons:watch', function(){
+    describe.only('icons:watch', function(){
         beforeEach(function(){
             return gulp('clean:webroot');
         });
