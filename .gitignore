@@ -5,3 +5,4 @@ test/sample_project/node_modules/product-a/node_modules
 test/sample_project/node_modules/product-b/node_modules
 test/sample_project/data/icons.json
 /coverage
+tasks/~tmp_project_gulp_tasks.js
