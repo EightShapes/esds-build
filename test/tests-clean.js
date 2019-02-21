@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe */
+/* global describe.only */
 /* global beforeEach */
 
 'use strict';
@@ -16,7 +16,7 @@ module.exports = function(){
           tokensPath = `${projectPath}/tokens`,
           dist = `${projectPath}/dist`;
 
-    describe('clean:dist', function(){
+    describe.only('clean:dist', function(){
 
       it('should delete all the files in dist', function() {
         const testFilename = `${dist}/some-random-file.txt`;
@@ -30,7 +30,7 @@ module.exports = function(){
       });
     });
 
-    describe('clean:tokens', function(){
+    describe.only('clean:tokens', function(){
       it('should delete any tokens file except tokens.yaml', function(){
         const tokensScssFilename = `${tokensPath}/tokens.scss`,
               tokensJsonFilename = `${tokensPath}/tokens.json`,
@@ -51,7 +51,7 @@ module.exports = function(){
       });
     });
 
-    describe('clean:concatenated-macros', function(){
+    describe.only('clean:concatenated-macros', function(){
       it('should delete all concatenated macro files', function(){
         const configDefaults = require('../esds-build-config.js');
         const concatenatedComponentsFilename = `${projectPath}/components/${configDefaults.codeNamespace}.njk`;
@@ -66,7 +66,7 @@ module.exports = function(){
       });
     });
 
-    describe('clean:webroot', function(){
+    describe.only('clean:webroot', function(){
       it('should delete all files in the project webroot', function(){
         const webroot = `${projectPath}/_site/latest`,
               webrootFile = `${webroot}/index.html`,
@@ -85,7 +85,7 @@ module.exports = function(){
       });
     });
 
-    describe('clean:webroot outside of project root', function(){
+    describe.only('clean:webroot outside of project root', function(){
       it('should delete all files in the project webroot even when the project webroot is outside of the project directory', function(){
         fs.copyFileSync('esds-build-config.js', 'esds-build-config.js.original');
         del('esds-build-config.js');
@@ -112,7 +112,7 @@ module.exports = function(){
       });
     });
 
-    describe('lifecycle hooks', function(){
+    describe.only('lifecycle hooks', function(){
       it('should run a lifecycle task BEFORE running clean:webroot', function(done) {
         gulp(' clean:webroot')
         .then(result => {
