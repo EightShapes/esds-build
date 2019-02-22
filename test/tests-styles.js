@@ -157,7 +157,7 @@ module.exports = function(){
         });
       });
 
-      describe('watch:styles', function(){
+      describe.only('watch:styles', function(){
         it('should watch styles for changes', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
@@ -198,11 +198,14 @@ module.exports = function(){
         });
 
         it('should watch tokens.scss for changes and recompile', function(done){
-          exec(`gulp watch:styles:tokens`); // start watch
+          const watchTask = exec(`gulp watch:styles:tokens`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
-              recursivelyCheckForFiles([compiledCssFile], done);
+              recursivelyCheckForFiles([compiledCssFile], function(){
+                watchTask.kill();
+                done();
+              });
             });
         });
       });
