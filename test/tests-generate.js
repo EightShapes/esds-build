@@ -32,7 +32,7 @@ module.exports = function(){
       });
 
       after(function() {
-        // return del(scaffoldDir);
+        return del(scaffoldDir);
       });
 
       it('should generate a project scaffold with top level directories and basic files', function() {

@@ -39,6 +39,7 @@ module.exports = {
     sinksPath: 'sink-pages', // Name of the top-level sink-pages directory
     stylesPath: 'styles', // Name of the top-level styles directory
     templatesPath: 'templates', // Name of the top-level templates directory
+    testPath: 'test', // Name of the top-level test directory
     tokensPath: 'tokens', // Name of the top-level tokens directory
     webroot: '_site', // Name of the top-level webroot directory
     forceCleanWebroot: false, // Use if the webroot is outside the default project directory, useful for publishing a monorepo doc site on github pages
