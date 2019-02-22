@@ -18,17 +18,17 @@ const productBuildConfigFileName = 'esds-build-config',
 function createTopLevelDirectories(rootPath) {
     // TODO: Make this idempotent and non-destructive
     const topLevelDirectories = [
-        'components',
-        'data',
-        'dist',
-        'docs',
-        'icons',
-        'images',
-        'scripts',
-        'styles',
-        'templates',
-        'test',
-        'tokens'
+        c.componentsPath,
+        c.dataPath,
+        c.distPath,
+        c.docsPath,
+        c.iconsPath,
+        c.imagesPath,
+        c.scriptsPath,
+        c.stylesPath,
+        c.templatesPath,
+        c.testPath,
+        c.tokensPath
     ];
 
     topLevelDirectories.forEach(dir => mkdirp.sync(path.join(rootPath, dir)));
