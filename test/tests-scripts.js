@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe.only */
+/* global describe */
 /* global beforeEach */
 /* global before */
 /* global after */
@@ -30,8 +30,8 @@ module.exports = function(){
     const projectPath = './test/sample_project',
           docJsFile = `${projectPath}/_site/latest/scripts/${c.codeNamespace}.js`;
 
-    describe.only('scripts', function(){
-      describe.only('scripts:concatenate', function(){
+    describe('scripts', function(){
+      describe('scripts:concatenate', function(){
         beforeEach(function() {
           return gulp('clean:webroot');
         });
@@ -59,7 +59,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('scripts:lint', function(){
+      describe('scripts:lint', function(){
         it('should be able to lint scripts', function() {
           return gulp(`scripts:lint:${c.productTaskName}`)
             .then(result => {
@@ -76,7 +76,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('scripts:build', function(){
+      describe('scripts:build', function(){
         beforeEach(function() {
           return gulp('clean:webroot');
         });
@@ -99,7 +99,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('when the /scripts directory does not exist', function(){
+      describe('when the /scripts directory does not exist', function(){
         before(function(){
           fs.moveSync(`${projectPath}/scripts`, `${projectPath}/moved-scripts`);
         });
@@ -116,7 +116,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('watch:scripts', function(){
+      describe('watch:scripts', function(){
         // Skipping failing wtach test for now
         xit('should watch all scripts for changes', function(done) {
           exec(`gulp watch:scripts:all`); // start watch

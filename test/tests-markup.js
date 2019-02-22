@@ -37,7 +37,7 @@ function deleteNodeModuleWebroots() {
 }
 
 module.exports = function(){
-    describe.only('markup:concatenate:macros:', function(){
+    describe('markup:concatenate:macros:', function(){
       beforeEach(function(){
         return gulp('clean:concatenated-macros');
       });
@@ -58,7 +58,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('skipping macro concatenation', function(){
+    describe('skipping macro concatenation', function(){
       before(function(){
         fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
         let newConfig = {
@@ -83,7 +83,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('when the /components directory does not exist', function(){
+    describe('when the /components directory does not exist', function(){
       before(function(){
         fs.moveSync(componentMacros, `${projectPath}/moved-components`);
       });
@@ -100,7 +100,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('markup:build:', function(){
+    describe('markup:build:', function(){
       beforeEach(function(){
         return gulp('clean:webroot');
       });
@@ -144,7 +144,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('markup customize markdown filter', function() {
+    describe('markup customize markdown filter', function() {
       before(function(){
         fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
         let newConfig = {
@@ -170,7 +170,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('markup:build: when tokens are updated', function(){
+    describe('markup:build: when tokens are updated', function(){
       before(function(){
         fs.copySync(`${projectPath}/tokens/tokens.yaml`, `${projectPath}/tokens/moved-tokens.yaml`);
         fs.copySync(`${projectPath}/docs/index.njk`, `${projectPath}/docs/moved-index.njk`);
@@ -197,7 +197,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('when the /docs directory does not exist', function(){
+    describe('when the /docs directory does not exist', function(){
       before(function(){
         fs.moveSync(`${projectPath}/docs`, `${projectPath}/moved-docs`);
       });
@@ -214,7 +214,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('custom nunjucks filters', function(){
+    describe('custom nunjucks filters', function(){
       const customFilterTestFilepath = './test/sample_project/docs/custom-filter-example.njk';
       beforeEach(function(){
         fs.writeFileSync(customFilterTestFilepath, "{% set test_array = ['a', 'b', 'c'] %}{% set is_it_an_array = test_array | isarray %}{% if is_it_an_array %}<p>Yes! It IS an array!</p>{% endif %}");
@@ -233,7 +233,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('tokens available in nunjucks', function(){
+    describe('tokens available in nunjucks', function(){
       const nunjucksTokensTestFilepath = './test/sample_project/docs/using-tokens-example.njk';
       beforeEach(function(){
         fs.writeFileSync(nunjucksTokensTestFilepath, "<h1>These tokens are {{ esds_tokens['what-are-the-tokens'] }}</h1>");
@@ -253,7 +253,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('child module tokens referenced and available in nunjucks', function(){
+    describe('child module tokens referenced and available in nunjucks', function(){
       const childTokensReferenceTestFilepath = './test/sample_project/docs/using-child-module-tokens-by-reference-example.njk';
       beforeEach(function(){
         fs.writeFileSync(childTokensReferenceTestFilepath, "<h1>This is a token from the child module: {{ product_b.color.text.default }}</h1>");
@@ -274,7 +274,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('json data available in nunjucks', function(){
+    describe('json data available in nunjucks', function(){
       beforeEach(function(){
         return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -292,7 +292,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('package.json content available in nunjucks', function(){
+    describe('package.json content available in nunjucks', function(){
       beforeEach(function(){
         return gulp('clean:webroot');
       });
@@ -306,7 +306,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('nunjucks filters defined in a dependency', function(){
+    describe('nunjucks filters defined in a dependency', function(){
       beforeEach(function(){
         return gulp('clean:webroot');
       });
@@ -324,7 +324,7 @@ module.exports = function(){
     });
 
     describe('watch:markup:macros', function(){
-      it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
+      xit('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
@@ -332,14 +332,14 @@ module.exports = function(){
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
             recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
-                                      `${webroot}/latest/index.html`], function(){
-                                        watchTask.kill();
-                                        done();
-                                      });
+              `${webroot}/latest/index.html`], function(){
+                watchTask.kill();
+                done();
+              });
           });
       });
 
-      it('should watch all macro files and trigger correct rebuilds when macro files are saved', function(done){
+      xit('should watch all macro files and trigger correct rebuilds when macro files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:macros:all`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
@@ -347,16 +347,16 @@ module.exports = function(){
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
             recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
-                                      `${webroot}/latest/index.html`], function(){
-                                        watchTask.kill();
-                                        done();
-                                      });
+              `${webroot}/latest/index.html`], function(){
+                watchTask.kill();
+                done();
+              });
           });
       });
     });
 
     describe('watch:markup:docs', function(){
-      it('should rebuild doc files when doc files are saved', function(done){
+      xit('should rebuild doc files when doc files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:docs:${c.productTaskName}`); // start watch
         gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
@@ -369,7 +369,7 @@ module.exports = function(){
           });
       });
 
-      it('should rebuild "doc" files when all doc files are being watched', function(done){
+      xit('should rebuild "doc" files when all doc files are being watched', function(done){
         const watchTask = exec(`gulp watch:markup:docs:all`); // start watch
         deleteNodeModuleWebroots();
         gulp('markup:concatenate:macros:all')

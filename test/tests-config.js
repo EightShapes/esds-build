@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe.only */
+/* global describe */
 /* global beforeEach */
 /* global before */
 /* global after */
@@ -13,7 +13,7 @@ const assert = require('yeoman-assert'),
 let config;
 
 module.exports = function(){
-    describe.only('when retrieving build config', function(){
+    describe('when retrieving build config', function(){
         beforeEach(function(){
             config = require('../tasks/config.js');
         });
@@ -76,7 +76,7 @@ module.exports = function(){
         });
     });
 
-    describe.only('when retrieving task config', function(){
+    describe('when retrieving task config', function(){
         beforeEach(function(){
             config = require('../tasks/config.js');
         });
@@ -138,7 +138,7 @@ module.exports = function(){
         });
     });
 
-    describe.only('when retrieving dependency config', function(){
+    describe('when retrieving dependency config', function(){
         beforeEach(function(){
             config = require('../tasks/config.js');
         });
@@ -157,7 +157,7 @@ module.exports = function(){
         });
     });
 
-    describe.only('when retrieving script lint config', function(){
+    describe('when retrieving script lint config', function(){
         before(function(done){
             config = require('../tasks/config.js');
             fs.moveSync('.eslintrc', 'renamed.eslintrc');

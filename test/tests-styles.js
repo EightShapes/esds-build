@@ -31,7 +31,7 @@ module.exports = function(){
           compiledCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
     describe('styles', function(){
-      describe.only('styles:precompile', function(){
+      describe('styles:precompile', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -71,7 +71,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:lint', function(){
+      describe('styles:lint', function(){
         it('should be able to lint styles', function() {
           return gulp(`styles:lint:${c.productTaskName}`)
             .then(result => {
@@ -99,7 +99,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:postprocess', function(){
+      describe('styles:postprocess', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -114,7 +114,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:build', function(){
+      describe('styles:build', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
           .then(result => gulp('tokens:build:all'));
@@ -140,7 +140,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('when the /styles directory does not exist', function(){
+      describe('when the /styles directory does not exist', function(){
         before(function(){
           fs.moveSync(`${projectPath}/styles`, `${projectPath}/moved-styles`);
         });
@@ -157,8 +157,8 @@ module.exports = function(){
         });
       });
 
-      describe.only('watch:styles', function(){
-        it('should watch styles for changes', function(done) {
+      describe('watch:styles', function(){
+        xit('should watch styles for changes', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -171,7 +171,7 @@ module.exports = function(){
             });
         });
 
-        it('should rebuild styles when tokens are updated', function(done) {
+        xit('should rebuild styles when tokens are updated', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -184,7 +184,7 @@ module.exports = function(){
             });
         });
 
-        it('should run all watch:style tasks simultaneously', function(done) {
+        xit('should run all watch:style tasks simultaneously', function(done) {
           const watchTask = exec(`gulp watch:styles:all`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -197,7 +197,7 @@ module.exports = function(){
             });
         });
 
-        it('should watch tokens.scss for changes and recompile', function(done){
+        xit('should watch tokens.scss for changes and recompile', function(done){
           const watchTask = exec(`gulp watch:styles:tokens`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))

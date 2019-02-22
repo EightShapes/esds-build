@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe.only */
+/* global describe */
 /* global beforeEach */
 
 'use strict';
@@ -10,7 +10,7 @@ const assert = require('yeoman-assert'),
         fs = require('fs');
 
 module.exports = function(){
-    describe.only('top-level composite tasks', function(){
+    describe('top-level composite tasks', function(){
         it('should define top level tasks', function(done) {
             gulp(' --tasks')
                 .then(result => {

@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe.only */
+/* global describe */
 /* global after */
 /* global beforeEach */
 
@@ -26,7 +26,7 @@ function recursivelyCheckForFiles(filePaths, done) {
 }
 
 module.exports = function(){
-    describe.only('generate:scaffold', function(){
+    describe('generate:scaffold', function(){
       beforeEach(function() {
         return del(scaffoldDir);
       });
@@ -96,7 +96,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('generate:default-config', function(){
+    describe('generate:default-config', function(){
       after(function() {
         return del(scaffoldDir);
       });
@@ -112,7 +112,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('generate:new-component', function(){
+    describe('generate:new-component', function(){
       after(function() {
         return del(scaffoldDir);
       });
