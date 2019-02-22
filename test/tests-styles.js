@@ -1,6 +1,6 @@
 /* global it */
 /* global xit */
-/* global describe.only */
+/* global describe */
 /* global beforeEach */
 /* global before */
 /* global after */
@@ -30,8 +30,8 @@ module.exports = function(){
     const projectPath = './test/sample_project',
           compiledCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
-    describe.only('styles', function(){
-      describe.only('styles:precompile', function(){
+    describe('styles', function(){
+      describe('styles:precompile', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -71,7 +71,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:lint', function(){
+      describe('styles:lint', function(){
         it('should be able to lint styles', function() {
           return gulp(`styles:lint:${c.productTaskName}`)
             .then(result => {
@@ -99,7 +99,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:postprocess', function(){
+      describe('styles:postprocess', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -114,7 +114,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('styles:build', function(){
+      describe('styles:build', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
           .then(result => gulp('tokens:build:all'));
@@ -140,7 +140,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('when the /styles directory does not exist', function(){
+      describe('when the /styles directory does not exist', function(){
         before(function(){
           fs.moveSync(`${projectPath}/styles`, `${projectPath}/moved-styles`);
         });
@@ -157,7 +157,7 @@ module.exports = function(){
         });
       });
 
-      describe.only('watch:styles', function(){
+      describe('watch:styles', function(){
         it('should watch styles for changes', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
