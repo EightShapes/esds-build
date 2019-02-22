@@ -31,7 +31,7 @@ module.exports = function(){
           compiledCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
     describe('styles', function(){
-      describe('styles:precompile', function(){
+      describe.only('styles:precompile', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -71,7 +71,7 @@ module.exports = function(){
         });
       });
 
-      describe('styles:lint', function(){
+      describe.only('styles:lint', function(){
         it('should be able to lint styles', function() {
           return gulp(`styles:lint:${c.productTaskName}`)
             .then(result => {
@@ -99,7 +99,7 @@ module.exports = function(){
         });
       });
 
-      describe('styles:postprocess', function(){
+      describe.only('styles:postprocess', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
             .then(result => gulp('tokens:build:all'));
@@ -114,7 +114,7 @@ module.exports = function(){
         });
       });
 
-      describe('styles:build', function(){
+      describe.only('styles:build', function(){
         beforeEach(function() {
           return gulp('clean:webroot')
           .then(result => gulp('tokens:build:all'));
@@ -140,7 +140,7 @@ module.exports = function(){
         });
       });
 
-      describe('when the /styles directory does not exist', function(){
+      describe.only('when the /styles directory does not exist', function(){
         before(function(){
           fs.moveSync(`${projectPath}/styles`, `${projectPath}/moved-styles`);
         });
