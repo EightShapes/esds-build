@@ -4,6 +4,7 @@ const productBuildConfigFileName = 'esds-build-config',
         config = require('./config.js'),
         gulp = config.getGulpInstance(),
         c = config.get(),
+        clear = require('clear'),
         fs = require('fs-extra'),
         path = require('path'),
         inquirer = require('inquirer'),
@@ -185,7 +186,7 @@ gulp.task(config.getBaseTaskName(taskNames.generateNewComponent), function(done)
                 default: false,
                 message: "Generate a javascript file for this component?"
             }];
-
+    clear();
     return inquirer.prompt(questions).then(function(answers) {
         generateComponentFiles(answers, c.rootPath);
         done();

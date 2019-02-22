@@ -21,6 +21,7 @@
     "app-root-path": "^2.1.0",
     "autoprefixer": "^9.4.8",
     "browser-sync": "^2.26.3",
+    "clear": "^0.1.0",
     "del": "^3.0.0",
     "eslint": "^4.19.1",
     "flat": "^4.1.0",
