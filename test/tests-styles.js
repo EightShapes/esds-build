@@ -158,7 +158,7 @@ module.exports = function(){
       });
 
       describe('watch:styles', function(){
-        it('should watch styles for changes', function(done) {
+        xit('should watch styles for changes', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -171,7 +171,7 @@ module.exports = function(){
             });
         });
 
-        it('should rebuild styles when tokens are updated', function(done) {
+        xit('should rebuild styles when tokens are updated', function(done) {
           const watchTask = exec(`gulp watch:styles:${c.productTaskName}`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -184,7 +184,7 @@ module.exports = function(){
             });
         });
 
-        it('should run all watch:style tasks simultaneously', function(done) {
+        xit('should run all watch:style tasks simultaneously', function(done) {
           const watchTask = exec(`gulp watch:styles:all`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
@@ -197,12 +197,15 @@ module.exports = function(){
             });
         });
 
-        it('should watch tokens.scss for changes and recompile', function(done){
-          exec(`gulp watch:styles:tokens`); // start watch
+        xit('should watch tokens.scss for changes and recompile', function(done){
+          const watchTask = exec(`gulp watch:styles:tokens`); // start watch
           gulp('clean:webroot') // clear webroot
             .then(result => gulp('tokens:build:all'))
             .then(result => {
-              recursivelyCheckForFiles([compiledCssFile], done);
+              recursivelyCheckForFiles([compiledCssFile], function(){
+                watchTask.kill();
+                done();
+              });
             });
         });
       });

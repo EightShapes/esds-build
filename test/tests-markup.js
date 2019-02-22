@@ -324,7 +324,7 @@ module.exports = function(){
     });
 
     describe('watch:markup:macros', function(){
-      it('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
+      xit('should reconcatenate macros and rebuild docs when macro files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:macros:${c.productTaskName}`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
@@ -332,14 +332,14 @@ module.exports = function(){
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
             recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
-                                      `${webroot}/latest/index.html`], function(){
-                                        watchTask.kill();
-                                        done();
-                                      });
+              `${webroot}/latest/index.html`], function(){
+                watchTask.kill();
+                done();
+              });
           });
       });
 
-      it('should watch all macro files and trigger correct rebuilds when macro files are saved', function(done){
+      xit('should watch all macro files and trigger correct rebuilds when macro files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:macros:all`); // start watch
         deleteNodeModuleWebroots();
         gulp('clean:concatenated-macros')
@@ -347,16 +347,16 @@ module.exports = function(){
           .then(result => {
             exec(`touch ${componentMacros}/button/button.njk`);
             recursivelyCheckForFiles([`${componentMacros}/${c.codeNamespace}.njk`,
-                                      `${webroot}/latest/index.html`], function(){
-                                        watchTask.kill();
-                                        done();
-                                      });
+              `${webroot}/latest/index.html`], function(){
+                watchTask.kill();
+                done();
+              });
           });
       });
     });
 
     describe('watch:markup:docs', function(){
-      it('should rebuild doc files when doc files are saved', function(done){
+      xit('should rebuild doc files when doc files are saved', function(done){
         const watchTask = exec(`gulp watch:markup:docs:${c.productTaskName}`); // start watch
         gulp('markup:concatenate:macros:all')
           .then(result => gulp('clean:webroot'))
@@ -369,7 +369,7 @@ module.exports = function(){
           });
       });
 
-      it('should rebuild "doc" files when all doc files are being watched', function(done){
+      xit('should rebuild "doc" files when all doc files are being watched', function(done){
         const watchTask = exec(`gulp watch:markup:docs:all`); // start watch
         deleteNodeModuleWebroots();
         gulp('markup:concatenate:macros:all')
