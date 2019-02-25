@@ -41,16 +41,19 @@ function generateIconNameManifestFile() {
             dataDirectory = path.join(c.rootPath, c.dataPath),
             iconDataFilePath = path.join(dataDirectory, 'icons.json');
 
-    if (!fs.existsSync(dataDirectory)) {
+    // Check if there are any files matching /icons/*.svg
+    if (iconNames.length > 0) {
+      if (!fs.existsSync(dataDirectory)) {
         mkdirp.sync(dataDirectory);
-    }
+      }
 
-    fs.writeFileSync(iconDataFilePath, iconNamesJson);
+      fs.writeFileSync(iconDataFilePath, iconNamesJson);
+    }
 }
 
 function generateBasePreAndPostTasks(taskName) {
     const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
-    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
 }
 
 function generateIconOptimizeTask(t) {

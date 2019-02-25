@@ -140,10 +140,12 @@ module.exports = function(){
         fs.moveSync(`${projectPath}/moved-icons`, `${projectPath}/icons`);
       });
 
-      it('should run the icons:build:all task without failing', function() {
+      it('should run the icons:build:all task without failing, and not generate an icons.json file', function() {
+        del(`${projectPath}/data/icons.json`);
         return gulp('icons:build:all')
           .then(result => {
             assert(result.stdout.includes("Finished 'icons:build:all'"));
+            assert.noFile(`${projectPath}/data/icons.json`);
           });
       });
     });
