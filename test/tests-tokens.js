@@ -12,7 +12,8 @@ const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs-extra');
+      fs = require('fs-extra'),
+      yaml = require('yamljs');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -34,7 +35,7 @@ module.exports = function(){
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
-    describe('tokens:build', function(){
+    describe.only('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
@@ -70,9 +71,16 @@ module.exports = function(){
         assert.noFile(`${tokensPath}/tokens.json`);
         assert.noFile(`${tokensPath}/tokens.scss`);
       });
+
+      it ('should allow variable interpolation in the yaml file', function(){
+        const parsedTokens = tokensTasks.tokensToJson(`${projectPath}/interpolated_tokens.yaml`);
+        assert.equal(parsedTokens.simple.beta, "Cheese Burger")
+        assert.equal(parsedTokens['test-scenario'].combined, "Something Else")
+        assert.equal(parsedTokens['another-one'], "Cheese Toastie")
+      });
     });
 
-    describe('when the /tokens directory does not exist', function(){
+    describe.only('when the /tokens directory does not exist', function(){
       before(function(){
         fs.moveSync(`${projectPath}/tokens`, `${projectPath}/moved-tokens`);
       });
@@ -89,7 +97,7 @@ module.exports = function(){
       });
     });
 
-    describe('watch:tokens', function(){
+    describe.only('watch:tokens', function(){
       // Skipping watch tests for now, causing intermittent failures on TravisCI
       xit('should watch tokens.yaml for changes and rebuild scss and json', function(done){
         exec(`gulp watch:tokens:all`); // start watch
@@ -103,7 +111,7 @@ module.exports = function(){
       });
     });
 
-    describe('invalid tokens file', function(){
+    describe.only('invalid tokens file', function(){
       it('should return an empty object when parsing an empty tokens file', function(){
         const tokens = tokensTasks.tokensToJson(`${process.cwd()}/test/sample_project/empty-tokens/empty-tokens.yaml`),
               keys = Object.keys(tokens);
