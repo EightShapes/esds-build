@@ -4,5 +4,14 @@ test/sample_project/_site
 test/sample_project/node_modules/product-a/node_modules
 test/sample_project/node_modules/product-b/node_modules
 test/sample_project/data/icons.json
+test/sample_project/dist
+test/sample_project/tokens
+test/sample_project/components/*.njk
+
+test/sample_project/tokens/*
+# Keep yaml token source file
+!test/sample_project/tokens/*.yaml
+
+
 /coverage
 tasks/~tmp_project_gulp_tasks.js
