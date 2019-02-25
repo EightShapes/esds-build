@@ -35,7 +35,7 @@ module.exports = function(){
           tokensScss = `${tokensPath}/tokens.scss`,
           tokensJson = `${tokensPath}/tokens.json`;
 
-    describe.only('tokens:build', function(){
+    describe('tokens:build', function(){
       beforeEach(function() {
         return gulp('clean:tokens');
       });
@@ -80,7 +80,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('when the /tokens directory does not exist', function(){
+    describe('when the /tokens directory does not exist', function(){
       before(function(){
         fs.moveSync(`${projectPath}/tokens`, `${projectPath}/moved-tokens`);
       });
@@ -97,7 +97,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('watch:tokens', function(){
+    describe('watch:tokens', function(){
       // Skipping watch tests for now, causing intermittent failures on TravisCI
       xit('should watch tokens.yaml for changes and rebuild scss and json', function(done){
         exec(`gulp watch:tokens:all`); // start watch
@@ -111,7 +111,7 @@ module.exports = function(){
       });
     });
 
-    describe.only('invalid tokens file', function(){
+    describe('invalid tokens file', function(){
       it('should return an empty object when parsing an empty tokens file', function(){
         const tokens = tokensTasks.tokensToJson(`${process.cwd()}/test/sample_project/empty-tokens/empty-tokens.yaml`),
               keys = Object.keys(tokens);
