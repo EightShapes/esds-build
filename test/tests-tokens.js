@@ -12,7 +12,8 @@ const { exec } = require('child_process'),
       gulp = require('./tests-gulp.js'),
       tokensTasks = require('../tasks/tokens.js'),
       assert = require('yeoman-assert'),
-      fs = require('fs-extra');
+      fs = require('fs-extra'),
+      yaml = require('yamljs');
 
 // TODO Move this function to a commonly shared place
 function recursivelyCheckForFiles(filePaths, done) {
@@ -69,6 +70,13 @@ module.exports = function(){
         tokensTasks.convertTokensYaml('/path/does/not/exist', function(){});
         assert.noFile(`${tokensPath}/tokens.json`);
         assert.noFile(`${tokensPath}/tokens.scss`);
+      });
+
+      it ('should allow variable interpolation in the yaml file', function(){
+        const parsedTokens = tokensTasks.tokensToJson(`${projectPath}/interpolated_tokens.yaml`);
+        assert.equal(parsedTokens.simple.beta, "Cheese Burger")
+        assert.equal(parsedTokens['test-scenario'].combined, "Something Else")
+        assert.equal(parsedTokens['another-one'], "Cheese Toastie")
       });
     });
 

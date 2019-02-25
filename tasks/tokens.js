@@ -14,15 +14,16 @@ const config = require('./config.js'),
 
 function generateBasePreAndPostTasks(taskName) {
     const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
-    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
 }
 
 function tokensToJson(sourceFile) {
     let tokens = {},
         parsedTokens;
     try {
-        parsedTokens = yaml.load(sourceFile);
-        parsedTokens = interpolateYamlVariables(parsedTokens);
+        let rawYaml = fs.readFileSync(sourceFile, 'UTF-8');
+        let interpolatedYaml = interpolateYamlVariables(rawYaml);
+        parsedTokens = yaml.parse(interpolatedYaml);
         if (parsedTokens !== null && typeof parsedTokens === 'object') {
             tokens = parsedTokens;
         }
@@ -33,24 +34,37 @@ function tokensToJson(sourceFile) {
     return tokens;
 }
 
-function interpolateYamlVariables(variables_object) {
-    const regex = /!{\*(.*?)}/g;
-    let json = JSON.stringify(variables_object);
+function interpolateYamlVariables(rawYaml) {
 
-    json = json.replace(regex, function(match, p1){
-        var variable_keys = p1.split('-'),
-            value = match,
-            sub_variables_object = variables_object;
+  const AnchorRegex = /\&(\S*) (.*)/gm;
+  let m;
+  const anchorReplacements = {};
 
-        variable_keys.forEach(function(key){
-            if (sub_variables_object.hasOwnProperty(key)) {
-                value = sub_variables_object[key];
-                sub_variables_object = value;
-            }
-        });
-        return value;
+  while ((m = AnchorRegex.exec(rawYaml)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === AnchorRegex.lastIndex) {
+          AnchorRegex.lastIndex++;
+      }
+
+      // The result can be accessed through the `m`-variable.
+      anchorReplacements[m[1]] = m[2];
+  }
+
+  const ReferenceRegex = /!\{\*\S*\}/;
+  while ((m = ReferenceRegex.exec(rawYaml)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (m.index === ReferenceRegex.lastIndex) {
+        ReferenceRegex.lastIndex++;
+    }
+
+    m.forEach((match, groupIndex) => {
+      const replacementKey = match.replace(/!|\{|\*|\}/g, '');
+      const replacement = anchorReplacements[replacementKey];
+      rawYaml = rawYaml.replace(match, replacement);
     });
-    return JSON.parse(json);
+  }
+
+  return rawYaml;
 }
 
 function tokensSourceFileExists(sourceFile) {
@@ -189,6 +203,6 @@ generateBasePreAndPostTasks(watchAllTaskName);
 
 module.exports = {
     convertTokensYaml: convertTokensYaml,
-    tokensToJson: tokensToJson
+    tokensToJson: tokensToJson,
+    interpolateYamlVariables: interpolateYamlVariables
 };
-

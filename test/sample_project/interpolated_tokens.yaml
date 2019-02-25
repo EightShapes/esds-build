@@ -1,0 +1,10 @@
+simple:
+  alpha: &simple-alpha Cheese
+  beta: "!{*simple-alpha} Burger"
+  box-shadow: &complex-text 0 2px 3px rgba(0,0,0,0.8);
+test-scenario:
+  this: &test-scenario-this Something
+  that: &test-that Else
+  combined: "!{*test-scenario-this} !{*test-that}"
+some-thingy: "box-shadow: !{*complex-text}"
+another-one: "!{*simple-alpha} Toastie"
