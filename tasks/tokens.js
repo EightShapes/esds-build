@@ -59,7 +59,8 @@ function interpolateYamlVariables(rawYaml) {
 
     m.forEach((match, groupIndex) => {
       const replacementKey = match.replace(/!|\{|\*|\}/g, '');
-      const replacement = anchorReplacements[replacementKey];
+      let replacement = anchorReplacements[replacementKey];
+      replacement = replacement.replace(/^"|"$/g, ''); // Remove double quotes from beginning and end of value
       rawYaml = rawYaml.replace(match, replacement);
     });
   }

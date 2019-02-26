@@ -74,9 +74,10 @@ module.exports = function(){
 
       it ('should allow variable interpolation in the yaml file', function(){
         const parsedTokens = tokensTasks.tokensToJson(`${projectPath}/interpolated_tokens.yaml`);
-        assert.equal(parsedTokens.simple.beta, "Cheese Burger")
-        assert.equal(parsedTokens['test-scenario'].combined, "Something Else")
-        assert.equal(parsedTokens['another-one'], "Cheese Toastie")
+        assert.equal(parsedTokens.simple.beta, "Cheese Burger");
+        assert.equal(parsedTokens['test-scenario'].combined, "Something Else");
+        assert.equal(parsedTokens['another-one'], "Cheese Toastie");
+        assert.equal(parsedTokens['interpolated-font'], "'Something Here', 'Helvetica', Arial, sans-serif");
       });
     });
 
