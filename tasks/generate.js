@@ -157,7 +157,7 @@ function generateComponentFiles(answers, rootPath) {
         // Create the component's sink page
         const sinkPageContent = `{% extends "${c.templatesPath}/sink${c.markupSourceExtension}" %}
 {% block body %}
-    {% filter markdown %}
+    {% filter markdown(true, "sink-reset") %}
         # ${componentSinkTitle} Sink
     {% endfilter %}
     {# Your sink examples go here #}
