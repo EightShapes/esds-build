@@ -52,15 +52,27 @@
 
         /* Reset BrowserSync Notification styles since the defaults don't protect against the hostile sink */
         #__bs_notify__ {
-            font-size: 14.4px !important;
-            font-style: normal;
-            font-weight: normal;
-            letter-spacing: 0;
-            line-height: 1;
-            text-align: left;
-            text-indent: 0;
-            text-transform: none;
-            text-shadow: none;
+          font-size: 14.4px !important;
+          {{ typography_reset }}
+        }
+
+        /* Some helper classes to allow headings and other annotations to be protected from the hostile styles */
+        .sink-reset {
+          {{ typography_reset }}
+          color: black;
+          border-left: solid 4px black;
+          margin: 0 0 16px 10px;
+          padding-left: 10px;
+        }
+
+        .sink-reset > * {
+          {{ typography_reset }}
+          margin: 0 0 16px 0;
+        }
+
+        p.sink-reset,
+        .sink-reset > p {
+          font-size: 16px;
         }
     </style>
 {% endblock %}
