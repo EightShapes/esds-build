@@ -13,7 +13,7 @@ const assert = require('yeoman-assert'),
 let config;
 
 module.exports = function(){
-    describe.only('when retrieving build config', function(){
+    describe('when retrieving build config', function(){
         beforeEach(function(){
             config = require('../tasks/config.js');
         });
