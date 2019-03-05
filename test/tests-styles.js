@@ -30,7 +30,7 @@ module.exports = function(){
     const projectPath = './test/sample_project',
           compiledCssFile = `${projectPath}/_site/latest/styles/doc.css`;
 
-    describe.only('styles', function(){
+    describe('styles', function(){
       describe('styles:precompile', function(){
         beforeEach(function() {
           return gulp('clean:webroot')

@@ -85,19 +85,19 @@ function getMarkupConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension),
-            componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
+            componentMacros: winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension)),
+            componentMacroOutputPath: winPathToGlob(path.join(c.rootPath, c.componentsPath)),
             componentMacroFilename: `${c.codeNamespace}${c.markupSourceExtension}`,
-            docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-            templateSourceFilePaths: path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
-            docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
+            docSourceFilePaths: winPathToGlob(path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension)),
+            templateSourceFilePaths: winPathToGlob(path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)),
+            docTemplateImportPaths: [c.rootPath, winPathToGlob(path.join(c.rootPath, c.dependenciesPath))],
             docTemplateWatchPaths: [
-                path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.tokensPath, '*.json'), // Watch tokens.json for changes and rebuild docs if they change
-                path.join(c.rootPath, c.dataPath, '**', '*.json') // Watch data/*.json for changes and rebuild docs if any of those files change
+                winPathToGlob(path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath, '*.json')), // Watch tokens.json for changes and rebuild docs if they change
+                winPathToGlob(path.join(c.rootPath, c.dataPath, '**', '*.json')) // Watch data/*.json for changes and rebuild docs if any of those files change
             ],
-            docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
+            docOutputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath))
         };
 
     let tasks = [defaultTask];
@@ -140,10 +140,10 @@ function getScriptsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
-            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath),
+            outputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath)),
             sourcePaths: [
-                path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension),
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension))
             ],
             lintOptions: {
                 configFile: c.scriptsLintConfig
@@ -168,8 +168,8 @@ function getTokensConfig(buildConfig) {
 
     return {
         namespace: c.codeNamespace,
-        sourceFile: path.join(c.rootPath, c.tokensPath, c.tokensSourceFile),
-        outputPath: path.join(c.rootPath, c.tokensPath),
+        sourceFile: winPathToGlob(path.join(c.rootPath, c.tokensPath, c.tokensSourceFile)),
+        outputPath: winPathToGlob(path.join(c.rootPath, c.tokensPath)),
         formats: c.tokensFormats
     };
 }
@@ -183,23 +183,23 @@ function getDependencyConfig(dependency, rootPath) {
 
 function getCopyConfig(buildConfig) {
     const c = buildConfig, // for brevity
-        latestVersionWebroot = path.join(c.rootPath, c.webroot, c.latestVersionPath),
+        latestVersionWebroot = winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath)),
         imageTask = {
             name: c.imagesTaskName,
             sources: [
-                path.join(c.rootPath, c.imagesPath, '**', '*')
+                winPathToGlob(path.join(c.rootPath, c.imagesPath, '**', '*'))
             ],
-            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath),
+            destination: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)),
             watch: true
         },
         distTask = {
             name: c.distTaskName,
             sources: [
-                path.join(latestVersionWebroot, c.stylesPath, '*.css'), // copy any css file from the root of webroot/styles
-                path.join(latestVersionWebroot, c.scriptsPath, `*.js`), // copy any js file from the root of webroot/scripts
-                path.join(latestVersionWebroot, c.iconsPath, `*.svg`) // copy any svg file from the root of webroot/icons
+                winPathToGlob(path.join(latestVersionWebroot, c.stylesPath, '*.css')), // copy any css file from the root of webroot/styles
+                winPathToGlob(path.join(latestVersionWebroot, c.scriptsPath, `*.js`)), // copy any js file from the root of webroot/scripts
+                winPathToGlob(path.join(latestVersionWebroot, c.iconsPath, `*.svg`)) // copy any svg file from the root of webroot/icons
             ],
-            destination: path.join(c.rootPath, c.distPath),
+            destination: winPathToGlob(path.join(c.rootPath, c.distPath)),
             watch: true
         };
 
@@ -224,11 +224,11 @@ function getIconsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             sources: [
-                path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`)
+                winPathToGlob(path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`))
             ],
             outputFilename: `${c.codeNamespace}${c.iconSourceExtension}`,
-            optimizedFileDestination: path.join(c.rootPath, c.iconsPath),
-            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath)
+            optimizedFileDestination: winPathToGlob(path.join(c.rootPath, c.iconsPath)),
+            destination: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath))
         };
 
     let tasks = [defaultTask];
@@ -241,14 +241,12 @@ function getIconsConfig(buildConfig) {
 function getTaskConfig(absolutePath) {
     let buildConfig = retrieveBuildConfig(absolutePath);
 
-    if (buildConfig.rootPath) {
-        buildConfig.copy = getCopyConfig(buildConfig);
-        buildConfig.icons = getIconsConfig(buildConfig);
-        buildConfig.markup = getMarkupConfig(buildConfig);
-        buildConfig.scripts = getScriptsConfig(buildConfig);
-        buildConfig.styles = getStylesConfig(buildConfig);
-        buildConfig.tokens = getTokensConfig(buildConfig);
-    }
+    buildConfig.copy = getCopyConfig(buildConfig);
+    buildConfig.icons = getIconsConfig(buildConfig);
+    buildConfig.markup = getMarkupConfig(buildConfig);
+    buildConfig.scripts = getScriptsConfig(buildConfig);
+    buildConfig.styles = getStylesConfig(buildConfig);
+    buildConfig.tokens = getTokensConfig(buildConfig);
 
     return buildConfig; // If no config file has been defined, use the default config
 }
