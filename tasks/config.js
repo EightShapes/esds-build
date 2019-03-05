@@ -6,10 +6,10 @@ const productBuildConfigFileName = 'esds-build-config',
         globals = {},
         projectGulpTasksFilename = '~tmp_project_gulp_tasks.js';
 
-function retrieveProductBuildConfig(rootPath) {
-    rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
-    const jsConfigPath = path.join(rootPath, productBuildConfigFileName + '.js'),
-            jsonConfigPath = path.join(rootPath, productBuildConfigFileName + '.json');
+function retrieveProductBuildConfig(absolutePath) {
+    absolutePath = typeof absolutePath === 'undefined' ? process.cwd() : absolutePath;
+    const jsConfigPath = path.join(absolutePath, productBuildConfigFileName + '.js'),
+            jsonConfigPath = path.join(absolutePath, productBuildConfigFileName + '.json');
     if (fs.existsSync(jsConfigPath)) {
         return require(jsConfigPath);
     } else if (fs.existsSync(jsonConfigPath)) {
@@ -23,10 +23,10 @@ function retrieveDefaultBuildConfig() {
     return require(`${__dirname}/../default_templates/${productBuildConfigFileName}-default.js`);
 }
 
-function retrieveBuildConfig(rootPath) {
-    rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
+function retrieveBuildConfig(absolutePath) {
+    absolutePath = typeof absolutePath === 'undefined' ? process.cwd() : absolutePath;
     const defaultConfig = Object.assign({}, retrieveDefaultBuildConfig()), // copy technique, won't work when config is more than one level dep
-            productConfig = Object.assign({}, retrieveProductBuildConfig(rootPath)); // copy technique, won't work when config is more than one level dep
+            productConfig = Object.assign({}, retrieveProductBuildConfig(absolutePath)); // copy technique, won't work when config is more than one level dep
 
     let buildConfig = Object.assign(defaultConfig, productConfig),
         useProductConfig = buildConfig.configMethod === 'overwrite';
@@ -42,25 +42,25 @@ function getStylesConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath),
-            compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
+            outputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath)),
+            compileSourceFiles: winPathToGlob(path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension)),
             compileImportPaths: [
-                path.join(c.rootPath, c.dependenciesPath),
-                path.join(c.rootPath, c.componentsPath),
-                path.join(c.rootPath, c.tokensPath),
-                path.join(c.rootPath, c.stylesPath)
+                winPathToGlob(path.join(c.rootPath, c.dependenciesPath)),
+                winPathToGlob(path.join(c.rootPath, c.componentsPath)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath))
             ],
             lintOptions: {
                 configFile: c.stylesLintConfig
             },
             lintPaths: [
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension))
             ],
             watchFiles: [
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.tokensPath, '*' + c.stylesSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath, '*' + c.stylesSourceExtension))
             ],
             autoprefixerOptions: {
                 browsers: ['last 2 versions'],
@@ -238,8 +238,8 @@ function getIconsConfig(buildConfig) {
     };
 }
 
-function getTaskConfig(rootPath) {
-    let buildConfig = retrieveBuildConfig(rootPath);
+function getTaskConfig(absolutePath) {
+    let buildConfig = retrieveBuildConfig(absolutePath);
 
     if (buildConfig.rootPath) {
         buildConfig.copy = getCopyConfig(buildConfig);
@@ -308,6 +308,10 @@ function getGulpInstance() {
     return response;
 }
 
+function winPathToGlob(path) {
+    return path.replace(/\\/g, '/');
+}
+
 module.exports = {
     get: getTaskConfig,
     getDependencyConfig: getDependencyConfig,
@@ -318,5 +322,6 @@ module.exports = {
     projectGulpTasksFilename: projectGulpTasksFilename,
     projectTaskIsDefined: projectTaskIsDefined,
     getBaseTaskName: getBaseTaskName,
-    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks
+    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks,
+    winPathToGlob: winPathToGlob
 };

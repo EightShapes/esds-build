@@ -13,9 +13,14 @@ const assert = require('yeoman-assert'),
 let config;
 
 module.exports = function(){
-    describe('when retrieving build config', function(){
+    describe.only('when retrieving build config', function(){
         beforeEach(function(){
             config = require('../tasks/config.js');
+        });
+
+        it('should transform a windows based path into a node glob path', function(){
+            const windowsPath = 'this\\is\\my\\default\\**\\*.js';
+            assert(config.winPathToGlob(windowsPath) === 'this/is/my/default/**/*.js');
         });
 
         it('should return an empty config object when a product config file cannot be found', function(){
