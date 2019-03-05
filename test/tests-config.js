@@ -18,6 +18,11 @@ module.exports = function(){
             config = require('../tasks/config.js');
         });
 
+        it('should transform a windows based path into a node glob path', function(){
+            const windowsPath = 'this\\is\\my\\default\\**\\*.js';
+            assert(config.winPathToGlob(windowsPath) === 'this/is/my/default/**/*.js');
+        });
+
         it('should return an empty config object when a product config file cannot be found', function(){
             const productConfig = config.retrieveProductBuildConfig('/path/doesnt/exist/'),
                     keys = Object.keys(productConfig);
@@ -132,7 +137,8 @@ module.exports = function(){
         });
 
         it('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
-            const taskConfig = config.get(`${process.cwd()}/test/sample_project_override_config/`),
+            const overrideProjectRoot = `${process.cwd()}/test/sample_project_override_config/`;
+            const taskConfig = config.get(overrideProjectRoot),
                     c = taskConfig; //for brevity
             assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });

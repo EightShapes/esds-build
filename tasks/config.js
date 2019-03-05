@@ -6,10 +6,10 @@ const productBuildConfigFileName = 'esds-build-config',
         globals = {},
         projectGulpTasksFilename = '~tmp_project_gulp_tasks.js';
 
-function retrieveProductBuildConfig(rootPath) {
-    rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
-    const jsConfigPath = path.join(rootPath, productBuildConfigFileName + '.js'),
-            jsonConfigPath = path.join(rootPath, productBuildConfigFileName + '.json');
+function retrieveProductBuildConfig(absolutePath) {
+    absolutePath = typeof absolutePath === 'undefined' ? process.cwd() : absolutePath;
+    const jsConfigPath = path.join(absolutePath, productBuildConfigFileName + '.js'),
+            jsonConfigPath = path.join(absolutePath, productBuildConfigFileName + '.json');
     if (fs.existsSync(jsConfigPath)) {
         return require(jsConfigPath);
     } else if (fs.existsSync(jsonConfigPath)) {
@@ -23,11 +23,10 @@ function retrieveDefaultBuildConfig() {
     return require(`${__dirname}/../default_templates/${productBuildConfigFileName}-default.js`);
 }
 
-function retrieveBuildConfig(rootPath) {
-    rootPath = typeof rootPath === 'undefined' ? process.cwd() : rootPath;
+function retrieveBuildConfig(absolutePath) {
+    absolutePath = typeof absolutePath === 'undefined' ? process.cwd() : absolutePath;
     const defaultConfig = Object.assign({}, retrieveDefaultBuildConfig()), // copy technique, won't work when config is more than one level dep
-            productConfig = Object.assign({}, retrieveProductBuildConfig(rootPath)); // copy technique, won't work when config is more than one level dep
-
+            productConfig = Object.assign({}, retrieveProductBuildConfig(absolutePath)); // copy technique, won't work when config is more than one level dep
     let buildConfig = Object.assign(defaultConfig, productConfig),
         useProductConfig = buildConfig.configMethod === 'overwrite';
 
@@ -42,25 +41,25 @@ function getStylesConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath),
-            compileSourceFiles: path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension),
+            outputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.stylesPath)),
+            compileSourceFiles: winPathToGlob(path.join(c.rootPath, c.stylesPath, '*' + c.stylesSourceExtension)),
             compileImportPaths: [
-                path.join(c.rootPath, c.dependenciesPath),
-                path.join(c.rootPath, c.componentsPath),
-                path.join(c.rootPath, c.tokensPath),
-                path.join(c.rootPath, c.stylesPath)
+                winPathToGlob(path.join(c.rootPath, c.dependenciesPath)),
+                winPathToGlob(path.join(c.rootPath, c.componentsPath)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath))
             ],
             lintOptions: {
                 configFile: c.stylesLintConfig
             },
             lintPaths: [
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension))
             ],
             watchFiles: [
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension),
-                path.join(c.rootPath, c.tokensPath, '*' + c.stylesSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.stylesPath, '**', '*' + c.stylesSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath, '*' + c.stylesSourceExtension))
             ],
             autoprefixerOptions: {
                 browsers: ['last 2 versions'],
@@ -85,19 +84,19 @@ function getMarkupConfig(buildConfig) {
     const c = buildConfig, // for brevity in task names
         defaultTask = {
             name: c.productTaskName,
-            componentMacros: path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension),
-            componentMacroOutputPath: path.join(c.rootPath, c.componentsPath),
+            componentMacros: winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.markupSourceExtension)),
+            componentMacroOutputPath: winPathToGlob(path.join(c.rootPath, c.componentsPath)),
             componentMacroFilename: `${c.codeNamespace}${c.markupSourceExtension}`,
-            docSourceFilePaths: path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-            templateSourceFilePaths: path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
-            docTemplateImportPaths: [c.rootPath, path.join(c.rootPath, c.dependenciesPath)],
+            docSourceFilePaths: winPathToGlob(path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension)),
+            templateSourceFilePaths: winPathToGlob(path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)),
+            docTemplateImportPaths: [c.rootPath, winPathToGlob(path.join(c.rootPath, c.dependenciesPath))],
             docTemplateWatchPaths: [
-                path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension),
-                path.join(c.rootPath, c.tokensPath, '*.json'), // Watch tokens.json for changes and rebuild docs if they change
-                path.join(c.rootPath, c.dataPath, '**', '*.json') // Watch data/*.json for changes and rebuild docs if any of those files change
+                winPathToGlob(path.join(c.rootPath, c.docsPath, '**', '*' + c.markupSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.templatesPath, '**', '*' + c.markupSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.tokensPath, '*.json')), // Watch tokens.json for changes and rebuild docs if they change
+                winPathToGlob(path.join(c.rootPath, c.dataPath, '**', '*.json')) // Watch data/*.json for changes and rebuild docs if any of those files change
             ],
-            docOutputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath)
+            docOutputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath))
         };
 
     let tasks = [defaultTask];
@@ -140,10 +139,10 @@ function getScriptsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             outputFilename: `${c.codeNamespace}${c.scriptsSourceExtension}`,
-            outputPath: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath),
+            outputPath: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.scriptsPath)),
             sourcePaths: [
-                path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension),
-                path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension)
+                winPathToGlob(path.join(c.rootPath, c.scriptsPath, '**', '*' + c.scriptsSourceExtension)),
+                winPathToGlob(path.join(c.rootPath, c.componentsPath, '**', '*' + c.scriptsSourceExtension))
             ],
             lintOptions: {
                 configFile: c.scriptsLintConfig
@@ -168,8 +167,8 @@ function getTokensConfig(buildConfig) {
 
     return {
         namespace: c.codeNamespace,
-        sourceFile: path.join(c.rootPath, c.tokensPath, c.tokensSourceFile),
-        outputPath: path.join(c.rootPath, c.tokensPath),
+        sourceFile: winPathToGlob(path.join(c.rootPath, c.tokensPath, c.tokensSourceFile)),
+        outputPath: winPathToGlob(path.join(c.rootPath, c.tokensPath)),
         formats: c.tokensFormats
     };
 }
@@ -183,23 +182,23 @@ function getDependencyConfig(dependency, rootPath) {
 
 function getCopyConfig(buildConfig) {
     const c = buildConfig, // for brevity
-        latestVersionWebroot = path.join(c.rootPath, c.webroot, c.latestVersionPath),
+        latestVersionWebroot = winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath)),
         imageTask = {
             name: c.imagesTaskName,
             sources: [
-                path.join(c.rootPath, c.imagesPath, '**', '*')
+                winPathToGlob(path.join(c.rootPath, c.imagesPath, '**', '*'))
             ],
-            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath),
+            destination: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.imagesPath)),
             watch: true
         },
         distTask = {
             name: c.distTaskName,
             sources: [
-                path.join(latestVersionWebroot, c.stylesPath, '*.css'), // copy any css file from the root of webroot/styles
-                path.join(latestVersionWebroot, c.scriptsPath, `*.js`), // copy any js file from the root of webroot/scripts
-                path.join(latestVersionWebroot, c.iconsPath, `*.svg`) // copy any svg file from the root of webroot/icons
+                winPathToGlob(path.join(latestVersionWebroot, c.stylesPath, '*.css')), // copy any css file from the root of webroot/styles
+                winPathToGlob(path.join(latestVersionWebroot, c.scriptsPath, `*.js`)), // copy any js file from the root of webroot/scripts
+                winPathToGlob(path.join(latestVersionWebroot, c.iconsPath, `*.svg`)) // copy any svg file from the root of webroot/icons
             ],
-            destination: path.join(c.rootPath, c.distPath),
+            destination: winPathToGlob(path.join(c.rootPath, c.distPath)),
             watch: true
         };
 
@@ -224,11 +223,11 @@ function getIconsConfig(buildConfig) {
         defaultTask = {
             name: c.productTaskName,
             sources: [
-                path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`)
+                winPathToGlob(path.join(c.rootPath, c.iconsPath, '**', `*${c.iconSourceExtension}`))
             ],
             outputFilename: `${c.codeNamespace}${c.iconSourceExtension}`,
-            optimizedFileDestination: path.join(c.rootPath, c.iconsPath),
-            destination: path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath)
+            optimizedFileDestination: winPathToGlob(path.join(c.rootPath, c.iconsPath)),
+            destination: winPathToGlob(path.join(c.rootPath, c.webroot, c.latestVersionPath, c.iconsPath))
         };
 
     let tasks = [defaultTask];
@@ -238,10 +237,10 @@ function getIconsConfig(buildConfig) {
     };
 }
 
-function getTaskConfig(rootPath) {
-    let buildConfig = retrieveBuildConfig(rootPath);
+function getTaskConfig(absolutePath) {
+    let buildConfig = retrieveBuildConfig(absolutePath);
 
-    if (buildConfig.rootPath) {
+    if (typeof buildConfig.rootPath !== 'undefined') {
         buildConfig.copy = getCopyConfig(buildConfig);
         buildConfig.icons = getIconsConfig(buildConfig);
         buildConfig.markup = getMarkupConfig(buildConfig);
@@ -308,6 +307,10 @@ function getGulpInstance() {
     return response;
 }
 
+function winPathToGlob(path) {
+    return path.replace(/\\/g, '/');
+}
+
 module.exports = {
     get: getTaskConfig,
     getDependencyConfig: getDependencyConfig,
@@ -318,5 +321,6 @@ module.exports = {
     projectGulpTasksFilename: projectGulpTasksFilename,
     projectTaskIsDefined: projectTaskIsDefined,
     getBaseTaskName: getBaseTaskName,
-    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks
+    getBaseTaskWithPreAndPostHooks: getBaseTaskWithPreAndPostHooks,
+    winPathToGlob: winPathToGlob
 };

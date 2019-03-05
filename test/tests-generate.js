@@ -105,9 +105,10 @@ module.exports = function(){
         const generate = require('../tasks/generate.js');
         generate.copyDefaultConfig(scaffoldDir);
         assert.file(`${scaffoldDir}/esds-build-config.js`);
+        console.log(scaffoldDir);
 
         const defaultConfig = require(`${__dirname}/scaffold_test/esds-build-config.js`);
-        assert(defaultConfig.rootPath.includes('/esds-build'));
+        assert(defaultConfig.packageRoot.includes('/esds-build'));
         assert(defaultConfig.webroot === '_site');
       });
     });
