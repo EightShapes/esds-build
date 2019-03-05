@@ -27,7 +27,6 @@ function retrieveBuildConfig(absolutePath) {
     absolutePath = typeof absolutePath === 'undefined' ? process.cwd() : absolutePath;
     const defaultConfig = Object.assign({}, retrieveDefaultBuildConfig()), // copy technique, won't work when config is more than one level dep
             productConfig = Object.assign({}, retrieveProductBuildConfig(absolutePath)); // copy technique, won't work when config is more than one level dep
-
     let buildConfig = Object.assign(defaultConfig, productConfig),
         useProductConfig = buildConfig.configMethod === 'overwrite';
 
@@ -241,12 +240,14 @@ function getIconsConfig(buildConfig) {
 function getTaskConfig(absolutePath) {
     let buildConfig = retrieveBuildConfig(absolutePath);
 
-    buildConfig.copy = getCopyConfig(buildConfig);
-    buildConfig.icons = getIconsConfig(buildConfig);
-    buildConfig.markup = getMarkupConfig(buildConfig);
-    buildConfig.scripts = getScriptsConfig(buildConfig);
-    buildConfig.styles = getStylesConfig(buildConfig);
-    buildConfig.tokens = getTokensConfig(buildConfig);
+    if (typeof buildConfig.rootPath !== 'undefined') {
+        buildConfig.copy = getCopyConfig(buildConfig);
+        buildConfig.icons = getIconsConfig(buildConfig);
+        buildConfig.markup = getMarkupConfig(buildConfig);
+        buildConfig.scripts = getScriptsConfig(buildConfig);
+        buildConfig.styles = getStylesConfig(buildConfig);
+        buildConfig.tokens = getTokensConfig(buildConfig);
+    }
 
     return buildConfig; // If no config file has been defined, use the default config
 }

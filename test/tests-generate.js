@@ -101,7 +101,7 @@ module.exports = function(){
         return del(scaffoldDir);
       });
 
-      it('should generate a default config', function() {
+      it.only('should generate a default config', function() {
         const generate = require('../tasks/generate.js');
         generate.copyDefaultConfig(scaffoldDir);
         assert.file(`${scaffoldDir}/esds-build-config.js`);

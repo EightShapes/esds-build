@@ -137,7 +137,8 @@ module.exports = function(){
         });
 
         it('should return a task config with full product level override when a product config file is present and configMode is set to "override"', function(){
-            const taskConfig = config.get(`${process.cwd()}/test/sample_project_override_config/`),
+            const overrideProjectRoot = `${process.cwd()}/test/sample_project_override_config/`;
+            const taskConfig = config.get(overrideProjectRoot),
                     c = taskConfig; //for brevity
             assert(typeof c.rootPath === 'undefined'); // full override file is insufficient and doesn't include rootPath
         });
