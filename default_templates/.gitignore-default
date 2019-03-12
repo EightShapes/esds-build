@@ -34,6 +34,11 @@ jspm_packages/
 # keep files in subdirectories in /components
 !/components/*/
 
+# AVR backstop files
+backstop-runtime-config.json
+backstop_data/html_report/
+backstop_data/json_report/
+backstop_data/bitmaps_test/
 
 # MacOS folder attributes
 *.DS_Store

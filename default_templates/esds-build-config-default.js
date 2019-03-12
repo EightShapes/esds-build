@@ -48,6 +48,9 @@ module.exports = {
     latestVersionPath: 'latest', // If versionedDocs is true, where is the latest version of the docs built? Relative to webroot
     tokensSourceFile: '*.yaml', // Tokens source filename
     tokensFormats: ['.scss', '.json'], // File formats of generated tokens files
+    avrConfig: path.join(packageRoot, 'backstop.js'), // Location of avg config file
+    avrBaseConfig: '', // Location of a base backstop config file, useful for monorepos
+    runAvrInDocker: true,
     stylesLintConfig: path.join(packageRoot, '.sass-lint.yml'), // Location of styles lint config, defaults to .sass-lint.yml in the root
     scriptsLintConfig: path.join(packageRoot, '.eslintrc'), // Location of scripts lint config, defaults to .eslintrc in the root
     iconSourceExtension: '.svg', // Icon File extension
@@ -59,6 +62,7 @@ module.exports = {
     markdownWrapperClass: 'esds-markdown-wrap', // wrapper class when nunjucks markdown filter is used
     copyTasks: [], // Product specific set of tasks to copy a file from one destination to another. For copying jQuery from node_modules to the webroot as an example
     allTaskName: 'all', // gulp task name segment, ex: build:all, watch:all
+    avrTaskName: 'avr', // gulp task name segment, ex: avr:reference, avr:test
     buildTaskName: 'build', // gulp task name segment, ex: markup:build, styles:build
     cleanTaskName: 'clean', // gulp task name segment, ex: clean:webroot
     concatTaskName: 'concatenate', // gulp task name segment, ex: markup:concatenate:macros, scripts:concatenate

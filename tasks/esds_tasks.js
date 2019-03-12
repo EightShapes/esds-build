@@ -56,7 +56,7 @@ if (c.additionalWatchTasks && c.additionalWatchTasks.length > 0) {
 /**************************************************/
 function generateBasePreAndPostTasks(taskName) {
     const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
-    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
 }
 
 //Build everything
@@ -81,5 +81,13 @@ generateBasePreAndPostTasks('default');
 if (fs.existsSync(copiedGulpTasksFilepath)) {
     del(copiedGulpTasksFilepath);
 }
+
+// AVR Composite tasks
+const avrReferenceTaskName = `${c.avrTaskName}:reference`,
+        avrTestTaskName = `${c.avrTaskname}:test`;
+gulp.task(config.getBaseTaskName(avrReferenceTaskName), gulp.series(buildAllTaskName, `${c.avrTaskName}:create-reference-images`));
+gulp.task(config.getBaseTaskName(avrTestTaskName), gulp.series(buildAllTaskName, `${c.avrTaskName}:run-tests`));
+generateBasePreAndPostTasks(avrReferenceTaskName);
+generateBasePreAndPostTasks(avrTestTaskName);
 
 module.exports = gulp;

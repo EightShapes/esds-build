@@ -49,6 +49,10 @@ function copyDefaultStarterFiles(rootPath) {
                 destination: path.join(rootPath, '.gitignore')
             },
             {
+                file: path.join(defaultTemplatesDir, '.backstop-default.js'),
+                destination: path.join(rootPath, 'backstop.js')
+            },
+            {
                 file: path.join(defaultTemplatesDir, '.npmignore-default'),
                 destination: path.join(rootPath, '.npmignore')
             },
