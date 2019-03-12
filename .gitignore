@@ -15,3 +15,5 @@ test/sample_project/tokens/*
 
 /coverage
 tasks/~tmp_project_gulp_tasks.js
+
+backstop-runtime-config.json

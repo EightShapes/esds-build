@@ -40,7 +40,7 @@ function createAvrRuntimeConfig(localEnv) {
         };
 
     try { // Get a base backstop config if set in esds-build config - useful for monorepos
-        baseBackstopConfig = require(c.avrBaseConfig);
+        const baseBackstopConfig = require(path.join(process.cwd(), c.avrBaseConfig));
         runtimeConfig.baseConfig = baseBackstopConfig;
     } catch (e) {
         console.log('Base Backstop Config could not be loaded, using local config only');
