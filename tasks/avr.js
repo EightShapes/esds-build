@@ -1,9 +1,17 @@
 'use strict';
 
 const config = require('./config.js'),
+        fs = require('fs-extra'),
+        path = require('path'),
+        backstop = require('backstopjs'),
         c = config.get(),
         gulp = config.getGulpInstance(),
-        avrApproveTaskName = `${c.avrTaskname}:approve`;
+        avrApproveTaskName = `${c.avrTaskName}:approve`;
+
+function generateBasePreAndPostTasks(taskName) {
+    const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
+}
 
 function startLocalServerWithCallback(callback, taskCallback) {
     const localEnv = require('browser-sync').create();
@@ -27,13 +35,13 @@ function startLocalServerWithCallback(callback, taskCallback) {
 function createAvrRuntimeConfig(localEnv) {
     const runtimeConfig = {
             testingPort: localEnv.getOption('port'),
-            sharedConfig: {},
+            baseConfig: {},
             hostUrl: c.runAvrInDocker ? 'host.docker.internal' : 'localhost'
         };
 
     try { // Get a base backstop config if set in esds-build config - useful for monorepos
         baseBackstopConfig = require(c.avrBaseConfig);
-        runtimeConfig.sharedConfig = baseBackstopConfig;
+        runtimeConfig.baseConfig = baseBackstopConfig;
     } catch (e) {
         console.log('Base Backstop Config could not be loaded, using local config only');
     }
@@ -77,7 +85,7 @@ gulp.task(`${c.avrTaskName}:create-reference-images`, function(done){
     startLocalServerWithCallback(createAvrReferenceImages, done);
 });
 
-gulp.task(`${c.avrTaskname}:run-tests`, function(done){
+gulp.task(`${c.avrTaskName}:run-tests`, function(done){
     startLocalServerWithCallback(runTests, done);
 });
 

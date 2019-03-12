@@ -48,7 +48,7 @@ module.exports = {
     latestVersionPath: 'latest', // If versionedDocs is true, where is the latest version of the docs built? Relative to webroot
     tokensSourceFile: '*.yaml', // Tokens source filename
     tokensFormats: ['.scss', '.json'], // File formats of generated tokens files
-    avrConfig: path.join(packageRoot, 'backstop.js'), // Location of avg config file
+    avrConfig: 'backstop.js', // Location of avg config file
     avrBaseConfig: '', // Location of a base backstop config file, useful for monorepos
     runAvrInDocker: true,
     stylesLintConfig: path.join(packageRoot, '.sass-lint.yml'), // Location of styles lint config, defaults to .sass-lint.yml in the root

@@ -13,7 +13,7 @@ const localConfig = {
     "scenarios": [
         {
             "label": "",
-            "url": `http://`${runtimeConfig.hostUrl}`:${runtimeConfig.testingPort}/index.html`,
+            "url": `http://${runtimeConfig.hostUrl}:${runtimeConfig.testingPort}/index.html`,
             "misMatchThreshold" : 0.1,
             "requireSameDimensions": true
         }
@@ -29,4 +29,4 @@ const localConfig = {
     "engine": "chrome"
 }
 
-module.exports = { ...runtimeConfig.sharedConfig, ...localConfig }
+module.exports = { ...runtimeConfig.baseConfig, ...localConfig }

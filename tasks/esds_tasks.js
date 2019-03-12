@@ -2,7 +2,7 @@
 
 const HubRegistry = require('gulp-hub'),
         config = require('./config.js'),
-        taskFiles = [config.projectGulpTasksFilename, 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
+        taskFiles = [config.projectGulpTasksFilename, 'avr.js', 'clean.js', 'copy.js', 'generate.js', 'icons.js', 'markup.js', 'scripts.js', 'serve.js', 'styles.js', 'tokens.js'],
         del = require('del'),
         fs = require('fs-extra'),
         gulp = require(`${process.cwd()}/node_modules/gulp`), // Load this gulp, not another version
@@ -84,7 +84,7 @@ if (fs.existsSync(copiedGulpTasksFilepath)) {
 
 // AVR Composite tasks
 const avrReferenceTaskName = `${c.avrTaskName}:reference`,
-        avrTestTaskName = `${c.avrTaskname}:test`;
+        avrTestTaskName = `${c.avrTaskName}:test`;
 gulp.task(config.getBaseTaskName(avrReferenceTaskName), gulp.series(buildAllTaskName, `${c.avrTaskName}:create-reference-images`));
 gulp.task(config.getBaseTaskName(avrTestTaskName), gulp.series(buildAllTaskName, `${c.avrTaskName}:run-tests`));
 generateBasePreAndPostTasks(avrReferenceTaskName);
