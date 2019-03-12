@@ -33,7 +33,7 @@ gulp.task(config.getBaseTaskName(taskNames.cleanConcatenatedMacros), function(do
     done();
 });
 
-gulp.task(config.getBaseTaskName(taskNames.cleanWebroot), function(done){
+gulp.task(config.getBaseTaskName(taskNames.cleanWebroot), function(){
     let webrootPaths = [path.join(c.rootPath, c.webroot, c.latestVersionPath, '**', '*')];
     const delOptions = {};
 

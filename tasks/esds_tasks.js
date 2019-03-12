@@ -79,7 +79,7 @@ generateBasePreAndPostTasks('default');
 
 // Project tasks are already loaded into registry at this point, delete the copied project gulpfile.js contents
 if (fs.existsSync(copiedGulpTasksFilepath)) {
-    del(copiedGulpTasksFilepath);
+    del(copiedGulpTasksFilepath, {force: true});
 }
 
 // AVR Composite tasks
