@@ -56,7 +56,7 @@ if (c.additionalWatchTasks && c.additionalWatchTasks.length > 0) {
 /**************************************************/
 function generateBasePreAndPostTasks(taskName) {
     const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
-    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined 
+    gulp.task(taskName, gulp.series(tasksWithPreAndPostHooks)); // Calls :base task and pre: and post: tasks if defined
 }
 
 //Build everything
@@ -79,7 +79,7 @@ generateBasePreAndPostTasks('default');
 
 // Project tasks are already loaded into registry at this point, delete the copied project gulpfile.js contents
 if (fs.existsSync(copiedGulpTasksFilepath)) {
-    del(copiedGulpTasksFilepath);
+    del(copiedGulpTasksFilepath, {force: true});
 }
 
 module.exports = gulp;
