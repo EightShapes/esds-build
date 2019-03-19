@@ -62,7 +62,9 @@ module.exports = function(){
       before(function(){
         fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
         let newConfig = {
-          concatenateComponentMacros: false
+          concatenateComponentMacros: false,
+          rootPath: "test/sample_project/",
+          codeNamespace: "esds"
         };
 
         fs.writeFileSync('esds-build-config.json', JSON.stringify(newConfig));

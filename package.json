@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
+    "gulp-debug": "^4.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },

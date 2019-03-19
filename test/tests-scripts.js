@@ -11,6 +11,7 @@ const { exec } = require('child_process'),
       c = config.get(),
       gulp = require('./tests-gulp.js'),
       assert = require('yeoman-assert'),
+      del = require('del'),
       fs = require('fs-extra');
 
 // TODO Move this function to a commonly shared place
@@ -45,16 +46,71 @@ module.exports = function(){
         });
 
         it('should be able to concatenate all scripts with one composite gulp task', function() {
-          return gulp('scripts:concatenate:all')
+          return gulp(`scripts:concatenate:${c.productTaskName}`)
             .then(result => {
               assert.fileContent(docJsFile, 'GlobalDocFunction');
             });
         });
 
         it('should concatenate /scripts contents before /components/**/*.js contents', function(){
-          return gulp('scripts:concatenate:all')
+          return gulp(`scripts:concatenate:${c.productTaskName}`)
             .then(result => {
               assert.fileContent(docJsFile, "var endOfGlobalFile = 'testing';\n\n'use strict';\nvar startOfComponentFile = 'testing';");
+            });
+        });
+      });
+
+      describe('skipping script concatenation', function(){
+        before(function(){
+          fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
+          let newConfig = {
+            concatenateScripts: false,
+            rootPath: "test/sample_project/",
+            codeNamespace: "esds"
+          };
+
+          fs.writeFileSync('esds-build-config.json', JSON.stringify(newConfig));
+        });
+
+        after(function(){
+          fs.moveSync(`moved-esds-build-config.js`, `esds-build-config.js`);
+          del.sync('esds-build-config.json');
+        });
+
+        it('should not concatenate scripts', function() {
+          del.sync(docJsFile);
+          return gulp(`scripts:concatenate:${c.productTaskName}`)
+            .then(result => {
+              assert.noFile(docJsFile);
+            });
+        });
+      });
+
+      describe('copying scripts to webroot', function(){
+        before(function(){
+          fs.moveSync(`esds-build-config.js`, `moved-esds-build-config.js`);
+          let newConfig = {
+            concatenateScripts: false,
+            copyScriptsToWebroot: true,
+            rootPath: "test/sample_project/",
+            codeNamespace: "esds"
+          };
+
+          fs.writeFileSync('esds-build-config.json', JSON.stringify(newConfig));
+        });
+
+        after(function(){
+          fs.moveSync(`moved-esds-build-config.js`, `esds-build-config.js`);
+          del.sync('esds-build-config.json');
+        });
+
+        it('should copy scripts from components dir and scripts dir to webroot', function() {
+          del.sync(docJsFile);
+          return gulp(`scripts:concatenate:${c.productTaskName}`)
+            .then(result => {
+              assert.noFile(docJsFile);
+              assert.fileContent(`${projectPath}/_site/latest/scripts/global.js`, 'GlobalDocFunction');
+              assert.fileContent(`${projectPath}/_site/latest/scripts/button/button.js`, 'startOfComponentFile');
             });
         });
       });
