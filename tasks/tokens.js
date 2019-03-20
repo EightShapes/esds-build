@@ -34,6 +34,25 @@ function tokensToJson(sourceFile) {
     return tokens;
 }
 
+function traceTokenReferenceToValue(value, rawYaml) {
+  const referenceRegex = /\*(.*)/gm;
+  let m;
+  m = referenceRegex.exec(value);
+  if (m === null) {
+    return value;
+  } else {
+    const match = m[1];
+    const searchRegex = new RegExp(`\&${match} (.*)`, 'gm');
+    m = searchRegex.exec(rawYaml);
+    if (m === null) {
+      return `CANNOT FIND VALUE FOR ${match}`;
+    } else {
+      const nextMatch = m[1];
+      return traceTokenReferenceToValue(nextMatch, rawYaml);
+    }
+  }
+}
+
 function interpolateYamlVariables(rawYaml) {
 
   const AnchorRegex = /\&(\S*) (.*)/gm;
@@ -47,7 +66,9 @@ function interpolateYamlVariables(rawYaml) {
       }
 
       // The result can be accessed through the `m`-variable.
-      anchorReplacements[m[1]] = m[2];
+      const replacementKey = m[1];
+      const replacementValue = m[2];
+      anchorReplacements[replacementKey] = traceTokenReferenceToValue(replacementValue, rawYaml);
   }
 
   const ReferenceRegex = /!\{\*\S*\}/;
@@ -188,8 +209,6 @@ const buildAllTaskName = [c.tokensTaskName, c.buildTaskName, c.allTaskName].join
 gulp.task(config.getBaseTaskName(buildAllTaskName), function(done){
     gulp.src(tokenConfig.sourceFile)
         .pipe(tap(function(file, t){
-            console.log(file.path);
-            console.log(path.basename(file.path));
             convertTokensYaml(file.path);
         }));
     done();

@@ -78,6 +78,8 @@ module.exports = function(){
         assert.equal(parsedTokens['test-scenario'].combined, "Something Else");
         assert.equal(parsedTokens['another-one'], "Cheese Toastie");
         assert.equal(parsedTokens['interpolated-font'], "'Something Here', 'Helvetica', Arial, sans-serif");
+        assert.equal(parsedTokens['interpolated-value-with-semantic-color'], "solid 1px #FFF000");
+        assert.equal(parsedTokens['interpolated-second-level'], "0px 2px 3px rgba(#FFF000, 0.8)");
       });
     });
 

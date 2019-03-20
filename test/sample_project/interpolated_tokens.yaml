@@ -15,3 +15,8 @@ a-quoted-item: &quoted "This Thing"
 a-quoted-thing-with-quotes: &double-quoted "'Some Fancy Font', another, sans-serif"
 another-quoted-item: "!{*quoted} Inserted Here"
 double-quoted-output: "'My Fancy Font', !{*double-quoted}"
+basic-color: &basic-color "#FFF000"
+assigned-semantic-color: &assigned-semantic-color *basic-color
+second-level-semantic-assignment: &second-level-semantic-assignment *assigned-semantic-color
+interpolated-value-with-semantic-color: "solid 1px !{*assigned-semantic-color}"
+interpolated-second-level: "0px 2px 3px rgba(!{*second-level-semantic-assignment}, 0.8)"
