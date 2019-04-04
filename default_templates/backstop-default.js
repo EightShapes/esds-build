@@ -25,7 +25,7 @@ const localConfig = {
       "html_report": "backstop_data/html_report",
       "ci_report": "backstop_data/ci_report"
     },
-    "report": ["html", "json"],
+    "report": ["browser", "json"],
     "engine": "chrome"
 }
 
