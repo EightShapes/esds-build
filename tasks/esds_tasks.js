@@ -91,3 +91,4 @@ generateBasePreAndPostTasks(avrReferenceTaskName);
 generateBasePreAndPostTasks(avrTestTaskName);
 
 module.exports = gulp;
+exports.hub = hub;
