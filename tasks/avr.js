@@ -6,7 +6,8 @@ const config = require('./config.js'),
         backstop = require('backstopjs'),
         c = config.get(),
         gulp = config.getGulpInstance(),
-        avrApproveTaskName = `${c.avrTaskName}:approve`;
+        avrApproveTaskName = `${c.avrTaskName}:approve`,
+        argv = require('yargs').argv;
 
 function generateBasePreAndPostTasks(taskName) {
     const tasksWithPreAndPostHooks = config.getBaseTaskWithPreAndPostHooks(taskName);
@@ -51,11 +52,16 @@ function createAvrRuntimeConfig(localEnv) {
 
 function createAvrReferenceImages(localEnv, done) {
     createAvrRuntimeConfig(localEnv);
-
-    backstop('reference', {
+    const backstopConfig = {
         docker: c.runAvrInDocker,
         config: c.avrConfig
-    }).then(() => {
+    };
+
+    if (argv.filter) {
+      backstopConfig.filter = argv.filter;
+    }
+
+    backstop('reference', backstopConfig).then(() => {
         localEnv.exit();
         done();
     }).catch(err => {
@@ -67,11 +73,16 @@ function createAvrReferenceImages(localEnv, done) {
 
 function runTests(localEnv, done) {
     createAvrRuntimeConfig(localEnv);
-
-    backstop('test', {
+    const backstopConfig = {
         docker: c.runAvrInDocker,
         config: c.avrConfig
-    }).then(() =>{
+    };
+
+    if (argv.filter) {
+      backstopConfig.filter = argv.filter;
+    }
+
+    backstop('test', backstopConfig).then(() =>{
         localEnv.exit();
         done();
     }).catch(err => {
@@ -90,9 +101,12 @@ gulp.task(`${c.avrTaskName}:run-tests`, function(done){
 });
 
 gulp.task(config.getBaseTaskName(avrApproveTaskName), function(done){
-    backstop('approve', {
-        config: c.avrConfig
-    }).then(function(){
+  const backstopConfig = { config: c.avrConfig };
+
+  if (argv.filter) {
+    backstopConfig.filter = argv.filter;
+  }
+    backstop('approve', backstopConfig).then(function(){
         done();
     });
     done();
